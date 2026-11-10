@@ -1074,7 +1074,7 @@ function drawMap(cv) {
     const [x, y] = k.split(',').map(Number);
     g.fillStyle = '#2b3626'; g.fillRect(x * s, y * s, s, s);
     for (let dd = 0; dd < 4; dd++) { const nx = x + DX[dd], ny = y + DY[dd]; if (!passable(D, nx, ny)) { g.fillStyle = tile(D, nx, ny) === 'D' ? '#7a5a34' : '#56634a'; g.fillRect(nx * s + 1, ny * s + 1, s - 2, s - 2); } }
-    const t = tile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b', 'L': '#cf5a42', 'D': '#7a5a34'}[t];
+    const t = tile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b', 'D': '#7a5a34'}[t];
     if (mark) { g.fillStyle = mark; g.fillRect(x * s + s * .3, y * s + s * .3, s * .4, s * .4); }
   }
   const cxp = px * s + s / 2, cyp = py * s + s / 2;
