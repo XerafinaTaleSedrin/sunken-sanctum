@@ -324,7 +324,16 @@ const RACES = {
   elf:     {name:'Elf',      b:{dex:2,int:1}, note:'cannot be paralysed'},
   dwarf:   {name:'Dwarf',    b:{con:2,wis:1}, note:'shrugs off poison'},
   halfling:{name:'Halfling', b:{dex:2,cha:1}},
+  half_elf:{name:'Half-Elf', plural:'Half-Elves', b:{cha:2,dex:1,con:1}, note:'cannot be paralysed'},
+  half_orc:{name:'Half-Orc', b:{str:2,con:1}, note:'stay on their feet at 1 hit the first time a fight would drop them'},
 };
+const noParalysis = c => c.race === 'elf' || c.race === 'half_elf';
+/* Half-orc endurance: once per fight, a blow that would kill leaves 1 hit instead. */
+function endure(t) {
+  if (t.race !== 'half_orc' || t.endured) return false;
+  t.endured = true; t.hp = 1; say(`${t.name} staggers but stays standing.`, 'good');
+  return true;
+}
 const STATS = ['str','dex','con','int','wis','cha'];
 const XP_NEXT = [0, 150, 450, 1350, 3250, 7000, 11500, 17000, 24000, 32000, 42500, 1e9];
 const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0], DIRN = ['north', 'east', 'south', 'west'];
@@ -516,14 +525,15 @@ function newGame(ready, mode) {
   if (ready) {
     const mk = (n, r, g, st) => makeChar(n, r, g, st, START_GEAR[g]);
     S.roster = [
-      mk('Bran', 'dwarf', 'fighter', {str:16, dex:12, con:16, int:9, wis:12, cha:10}),
-      mk('Wren', 'halfling', 'rogue', {str:10, dex:17, con:13, int:12, wis:11, cha:13}),
-      mk('Ysolde', 'elf', 'wizard', {str:8, dex:15, con:12, int:17, wis:12, cha:11}),
-      mk('Tamsin', 'human', 'cleric', {str:13, dex:11, con:14, int:11, wis:16, cha:12}),
+      // The four from the Sunken Sanctum puzzle campaign, in the trades the book gives them.
+      mk('Sylene', 'human', 'fighter', {str:16, dex:15, con:14, int:11, wis:13, cha:10}),
+      mk('Tharok', 'half_orc', 'cleric', {str:16, dex:10, con:16, int:8, wis:15, cha:10}),
+      mk('Elara', 'half_elf', 'rogue', {str:10, dex:17, con:13, int:12, wis:12, cha:14}),
+      mk('Grimjaw', 'dwarf', 'wizard', {str:10, dex:13, con:16, int:16, wis:13, cha:9}),
     ];
     S.party = S.roster.map(c => c.id);
     S.gold = 60;
-    say('Four companions wait at the edge of the town square. The way down is a stair cut between the roots.', 'note');
+    say('Sylene, Tharok, Elara and Grimjaw answered the same summons and have not decided to trust each other yet. They wait at the edge of the town square, where a stair goes down between the roots.', 'note');
   } else {
     say('The guild ledgers are empty. Make your first character in the Roster.', 'note');
   }
@@ -652,6 +662,7 @@ function startFight(mid, n, room) {
   const mons = Array.from({length: n}, () => { const hp = roll(m.hp); return {hp, mhp: hp, asleep: false, gone: false}; });
   ui.combat = {mid, mons, lair, room, round: 1, cur: 0, queue: [], target: 0, bless: false, xp: 0, killed: 0, first: true};
   S.aid = false;
+  for (const c of party()) c.endured = false;
   say(`${n > 1 ? n + ' ' + m.plural : 'A ' + m.name} ${lair ? (n > 1 ? 'guard' : 'guards') + ' this hollow' : (n > 1 ? 'wait' : 'waits') + ' in the dark here'}!`, 'foe');
   nextChooser(0); save(); render();
 }
@@ -754,10 +765,10 @@ function monstersAct() {
       let dmg = roll(m.dmg, r === 20);
       let extra = '';
       if (m.poison && t.race !== 'dwarf' && R(3) === 0) { dmg += roll(m.poison); extra = ' Poison burns in the wound.'; }
-      if (m.paralyze && t.race !== 'elf' && d20() + mod(t.st.con) < 10) { t.para = 2; extra = ` ${t.name} goes rigid!`; }
+      if (m.paralyze && !noParalysis(t) && d20() + mod(t.st.con) < 10) { t.para = 2; extra = ` ${t.name} goes rigid!`; }
       t.hp -= dmg;
       say(`A ${m.name.toLowerCase()} hits ${t.name} for ${dmg}.${extra}`, 'foe');
-      if (t.hp <= 0) { t.hp = 0; t.status = 'dead'; t.para = 0; say(`${t.name} falls and does not rise.`, 'foe'); }
+      if (t.hp <= 0 && !endure(t)) { t.hp = 0; t.status = 'dead'; t.para = 0; say(`${t.name} falls and does not rise.`, 'foe'); }
     }
   }
 }
@@ -877,7 +888,7 @@ function tend() {
   for (const t of alive()) if (t.hp < t.mhp) heal(t, roll('1d4') + n + wis, c.name);
   save(); render();
 }
-function hurt(t, n, how) { t.hp -= n; say(`${how} ${t.name} for ${n}.`, 'foe'); if (t.hp <= 0) { t.hp = 0; t.status = 'dead'; say(`${t.name} falls.`, 'foe'); } }
+function hurt(t, n, how) { t.hp -= n; say(`${how} ${t.name} for ${n}.`, 'foe'); if (t.hp <= 0 && !endure(t)) { t.hp = 0; t.status = 'dead'; say(`${t.name} falls.`, 'foe'); } }
 
 /* ---------- inventory actions ---------- */
 function equip(c, i) {
@@ -1200,7 +1211,7 @@ function rosterHTML() {
       <div class="pb">${STATS.map(k => { const v = N.base[k], up = v < 15 && PB_COST[v + 1] - PB_COST[v] <= left, rb = RACES[N.race].b[k] || 0;
         return `<div><small>${k.toUpperCase()}</small><b>${st[k]}</b>${rb ? `<span class="small muted">${v} +${rb}</span>` : `<span class="small muted">${v}</span>`}
           <span class="pbb"><button class="btn" data-a="pb" data-k="${k}" data-d="-1" ${v > 8 ? '' : 'disabled'} aria-label="Lower ${k}">-</button><button class="btn" data-a="pb" data-k="${k}" data-d="1" ${up ? '' : 'disabled'} aria-label="Raise ${k}">+</button></span></div>`; }).join('')}</div>
-      <p class="small muted">${g.about}${RACES[N.race].note ? ' ' + RACES[N.race].name + 's ' + RACES[N.race].note + '.' : ''}</p>
+      <p class="small muted">${g.about}${RACES[N.race].note ? ' ' + (RACES[N.race].plural || RACES[N.race].name + 's') + ' ' + RACES[N.race].note + '.' : ''}</p>
       ${okReq ? '' : `<p class="small" style="color:var(--blood)">The ${g.name} guild needs ${g.req.toUpperCase()} of 11 or more.</p>`}
       <div class="btns"><button class="btn" data-a="preset">Suggested for a ${g.name.toLowerCase()}</button><button class="btn go" data-a="makec" ${okReq ? '' : 'disabled'}>Add to roster</button><button class="btn" data-a="cancelc">Cancel</button></div>`;
   }
