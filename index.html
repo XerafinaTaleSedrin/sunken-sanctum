@@ -116,8 +116,8 @@ input, select, textarea { background: #0c100d; color: var(--ink); border: 1px so
 <div id="app"></div>
 
 <script>
-const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"map":["################","#<..##....##..F#","#...D...L.D....#","#...##....##...#","##D#####D###...#","##.#####.####D##","#....##...###.##","#....##.L.D....#","#.N..##...##...#","#....###D###...#","##D#####.#######","##.###....######","#...##....S....#","#...D...L.##.>.#","#...##....##...#","################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"map":["################","#...#....##...F#","#.L.D....##....#","#...#....##....#","##D###D######D##","#...#....##....#","#...#....D...L.#","#...D.N..##....#","#...#....##....#","##.###.#####.###","##S###D#####D###","#...#....##....#","#...#.....D....#","#.>.#....##..<.#","#...#....##....#","################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,5],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,6],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,5],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,6],"group":[1,3],"undead":true,"paralyze":true}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}}};
-const MON = DATA.monsters, SK = DATA.skills;
+const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"map":["################","#<..##....##..F#","#...D...L.D....#","#...##....##...#","##D#####D###...#","##.#####.####D##","#....##...###.##","#....##.L.D....#","#.N..##...##...#","#....###D###...#","##D#####.#######","##.###....######","#...##....S....#","#...D...L.##.>.#","#...##....##...#","################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"map":["################","#...#....##...F#","#.L.D....##....#","#...#....##....#","##D###D######D##","#...#....##....#","#...#....D...L.#","#...D.N..##....#","#...#....##....#","##.###.#####.###","##S###D#####D###","#...#....##....#","#...#.....D....#","#.>.#....##..<.#","#...#....##....#","################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,5],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,6],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,5],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,6],"group":[1,3],"undead":true,"paralyze":true}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null}};
+const MON = DATA.monsters, SK = DATA.skills, PARTS = DATA.parts;
 /* Random dungeon generator.
 
    Each level is a 4 x 4 grid of 3 x 3 chambers inside a 17 x 17 map. A spanning
@@ -296,6 +296,7 @@ const ITEMS = {
   potion_heal: {kind:'potion', name:'Potion of Healing',  cat:'a potion', heal:'2d4+2', cost:50},
   potion_greater:{kind:'potion', name:'Potion of Greater Healing', cat:'a potion', heal:'4d4+4', cost:150},
   scroll_id:   {kind:'scroll', name:'Scroll of Identify', cat:'a scroll', cost:40},
+  salve:       {kind:'potion', name:'Moss Salve',         cat:'a salve',  heal:'1d4+2', cost:15},
 };
 const WEAPONS = Object.keys(ITEMS).filter(k => ITEMS[k].kind === 'weapon');
 const ARMORS = Object.keys(ITEMS).filter(k => ITEMS[k].kind === 'armor' || ITEMS[k].kind === 'shield');
@@ -310,6 +311,8 @@ const GUILDS = {
             about:'Few hits, no armor. Magic Missile and Sleep from the start, Burning Hands at level 3.'},
   cleric:  {name:'Cleric',  hd:8,  req:'wis', weapons:['club','mace','quarterstaff','warhammer'], armor:['leather','studded','chain_shirt','scale'], shield:1, caster:'wis',
             about:'Heals, blesses the party, and turns the undead at level 2.'},
+  forager: {name:'Forager', hd:8,  req:'wis', weapons:['dagger','club','quarterstaff','shortsword'], armor:['leather','studded'], shield:0,
+            about:'No match for a fighter, but worth more after the fight: skins fallen foes for parts to sell, forages salves from the rooms, and finds extra coin in chests.'},
 };
 const SPELLS = {
   missile: {name:'Magic Missile', guild:'wizard', lvl:1, sp:2, aim:'foe',   about:'3d4+3, never misses'},
@@ -358,6 +361,7 @@ const PB_PRESET = {
   rogue:   {str:10, dex:15, con:14, int:13, wis:12, cha:8},
   wizard:  {str:8,  dex:13, con:14, int:15, wis:12, cha:10},
   cleric:  {str:13, dex:12, con:14, int:8,  wis:15, cha:10},
+  forager: {str:10, dex:14, con:14, int:10, wis:15, cha:8},
 };
 const pbSpent = base => STATS.reduce((t, k) => t + PB_COST[base[k]], 0);
 const withRace = (base, race) => Object.fromEntries(STATS.map(k => [k, base[k] + (RACES[race].b[k] || 0)]));
@@ -390,7 +394,7 @@ function makeChar(name, race, guild, st, gear) {
   for (const b of gear) { const k = ITEMS[b].kind; c.inv.push({base: b, plus: 0, cursed: false, id: 2, eq: ['weapon','armor','shield'].includes(k) && !worn(c, k)}); }
   return c;
 }
-const START_GEAR = {fighter:['longsword','chain_shirt','shield','potion_heal'], rogue:['shortsword','leather','dagger','potion_heal'], wizard:['quarterstaff','potion_heal'], cleric:['mace','chain_shirt','shield','potion_heal']};
+const START_GEAR = {fighter:['longsword','chain_shirt','shield','potion_heal'], rogue:['shortsword','leather','dagger','potion_heal'], wizard:['quarterstaff','potion_heal'], cleric:['mace','chain_shirt','shield','potion_heal'], forager:['shortsword','leather','dagger','salve']};
 const prof = c => 2 + Math.floor((c.lvl - 1) / 4);
 const worn = (c, kind) => c.inv.find(i => i.eq && ITEMS[i.base].kind === kind);
 function acOf(c) {
@@ -568,7 +572,7 @@ function step(back) {
   const f = back ? (S.pos.f + 2) % 4 : S.pos.f;
   const nx = S.pos.x + DX[f], ny = S.pos.y + DY[f];
   if (!passable(S.pos.depth, nx, ny)) { say(tile(S.pos.depth, nx, ny) === 'D' ? 'The door will not budge.' : 'Wet rock. No way through.'); return render(); }
-  S.pos.prev = {x: S.pos.x, y: S.pos.y};
+  S.pos.prev = {x: S.pos.x, y: S.pos.y}; S.carcass = null;
   S.pos.x = nx; S.pos.y = ny;
   arrive();
 }
@@ -661,7 +665,7 @@ function startFight(mid, n, room) {
   const m = MON[mid], lair = room && S.rooms[room]?.lair;
   const mons = Array.from({length: n}, () => { const hp = roll(m.hp); return {hp, mhp: hp, asleep: false, gone: false}; });
   ui.combat = {mid, mons, lair, room, round: 1, cur: 0, queue: [], target: 0, bless: false, xp: 0, killed: 0, first: true};
-  S.aid = false;
+  S.aid = false; S.carcass = null;
   for (const c of party()) c.endured = false;
   say(`${n > 1 ? n + ' ' + m.plural : 'A ' + m.name} ${lair ? (n > 1 ? 'guard' : 'guards') + ' this hollow' : (n > 1 ? 'wait' : 'waits') + ' in the dark here'}!`, 'foe');
   nextChooser(0); save(); render();
@@ -799,6 +803,7 @@ function win() {
   if (C.room && S.rooms[C.room]) S.rooms[C.room].held = false;
   ui.combat = null;
   S.aid = true;
+  S.carcass = C.killed && PARTS[C.mid] ? {mid: C.mid, n: C.killed} : null;
   settleBodies();
   if (C.lair || R(100) < 35) {
     const items = [makeItem(d)];
@@ -816,6 +821,8 @@ function wipe() {
   for (const id of S.party) { const c = ch(id); c.where = 'dungeon'; c.status = c.status === 'ok' ? 'dead' : c.status; c.para = 0; }
   for (const id of S.carried) { const c = ch(id); if (c) c.where = 'dungeon'; }
   S.party = []; S.carried = []; S.gold = 0; S.inDungeon = false; S.pos = null;
+  if (S.salvage && Object.keys(S.salvage).length) say('The salvage they carried is lost with them.', 'muted');
+  S.salvage = {}; S.carcass = null;
   ui.combat = null; ui.chest = null; ui.screen = 'town'; ui.place = 'morgue';
   say(`The party has fallen on ${lvl(depth).name}. Their bodies lie where they fell.`, 'foe');
   save(); render();
@@ -856,6 +863,8 @@ function chestAct(a) {
     if (K.trap && !K.disarmed) spring(K);
     if (!alive().length) return wipe();
     settleBodies();
+    const fg = alive().find(c => c.guild === 'forager');
+    if (fg) { const extra = Math.max(1, Math.floor(K.gold / 4)); K.gold += extra; say(`${fg.name} finds ${extra} more gold wedged under the lining.`, 'gold'); }
     S.gold += K.gold;
     let items = K.items, smashed = 0;
     if (a === 'force') { smashed = items.filter(it => ITEMS[it.base].kind === 'potion').length; items = items.filter(it => ITEMS[it.base].kind !== 'potion'); }
@@ -877,6 +886,31 @@ function spring(K) {
     say('A bell clangs. Somewhere on this level, something is now awake and waiting.', 'foe');
   }
   K.disarmed = true;
+}
+/* Skinning: after a fight, the best skinner works the bodies for parts to sell.
+   Foraging: once per room per trip, search for herbs and fungi. */
+const salvageCount = () => Object.values(S.salvage || {}).reduce((t, s) => t + s.n, 0);
+function addSalvage(name, value, n) { S.salvage ||= {}; const s = S.salvage[name] ||= {n: 0, value}; s.n += n; }
+const canSkin = () => S.carcass && best('skinning') && !ui.combat;
+function skin() {
+  const c = best('skinning'), K = S.carcass; if (!canSkin()) return;
+  const p = PARTS[K.mid], d = S.pos.depth; let got = 0;
+  for (let i = 0; i < K.n; i++) if (skillRoll(c, 'skinning') >= 8 + d) got++;
+  S.carcass = null;
+  if (got) { addSalvage(p.name, p.value, got); say(`${c.name} takes ${got} ${p.name}${got > 1 ? 's' : ''} from the fallen.`, 'gold'); }
+  else say(`${c.name} works at the bodies, but nothing comes away clean.`, 'muted');
+  save(); render();
+}
+const canForage = () => { const k = S.pos && S.pos.room; return !!(k && S.rooms[k] && !S.rooms[k].foraged && !S.rooms[k].held && best('foraging') && !ui.combat && !ui.chest); };
+const FINDS = ['glowcap mushrooms', 'cave moss', 'root amber', 'pale truffles'];
+function forage() {
+  const c = best('foraging'); if (!canForage()) return;
+  S.rooms[S.pos.room].foraged = true;
+  const d = S.pos.depth, r = skillRoll(c, 'foraging');
+  if (r < 10 + d) { say(`${c.name} searches the corners and finds nothing useful.`, 'muted'); return save(), render(); }
+  if (R(2) === 0 && c.inv.length < 10) { c.inv.push({base: 'salve', plus: 0, cursed: false, id: 2}); S.known.salve = 1; say(`${c.name} gathers healing moss and presses it into a salve.`, 'good'); }
+  else { const f = pick(FINDS), n = 1 + (r >= 15 + d ? 1 : 0); addSalvage(f, 3 * d, n); say(`${c.name} gathers ${f}${n > 1 ? ', a good haul' : ''}. The store will buy them.`, 'gold'); }
+  save(); render();
 }
 /* First aid: once after each fight, the party's best medic tends everyone hurt. */
 const canTend = () => S.aid && best('firstaid') && alive().some(c => c.hp < c.mhp);
@@ -1074,7 +1108,7 @@ function partyPanel(actingId) {
   return `<div class="panel"><h2>Party</h2>${p.length ? rows : '<p class="muted">Nobody yet. Form a party in the Roster.</p>'}
     ${canOrder ? `<p class="small muted" style="margin:6px 0 0">${ui.order ? 'The first two in line take most of the blows. ' : ''}<button class="link" data-a="order">${ui.order ? 'Done' : 'Change marching order'}</button></p>` : ''}
     ${carried.length ? `<h3>Carried bodies (${carried.length} of ${capacity()})</h3><ul class="small bodies">${bodies}</ul><p class="small muted" style="margin:0">Each living member carries one body. Take them to the temple in town.</p>` : ''}
-    <p class="small muted" style="margin:8px 0 0">Purse: <b style="color:var(--lamp)">${S.gold}</b> gold${S.bank ? `. Bank: ${S.bank}` : ''}</p></div>`;
+    <p class="small muted" style="margin:8px 0 0">Purse: <b style="color:var(--lamp)">${S.gold}</b> gold${S.bank ? `. Bank: ${S.bank}` : ''}${salvageCount() ? `. Salvage: ${salvageCount()} piece${salvageCount() > 1 ? 's' : ''}, to sell at the store` : ''}</p></div>`;
 }
 function logPanel() { return `<div class="panel"><h2>Messages</h2><div class="log">${S.log.slice(0, 40).map(l => `<div class="${l.cls}">${esc(l.t)}</div>`).join('')}</div></div>`; }
 
@@ -1112,6 +1146,8 @@ function dungeonHTML() {
     if (t === '<') extra.push(`<button class="btn go" data-a="stairs">${S.pos.depth === 1 ? 'Climb to town' : 'Climb up'}</button>`);
     if (t === '>') extra.push(`<button class="btn go" data-a="stairs">Go down</button>`);
     if (t === 'F') extra.push(`<button class="btn go" data-a="drink">Drink from the spring</button>`);
+    if (canSkin()) extra.push(`<button class="btn" data-a="skin">Skin the fallen (${esc(best('skinning').name)})</button>`);
+    if (canForage()) extra.push(`<button class="btn" data-a="forage">Forage (${esc(best('foraging').name)})</button>`);
     if (canTend()) extra.push(`<button class="btn" data-a="tend">Tend wounds (${esc(best('firstaid').name)})</button>`);
     controls = `<div class="pad">
       <button class="btn" data-a="turn" data-t="-1" aria-label="Turn left">Turn left</button>
@@ -1229,7 +1265,7 @@ function guildHTML() {
   }).join('');
   const lore = Object.values(GUILDS).map(g => `<p class="small"><b style="color:var(--lamp)">${g.name}.</b> ${g.about}</p>`).join('');
   return `<div class="panel"><h2>Guild hall</h2>${rows ? `<div class="tablewrap"><table class="list">${rows}</table></div>` : '<p class="muted">Nobody here can train.</p>'}
-    ${trainHTML()}<h3>The four guilds</h3>${lore}</div>`;
+    ${trainHTML()}<h3>The guilds</h3>${lore}</div>`;
 }
 function trainHTML() {
   const c = selChar(); if (!c) return '';
@@ -1251,7 +1287,10 @@ function storeHTML() {
   const buy = STOCK.map(k => { const b = ITEMS[k], use = ['potion','scroll'].includes(b.kind) || canUse(c, {base: k}); return `<tr><td>${b.name}${use ? '' : ' <span class="small muted">(not for a ' + GUILDS[c.guild].name.toLowerCase() + ')</span>'}</td><td class="n">${b.cost}</td><td class="n"><button class="link" data-a="buy" data-k="${k}" ${S.gold >= b.cost && c.inv.length < 10 ? '' : 'disabled'}>Buy</button></td></tr>`; }).join('');
   const sell = c.inv.map((it, i) => `<tr><td>${esc(itemName(it))}${it.eq ? ' <span class="small muted">(worn)</span>' : ''}</td><td class="n">${sellPrice(it)}</td><td class="n">
     <button class="link" data-a="sell" data-i="${i}" ${it.eq ? 'disabled' : ''}>Sell</button> <button class="link" data-a="ident" data-i="${i}" ${it.id >= 2 || S.gold < 25 ? 'disabled' : ''}>Identify (25)</button></td></tr>`).join('');
-  return `<div class="panel"><h2>Store</h2><p class="small muted">Shopping for:</p>${charPicker()}
+  const sv = Object.entries(S.salvage || {}).filter(([, s]) => s.n);
+  const svTot = sv.reduce((t, [, s]) => t + s.n * s.value, 0);
+  const salvage = sv.length ? `<h3>Salvage</h3><p class="small">${sv.map(([k, s]) => `${s.n} ${esc(k)} (${s.value} each)`).join(', ')}.</p><div class="btns"><button class="btn go" data-a="sellsalvage">Sell it all (${svTot} gold)</button></div>` : '';
+  return `<div class="panel"><h2>Store</h2>${salvage}<p class="small muted">Shopping for:</p>${charPicker()}
     <h3>Sell or identify</h3>${sell ? `<div class="tablewrap"><table class="list">${sell}</table></div>` : '<p class="muted small">Nothing carried.</p>'}
     <p class="small muted">Unknown goods sell for a quarter of their base price.</p>
     <h3>Buy</h3><div class="tablewrap"><table class="list">${buy}</table></div></div>`;
@@ -1413,6 +1452,9 @@ const A = {
     save(); render();
   },
   tend() { tend(); },
+  skin() { skin(); },
+  forage() { forage(); },
+  sellsalvage() { const s = S.salvage || {}; let tot = 0; for (const k in s) tot += s[k].n * s[k].value; if (!tot) return; S.gold += tot; S.salvage = {}; say(`The store buys the salvage for ${tot} gold.`, 'gold'); save(); render(); },
   buy(d) { const c = selChar(), b = ITEMS[d.k]; if (S.gold < b.cost || c.inv.length >= 10) return; S.gold -= b.cost; c.inv.push({base: d.k, plus: 0, cursed: false, id: 2}); say(`${c.name} buys ${b.name.toLowerCase()}.`); save(); render(); },
   sell(d) { const c = selChar(), it = c.inv[+d.i]; if (!it || it.eq) return; const p = sellPrice(it); S.gold += p; c.inv.splice(+d.i, 1); say(`${c.name} sells ${itemName(it).toLowerCase()} for ${p} gold.`, 'gold'); save(); render(); },
   ident(d) { const c = selChar(), it = c.inv[+d.i]; if (!it || S.gold < 25) return; S.gold -= 25; it.id = 2; S.known[it.base] = 1; say(`The shopkeeper squints at it: ${itemName(it)}.`, 'good'); save(); render(); },

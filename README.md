@@ -8,10 +8,10 @@ Play it at **https://xerafinatalesedrin.github.io/sunken-sanctum/**
 
 - Single player, with a party of one to four characters.
 - Two ways to play: the written campaign, or a random five-level dungeon that is different every new game.
-- Four guilds (Fighter, Rogue, Wizard, Cleric) and six races.
+- Five guilds (Fighter, Rogue, Wizard, Cleric, Forager) and six races. The Forager skins, forages and salvages rather than fights.
 - A ready-made party: Sylene, Tharok, Elara and Grimjaw, the four adventurers of the Sunken Sanctum puzzle campaign.
 - Point-buy character creation.
-- Six trainable skills: Lore, Perception, Disarm, Locks, First aid, Armor use. Each guild pays its own price per rank.
+- Eight trainable skills: Lore, Perception, Disarm, Locks, First aid, Armor use, Skinning, Foraging. Each guild pays its own price per rank.
 - Unidentified treasure, trapped and locked chests, hidden doors.
 - Fallen characters can be carried home, rescued, and raised at the temple.
 
