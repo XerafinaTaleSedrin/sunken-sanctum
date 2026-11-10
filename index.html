@@ -1,0 +1,1305 @@
+<title>Sunken Sanctum</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<style>
+/* Layout: one screen. The first-person view and its controls on the left, the party and the log beside it; stacked on a phone. */
+:root {
+  --rock: #111712; --slab: #1a221b; --slab2: #222c23; --line: #34412f;
+  --ink: #e4e0cf; --dim: #9ba18b; --moss: #86a24c; --lichen: #c7d38f;
+  --lamp: #e2b45a; --blood: #cf5a42; --spring: #6cc5b3; --mana: #7f9be0;
+  --display: "IM Fell English SC", "Iowan Old Style", Georgia, serif;
+  --body: "Alegreya Sans", "Gill Sans", "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--rock); color: var(--ink); font: 16px/1.45 var(--body); }
+* { box-sizing: border-box; }
+button { font: inherit; color: inherit; }
+#app { max-width: 1180px; margin: 0 auto; padding-block: 12px 24px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 14px; }
+header h1 { font: 1.9rem/1 var(--display); margin: 0; color: var(--lichen); letter-spacing: .02em; }
+header .where { color: var(--dim); font-size: .95rem; }
+.hbtn { background: none; border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; color: var(--dim); cursor: pointer; }
+.hbtn:hover { color: var(--ink); border-color: var(--moss); }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 820px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+.view { position: relative; border: 1px solid var(--line); background: #000; border-radius: 3px; overflow: hidden; }
+.view canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; }
+.view .bar { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 10px; background: linear-gradient(transparent, rgba(0,0,0,.75)); display: flex; justify-content: space-between; gap: 8px; font-size: .9rem; color: var(--lichen); pointer-events: none; }
+.mapwrap canvas { display: block; width: 100%; max-width: 100%; aspect-ratio: 1; height: auto; border: 1px solid var(--line); background: #0b0f0c; }
+
+.pad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.btn { background: var(--slab2); border: 1px solid var(--line); border-radius: 4px; padding: 10px 8px; cursor: pointer; min-height: 44px; text-align: center; }
+.btn:hover:not(:disabled) { border-color: var(--moss); }
+.btn:focus-visible, .hbtn:focus-visible, .link:focus-visible, .row:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.go { background: #3a3220; border-color: #6e5a2c; color: var(--lamp); }
+.btn.warn { border-color: #6b3a2e; color: #f0a594; }
+.btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.btns .btn { flex: 1 1 auto; }
+
+.panel { background: var(--slab); border: 1px solid var(--line); border-radius: 4px; padding: 12px; min-width: 0; }
+.panel h2 { font: 1.25rem/1.1 var(--display); color: var(--lichen); margin: 0 0 8px; }
+.panel h3 { font: 1.05rem/1.1 var(--display); color: var(--lamp); margin: 12px 0 6px; }
+.muted { color: var(--dim); }
+.small { font-size: .88rem; }
+p { margin: 0 0 8px; }
+
+.member { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 8px; border: 1px solid transparent; border-radius: 4px; cursor: pointer; background: none; width: 100%; text-align: left; }
+.member:hover { border-color: var(--line); }
+.member.acting { border-color: var(--lamp); }
+.member .nm { font-weight: 700; }
+.member .cls { color: var(--dim); font-size: .88rem; text-align: right; }
+.pb { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: 8px; margin: 8px 0; }
+.pb > div { border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; display: grid; gap: 2px; }
+.pb b { font-size: 1.3rem; color: var(--lamp); }
+.pbb { display: flex; gap: 6px; }
+.pbb .btn { padding: 4px 12px; flex: 1; }
+.iinfo { font-size: .85rem; color: var(--dim); margin-top: 2px; line-height: 1.45; }
+.tag { display: inline-block; font-size: .75rem; padding: 0 6px; margin-right: 4px; border: 1px solid var(--line); border-radius: 3px; color: var(--lamp); }
+.tag.ok { color: var(--moss); border-color: var(--moss); }
+.iinfo b.up { color: var(--moss); }
+.iinfo b.down { color: var(--blood); }
+.mrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.btn.up { padding: 6px 10px; }
+ul.bodies { margin: 4px 0 6px; padding-left: 1.1rem; }
+.meter { grid-column: 1 / -1; display: grid; grid-template-columns: 2.2em minmax(0, 1fr) 4.8em; align-items: center; gap: 6px; font-size: .82rem; color: var(--dim); font-variant-numeric: tabular-nums; }
+.meter i { display: block; height: 6px; background: #0c100d; border-radius: 3px; overflow: hidden; }
+.meter i b { display: block; height: 100%; }
+.dead .nm { color: var(--blood); text-decoration: line-through; }
+
+.log { max-height: 220px; overflow-y: auto; font-size: .93rem; display: flex; flex-direction: column-reverse; gap: 3px; }
+.log .foe { color: #f0a594; } .log .good { color: var(--lichen); } .log .note { color: var(--spring); font-style: italic; } .log .gold { color: var(--lamp); }
+
+.foes { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: none; cursor: pointer; text-align: left; width: 100%; }
+.row.sel { border-color: var(--lamp); }
+.row .st { color: var(--dim); font-size: .88rem; }
+
+.places { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.place { background: var(--slab2); border: 1px solid var(--line); border-radius: 4px; padding: 12px; cursor: pointer; text-align: left; }
+.place b { display: block; font: 1.1rem var(--display); color: var(--lamp); }
+.place span { color: var(--dim); font-size: .88rem; }
+.place.on { border-color: var(--lamp); }
+
+table.list { width: 100%; border-collapse: collapse; font-size: .94rem; }
+table.list td { padding: 6px 4px; border-top: 1px solid var(--line); vertical-align: middle; }
+table.list td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tablewrap { overflow-x: auto; }
+.link { background: none; border: 1px solid var(--line); border-radius: 3px; padding: 3px 8px; cursor: pointer; color: var(--lamp); white-space: nowrap; }
+.link:disabled { opacity: .35; cursor: default; }
+
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.form label { display: flex; flex-direction: column; gap: 3px; font-size: .88rem; color: var(--dim); }
+input, select, textarea { background: #0c100d; color: var(--ink); border: 1px solid var(--line); border-radius: 3px; padding: 7px; font: inherit; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; text-align: center; font-variant-numeric: tabular-nums; margin: 8px 0; }
+.stats div { background: #0c100d; border-radius: 3px; padding: 4px 0; }
+.stats small { display: block; color: var(--dim); font-size: .75rem; }
+
+.modal { position: fixed; inset: 0; background: rgba(4,7,5,.78); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; z-index: 20;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); }
+.modal .panel { width: 100%; max-width: 560px; }
+.title { text-align: center; padding: 6vh 0 4vh; }
+.title h1 { font: clamp(3rem, 2rem + 6vw, 6rem)/1 var(--display); color: var(--lichen); margin: 0; }
+.title p { color: var(--dim); max-width: 34em; margin: 14px auto; }
+.title .btns { max-width: 420px; margin: 18px auto 0; flex-direction: column; }
+.fine { color: var(--dim); font-size: .78rem; margin-top: 28px; }
+.fine a { color: var(--dim); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div id="app"></div>
+
+<script>
+const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"map":["################","#<..##....##..F#","#...D...L.D....#","#...##....##...#","##D#####D###...#","##.#####.####D##","#....##...###.##","#....##.L.D....#","#.N..##...##...#","#....###D###...#","##D#####.#######","##.###....######","#...##....S....#","#...D...L.##.>.#","#...##....##...#","################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"map":["################","#...#....##...F#","#.L.D....##....#","#...#....##....#","##D###D######D##","#...#....##....#","#...#....D...L.#","#...D.N..##....#","#...#....##....#","##.###.#####.###","##S###D#####D###","#...#....##....#","#...#.....D....#","#.>.#....##..<.#","#...#....##....#","################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,5],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,6],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,5],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,6],"group":[1,3],"undead":true,"paralyze":true}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}}};
+const LV = DATA.levels, MON = DATA.monsters, SK = DATA.skills;
+
+/* ---------- dice ---------- */
+const R = n => Math.floor(Math.random() * n);
+const d20 = () => 1 + R(20);
+const mod = v => Math.floor((v - 10) / 2);
+const pick = a => a[R(a.length)];
+function roll(s, crit) {
+  const m = /^(\d+)d(\d+)([+-]\d+)?$/.exec(String(s));
+  if (!m) return +s || 0;
+  let t = +(m[3] || 0);
+  const n = +m[1] * (crit ? 2 : 1);
+  for (let i = 0; i < n; i++) t += 1 + R(+m[2]);
+  return Math.max(1, t);
+}
+function weighted(o) { let tot = 0; for (const k in o) tot += o[k]; let r = R(tot); for (const k in o) { r -= o[k]; if (r < 0) return k; } }
+const uid = () => Math.random().toString(36).slice(2, 9);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cap = s => s[0].toUpperCase() + s.slice(1);
+
+/* ---------- rules tables (SRD 5.1, adapted) ---------- */
+const ITEMS = {
+  dagger:      {kind:'weapon', name:'Dagger',       cat:'a blade',  dmg:'1d4',  fin:1, cost:2},
+  club:        {kind:'weapon', name:'Club',         cat:'a cudgel', dmg:'1d4',  cost:1},
+  quarterstaff:{kind:'weapon', name:'Quarterstaff', cat:'a staff',  dmg:'1d6',  cost:2},
+  mace:        {kind:'weapon', name:'Mace',         cat:'a cudgel', dmg:'1d6',  cost:5},
+  shortsword:  {kind:'weapon', name:'Shortsword',   cat:'a blade',  dmg:'1d6',  fin:1, cost:10},
+  rapier:      {kind:'weapon', name:'Rapier',       cat:'a blade',  dmg:'1d8',  fin:1, cost:25},
+  longsword:   {kind:'weapon', name:'Longsword',    cat:'a blade',  dmg:'1d8',  cost:15},
+  warhammer:   {kind:'weapon', name:'Warhammer',    cat:'a cudgel', dmg:'1d8',  cost:15},
+  greataxe:    {kind:'weapon', name:'Greataxe',     cat:'an axe',   dmg:'1d12', cost:30},
+  leather:     {kind:'armor',  name:'Leather Armor',   cat:'armor', ac:11, dex:9, cost:10},
+  studded:     {kind:'armor',  name:'Studded Leather', cat:'armor', ac:12, dex:9, cost:45},
+  chain_shirt: {kind:'armor',  name:'Chain Shirt',     cat:'armor', ac:13, dex:2, cost:50},
+  scale:       {kind:'armor',  name:'Scale Mail',      cat:'armor', ac:14, dex:2, cost:50},
+  chain_mail:  {kind:'armor',  name:'Chain Mail',      cat:'armor', ac:16, dex:0, cost:75},
+  shield:      {kind:'shield', name:'Shield',          cat:'a shield', ac:2, cost:10},
+  ring_prot:   {kind:'ring',   name:'Ring of Protection', cat:'a ring', cost:300},
+  potion_heal: {kind:'potion', name:'Potion of Healing',  cat:'a potion', heal:'2d4+2', cost:50},
+  potion_greater:{kind:'potion', name:'Potion of Greater Healing', cat:'a potion', heal:'4d4+4', cost:150},
+  scroll_id:   {kind:'scroll', name:'Scroll of Identify', cat:'a scroll', cost:40},
+};
+const WEAPONS = Object.keys(ITEMS).filter(k => ITEMS[k].kind === 'weapon');
+const ARMORS = Object.keys(ITEMS).filter(k => ITEMS[k].kind === 'armor' || ITEMS[k].kind === 'shield');
+const STOCK = ['dagger','club','quarterstaff','mace','shortsword','longsword','warhammer','rapier','greataxe','leather','studded','chain_shirt','scale','chain_mail','shield','potion_heal','scroll_id'];
+
+const GUILDS = {
+  fighter: {name:'Fighter', hd:10, req:'str', weapons:WEAPONS, armor:['leather','studded','chain_shirt','scale','chain_mail'], shield:1,
+            about:'Most hits, every weapon and armor, a second attack at level 5.'},
+  rogue:   {name:'Rogue',   hd:8,  req:'dex', weapons:['dagger','club','quarterstaff','shortsword','rapier'], armor:['leather','studded'], shield:0, study:45,
+            about:'Strikes first and hard, disarms chest traps, finds hidden doors, and learns what an item is.'},
+  wizard:  {name:'Wizard',  hd:6,  req:'int', weapons:['dagger','quarterstaff'], armor:[], shield:0, caster:'int', study:30,
+            about:'Few hits, no armor. Magic Missile and Sleep from the start, Burning Hands at level 3.'},
+  cleric:  {name:'Cleric',  hd:8,  req:'wis', weapons:['club','mace','quarterstaff','warhammer'], armor:['leather','studded','chain_shirt','scale'], shield:1, caster:'wis',
+            about:'Heals, blesses the party, and turns the undead at level 2.'},
+};
+const SPELLS = {
+  missile: {name:'Magic Missile', guild:'wizard', lvl:1, sp:2, aim:'foe',   about:'3d4+3, never misses'},
+  sleep:   {name:'Sleep',         guild:'wizard', lvl:1, sp:3, aim:'group', about:'5d8 hit points of foes fall asleep; not the undead'},
+  flame:   {name:'Burning Hands', guild:'wizard', lvl:3, sp:4, aim:'group', about:'3d6 to every foe, half on a save'},
+  cure:    {name:'Cure Wounds',   guild:'cleric', lvl:1, sp:2, aim:'ally',  about:'1d8 + Wisdom to the most hurt', field:1},
+  bless:   {name:'Bless',         guild:'cleric', lvl:1, sp:3, aim:'party', about:'+1d4 to hit for the rest of the fight'},
+  turn:    {name:'Turn Undead',   guild:'cleric', lvl:2, sp:3, aim:'group', about:'undead that fail a save flee'},
+};
+const RACES = {
+  human:   {name:'Human',    b:{str:1,dex:1,con:1,int:1,wis:1,cha:1}},
+  elf:     {name:'Elf',      b:{dex:2,int:1}, note:'cannot be paralysed'},
+  dwarf:   {name:'Dwarf',    b:{con:2,wis:1}, note:'shrugs off poison'},
+  halfling:{name:'Halfling', b:{dex:2,cha:1}},
+};
+const STATS = ['str','dex','con','int','wis','cha'];
+const XP_NEXT = [0, 150, 450, 1350, 3250, 7000, 11500, 17000, 24000, 32000, 42500, 1e9];
+const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0], DIRN = ['north', 'east', 'south', 'west'];
+
+/* ---------- state ---------- */
+const SAVE = 'undergrove-save-1';
+let S = null;
+const ui = {screen:'title', place:'square', modal:null, combat:null, chest:null, map:false, sheet:null, newc:null, confirm:null, msg:''};
+function fresh() { return {v:1, roster:[], party:[], gold:0, bank:0, inDungeon:false, pos:null, seen:{}, secrets:{}, rooms:{}, known:{}, fallen:[], carried:[], settings:{lasting:false}, log:[]}; }
+function save() { try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) {} }
+function loadSave() { try { const t = localStorage.getItem(SAVE); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
+function say(t, cls) { S.log.unshift({t, cls: cls || ''}); S.log.length = Math.min(S.log.length, 80); }
+const ch = id => S.roster.find(c => c.id === id);
+const party = () => S.party.map(ch).filter(Boolean);
+const alive = () => party().filter(c => c.status === 'ok');
+
+/* ---------- characters ---------- */
+/* Point buy: every score starts at 8, 27 points to spend, 15 at most before race. */
+const PB_COST = {8:0, 9:1, 10:2, 11:3, 12:4, 13:5, 14:7, 15:9}, PB_POINTS = 27;
+const PB_PRESET = {
+  fighter: {str:15, dex:13, con:14, int:8,  wis:12, cha:10},
+  rogue:   {str:10, dex:15, con:14, int:13, wis:12, cha:8},
+  wizard:  {str:8,  dex:13, con:14, int:15, wis:12, cha:10},
+  cleric:  {str:13, dex:12, con:14, int:8,  wis:15, cha:10},
+};
+const pbSpent = base => STATS.reduce((t, k) => t + PB_COST[base[k]], 0);
+const withRace = (base, race) => Object.fromEntries(STATS.map(k => [k, base[k] + (RACES[race].b[k] || 0)]));
+function maxSp(c) { const g = GUILDS[c.guild]; return g.caster ? 4 + (c.lvl - 1) * 3 + Math.max(0, mod(c.st[g.caster])) : 0; }
+
+/* Skills, GemStone-style: ranks bought with training points at the guild,
+   each guild paying its own price per rank. The table lives in data/skills.json. */
+const SKILLS = SK.skills;
+const rank = (c, k) => (c.sk && c.sk[k]) || 0;
+const skillCap = c => SK.max_ranks.base + SK.max_ranks.per_level * c.lvl;
+const skillCost = (c, k) => SK.costs[c.guild][k];
+const armorNeed = base => SK.armor_need[base] || 0;
+/* Characters made before skills existed get their guild's starting ranks and
+   the points they would have earned for each level already gained. */
+function ensureSkills(c) {
+  if (c.sk) return;
+  c.sk = {...(SK.start[c.guild] || {})};
+  c.tp = (c.lvl - 1) * SK.points_per_level;
+}
+/* The living member best at a skill, or null if nobody has a rank in it. */
+function best(k) { let b = null; for (const c of alive()) if (rank(c, k) > 0 && (!b || rank(c, k) + mod(c.st[SKILLS[k].stat]) > rank(b, k) + mod(b.st[SKILLS[k].stat]))) b = c; return b; }
+const pct = n => Math.max(5, Math.min(95, n));
+/* Attack penalty for armor heavier than the wearer has trained for. */
+function armorPenalty(c) { const a = worn(c, 'armor'); return a ? 2 * Math.max(0, armorNeed(a.base) - rank(c, 'armor')) : 0; }
+
+function makeChar(name, race, guild, st, gear) {
+  const c = {id: uid(), name, race, guild, lvl: 1, xp: 0, st, inv: [], status: 'ok', where: 'town'};
+  ensureSkills(c);
+  c.mhp = Math.max(1, GUILDS[guild].hd + mod(st.con)); c.hp = c.mhp; c.msp = maxSp(c); c.sp = c.msp;
+  for (const b of gear) { const k = ITEMS[b].kind; c.inv.push({base: b, plus: 0, cursed: false, id: 2, eq: ['weapon','armor','shield'].includes(k) && !worn(c, k)}); }
+  return c;
+}
+const START_GEAR = {fighter:['longsword','chain_shirt','shield','potion_heal'], rogue:['shortsword','leather','dagger','potion_heal'], wizard:['quarterstaff','potion_heal'], cleric:['mace','chain_shirt','shield','potion_heal']};
+const prof = c => 2 + Math.floor((c.lvl - 1) / 4);
+const worn = (c, kind) => c.inv.find(i => i.eq && ITEMS[i.base].kind === kind);
+function acOf(c) {
+  const a = worn(c, 'armor'), s = worn(c, 'shield'), r = worn(c, 'ring'), dm = mod(c.st.dex);
+  let ac = a ? ITEMS[a.base].ac + Math.min(dm, ITEMS[a.base].dex) + a.plus : 10 + dm;
+  if (s) ac += 2 + s.plus;
+  if (r) ac += r.plus;
+  return ac;
+}
+function weaponOf(c) { const w = worn(c, 'weapon'); return w ? {it: w, b: ITEMS[w.base]} : null; }
+function atkMod(c) { const w = weaponOf(c); const m = w && w.b.fin ? Math.max(mod(c.st.str), mod(c.st.dex)) : mod(c.st.str); return m; }
+function spellsOf(c) { return Object.entries(SPELLS).filter(([, s]) => s.guild === c.guild && c.lvl >= s.lvl); }
+function canUse(c, it) {
+  const b = ITEMS[it.base], g = GUILDS[c.guild];
+  if (b.kind === 'weapon') return g.weapons.includes(it.base);
+  if (b.kind === 'armor') return g.armor.includes(it.base) || rank(c, 'armor') >= armorNeed(it.base);
+  if (b.kind === 'shield') return !!g.shield;
+  return b.kind === 'ring';
+}
+function itemName(it) {
+  const b = ITEMS[it.base];
+  let lv = it.id;
+  if (['potion','scroll','ring'].includes(b.kind) && S.known[it.base]) lv = Math.max(lv, 1);
+  if (lv === 0) return cap(b.cat);
+  if (lv === 1 || b.kind === 'potion' || b.kind === 'scroll') return b.name;
+  return b.name + (it.plus ? (it.plus > 0 ? ' +' : ' ') + it.plus : '') + (it.cursed ? ' (cursed)' : '');
+}
+/* What an item does, and how it would suit each living companion. Shown once
+   its kind is known; a +bonus only counts once it is fully identified. */
+function itemInfo(owner, it) {
+  const b = ITEMS[it.base];
+  let lv = it.id;
+  if (['potion','scroll','ring'].includes(b.kind) && S.known[it.base]) lv = Math.max(lv, 1);
+  if (lv === 0) return `<div class="iinfo"><span class="tag">Unknown</span> Anyone with Lore can study it, or the store can identify it.</div>`;
+  const full = lv >= 2 || ['potion','scroll'].includes(b.kind);
+  const tag = full ? '<span class="tag ok">Fully identified</span> ' : '<span class="tag">Partly known</span> ';
+  const plus = lv >= 2 ? it.plus : 0, sp = plus ? (plus > 0 ? '+' : '') + plus : '';
+  let what = '';
+  if (b.kind === 'weapon') what = `Damage ${b.dmg}${sp}${b.fin ? ', finesse: uses STR or DEX, whichever is better' : ', uses STR'}.`;
+  if (b.kind === 'armor') what = `Armor class ${b.ac + plus}${b.dex >= 9 ? ' + DEX' : b.dex ? ` + DEX (up to ${b.dex})` : ', no DEX bonus'}. Needs Armor use ${armorNeed(it.base)} to fight in it without an attack penalty.`;
+  if (b.kind === 'shield') what = `Adds ${2 + plus} to armor class.`;
+  if (b.kind === 'ring') what = lv >= 2 ? `Adds ${plus} to armor class.` : 'Identify it fully to learn its strength.';
+  if (b.kind === 'potion') what = `Heals ${b.heal}.`;
+  if (b.kind === 'scroll') what = 'Reveals one item completely.';
+  if (!full) what += ' Its enchantment or curse is still hidden. Study it again on another trip, read a scroll, or pay the store.';
+  what = tag + what;
+  if (!['weapon','armor','shield','ring'].includes(b.kind)) return `<div class="iinfo">${what}</div>`;
+  const folk = (ui.screen === 'town' ? townFolk() : party()).filter(o => o.status === 'ok');
+  const fits = [], not = [];
+  for (const o of folk) {
+    if (!canUse(o, it)) { not.push(esc(o.name)); continue; }
+    const trial = {...o, inv: o.inv.filter(x => !(x.eq && ITEMS[x.base].kind === b.kind)).concat([{...it, plus, eq: true}])};
+    if (b.kind === 'weapon') {
+      const w = weaponOf(o), m = atkMod(trial), now = w ? `${w.b.dmg}${fmt(atkMod(o) + (w.it.id >= 2 ? w.it.plus : 0))}` : 'bare hands';
+      fits.push(`${esc(o.name)} ${b.dmg}${fmt(m + plus)} <span class="muted">(now ${now})</span>`);
+    } else {
+      const a0 = acOf(o), a1 = acOf(trial);
+      const pen = b.kind === 'armor' ? armorPenalty(trial) : 0;
+      fits.push(`${esc(o.name)} AC ${a0} &rarr; <b class="${a1 > a0 ? 'up' : a1 < a0 ? 'down' : ''}">${a1}</b>${pen ? ` <span class="down">(attack &minus;${pen})</span>` : ''}`);
+    }
+  }
+  return `<div class="iinfo">${what}${fits.length ? `<br>${fits.join('; ')}` : ''}${not.length ? `<br>Not for: ${not.join(', ')}` : ''}</div>`;
+}
+const fmt = n => n > 0 ? '+' + n : n < 0 ? String(n) : '';
+function itemValue(it) { const b = ITEMS[it.base]; if (it.cursed) return 1; return b.kind === 'ring' ? b.cost : b.cost * (it.plus > 0 ? 1 + 4 * it.plus : 1); }
+function sellPrice(it) { return it.id >= 2 ? Math.max(1, Math.floor(itemValue(it) / 2)) : Math.max(1, Math.floor(ITEMS[it.base].cost / 4)); }
+function makeItem(depth) {
+  const r = R(100);
+  let base;
+  if (r < 34) base = pick(WEAPONS);
+  else if (r < 56) base = pick(ARMORS);
+  else if (r < 80) base = depth >= 3 && R(3) === 0 ? 'potion_greater' : 'potion_heal';
+  else if (r < 91) base = 'scroll_id';
+  else base = 'ring_prot';
+  const it = {base, plus: 0, cursed: false, id: 0};
+  const k = ITEMS[base].kind;
+  if (k === 'ring') { if (R(100) < 20) { it.plus = -1; it.cursed = true; } else it.plus = 1; }
+  else if (k === 'weapon' || k === 'armor' || k === 'shield') {
+    if (R(100) < 18 + depth * 6) it.plus = depth >= 3 && R(3) === 0 ? 2 : 1;
+    else if (R(100) < 14) { it.plus = -1; it.cursed = true; }
+  }
+  return it;
+}
+
+/* ---------- map ---------- */
+const lvl = d => LV[d - 1];
+function tile(d, x, y) { const m = lvl(d).map; if (y < 0 || y >= m.length || x < 0 || x >= m[0].length) return '#'; return m[y][x]; }
+const skey = (d, x, y) => d + ':' + x + ',' + y;
+function passable(d, x, y) { const t = tile(d, x, y); if (t === '#') return false; if (t === 'S') return !!S.secrets[skey(d, x, y)]; return true; }
+function find(d, ch) { const m = lvl(d).map; for (let y = 0; y < m.length; y++) { const x = m[y].indexOf(ch); if (x >= 0) return {x, y}; } return null; }
+function markSeen() { const {depth, x, y} = S.pos; (S.seen[depth] ||= {})[x + ',' + y] = 1; }
+
+/* ---------- rooms ----------
+   A room is a patch of floor bounded by rock and doors. Each room holds at most
+   one encounter: it is decided the first time the party walks in, and a beaten
+   room stays empty until the party goes back to town. */
+const ROOMS = LV.map(L => {
+  const m = L.map, ids = m.map(r => [...r].map(() => -1)); let n = 0;
+  for (let y = 0; y < m.length; y++) for (let x = 0; x < m[0].length; x++) {
+    if ('#DS'.includes(m[y][x]) || ids[y][x] >= 0) continue;
+    const q = [[x, y]]; ids[y][x] = n;
+    while (q.length) { const [cx, cy] = q.pop(); for (let f = 0; f < 4; f++) { const nx = cx + DX[f], ny = cy + DY[f]; if (!'#DS'.includes(m[ny][nx]) && ids[ny][nx] < 0) { ids[ny][nx] = n; q.push([nx, ny]); } } }
+    n++;
+  }
+  return {ids, n};
+});
+const roomAt = (d, x, y) => ROOMS[d - 1].ids[y]?.[x] ?? -1;
+const roomKey = (d, x, y) => { const r = roomAt(d, x, y); return r < 0 ? null : d + ':' + r; };
+function rollRoom(d, r, force) {
+  const L = lvl(d);
+  for (const [k, l] of Object.entries(L.lairs || {})) {
+    const [x, y] = k.split(',').map(Number);
+    if (roomAt(d, x, y) === r) return {held: true, mid: l.monster, n: l.count[0] + R(l.count[1] - l.count[0] + 1), lair: true};
+  }
+  if (force || R(100) < (L.room_chance ?? 50)) { const mid = weighted(L.wander), m = MON[mid]; return {held: true, mid, n: Math.min(d + 1, m.group[0] + R(m.group[1] - m.group[0] + 1))}; }
+  return {held: false};
+}
+function quietRoom() { S.rooms ||= {}; const k = roomKey(S.pos.depth, S.pos.x, S.pos.y); S.pos.room = k; if (k && !S.rooms[k]) S.rooms[k] = {held: false}; }
+
+/* ---------- town ---------- */
+function newGame(ready) {
+  S = fresh();
+  if (ready) {
+    const mk = (n, r, g, st) => makeChar(n, r, g, st, START_GEAR[g]);
+    S.roster = [
+      mk('Bran', 'dwarf', 'fighter', {str:16, dex:12, con:16, int:9, wis:12, cha:10}),
+      mk('Wren', 'halfling', 'rogue', {str:10, dex:17, con:13, int:12, wis:11, cha:13}),
+      mk('Ysolde', 'elf', 'wizard', {str:8, dex:15, con:12, int:17, wis:12, cha:11}),
+      mk('Tamsin', 'human', 'cleric', {str:13, dex:11, con:14, int:11, wis:16, cha:12}),
+    ];
+    S.party = S.roster.map(c => c.id);
+    S.gold = 60;
+    say('Four companions wait at the edge of the town square. The way down is a stair cut between the roots.', 'note');
+  } else {
+    say('The guild ledgers are empty. Make your first character in the Roster.', 'note');
+  }
+  ui.screen = 'town'; ui.place = ready ? 'square' : 'roster'; ui.combat = ui.chest = null;
+  save(); render();
+}
+function toTown() {
+  S.inDungeon = false; S.pos = null; S.rooms = {};
+  for (const id of S.carried) { const c = ch(id); if (c) { c.where = 'town'; if (S.party.length < 4 && !S.party.includes(id)) S.party.push(id); } }
+  S.carried = [];
+  for (const c of S.roster) { if (c.status === 'ok') { c.hp = c.mhp; c.sp = c.msp; } c.where = c.where === 'dungeon' ? 'dungeon' : 'town'; }
+  say('You climb out into the grey light. The inn restores everyone still breathing.', 'good');
+  ui.screen = 'town'; ui.place = 'square'; ui.map = false;
+  save(); render();
+}
+function enterDungeon() {
+  if (!alive().length) { ui.msg = 'Nobody in the party can walk. Raise or replace them first.'; return render(); }
+  const dead = party().filter(c => c.status !== 'ok');
+  if (dead.length) { S.party = S.party.filter(id => ch(id).status === 'ok'); say(`${dead.map(c => c.name).join(', ')} stay${dead.length > 1 ? '' : 's'} behind with the temple.`, 'muted'); }
+  const st = find(1, '<');
+  S.trip = (S.trip || 0) + 1; // a new trip: items can be studied again
+  S.inDungeon = true; S.pos = {depth: 1, x: st.x, y: st.y, f: openFacing(1, st.x, st.y)};
+  S.rooms = {}; quietRoom();
+  say(`You descend into ${lvl(1).name}.`, 'note');
+  ui.screen = 'dungeon'; markSeen(); save(); render();
+}
+function openFacing(d, x, y) { for (let f = 0; f < 4; f++) if (passable(d, x + DX[f], y + DY[f])) return f; return 0; }
+
+/* ---------- movement ---------- */
+function step(back) {
+  if (ui.combat || ui.chest) return;
+  const f = back ? (S.pos.f + 2) % 4 : S.pos.f;
+  const nx = S.pos.x + DX[f], ny = S.pos.y + DY[f];
+  if (!passable(S.pos.depth, nx, ny)) { say(tile(S.pos.depth, nx, ny) === 'D' ? 'The door will not budge.' : 'Wet rock. No way through.'); return render(); }
+  S.pos.prev = {x: S.pos.x, y: S.pos.y};
+  S.pos.x = nx; S.pos.y = ny;
+  arrive();
+}
+function turn(t) { if (ui.combat || ui.chest) return; S.pos.f = (S.pos.f + t + 4) % 4; render(); }
+function arrive() {
+  markSeen();
+  const {depth: d, x, y} = S.pos, t = tile(d, x, y), k = x + ',' + y, L = lvl(d);
+  pickUpBodies();
+  if (t === 'N') say(L.notes[k], 'note');
+  if (t === 'F') say('Clear water wells up through the moss here.', 'note');
+  if (t === '>') say('A root-tangled stair leads down.', 'note');
+  if (t === '<') say(d === 1 ? 'Daylight, faintly, up the stair.' : 'A stair climbs back up.', 'note');
+  const rk = roomKey(d, x, y), entered = rk && rk !== S.pos.room;
+  S.pos.room = rk;
+  if (entered) {
+    S.rooms ||= {};
+    const rec = S.rooms[rk] ||= rollRoom(d, roomAt(d, x, y));
+    if (rec.held) return startFight(rec.mid, rec.n, rk);
+  }
+  save(); render();
+}
+
+/* ---------- the fallen ----------
+   Each living member can carry one body. Bodies past that are set down where
+   the party stands, and can be picked up again by walking onto the square. */
+const capacity = () => alive().length;
+function pickUpBodies() {
+  const {depth: d, x, y} = S.pos;
+  for (const f of S.fallen.filter(f => f.depth === d && f.x === x && f.y === y)) {
+    const room = capacity() - S.carried.length;
+    if (room <= 0) { say(`The fallen lie here: ${f.ids.map(id => ch(id)?.name).join(', ')}. Nobody has a free pair of hands.`, 'muted'); continue; }
+    const take = f.ids.slice(0, room), rest = f.ids.slice(room);
+    S.carried.push(...take); S.gold += f.gold; f.gold = 0;
+    if (rest.length) f.ids = rest; else S.fallen = S.fallen.filter(g => g !== f);
+    say(`You take up ${take.map(id => ch(id)?.name).join(', ')}${rest.length ? `. ${rest.map(id => ch(id)?.name).join(', ')} must wait` : ''}.`, 'good');
+  }
+}
+function leaveBody(id, quiet) {
+  const {depth, x, y} = S.pos;
+  S.carried = S.carried.filter(i => i !== id);
+  const f = S.fallen.find(f => f.depth === depth && f.x === x && f.y === y);
+  if (f) f.ids.push(id); else S.fallen.push({ids: [id], depth, x, y, gold: 0});
+  const c = ch(id); c.where = 'dungeon';
+  if (!quiet) say(`You set ${c.name}'s body down. It will be here when you come back.`, 'muted');
+}
+function settleBodies() {
+  for (const c of party()) if (c.status !== 'ok') {
+    S.party = S.party.filter(i => i !== c.id); S.carried.push(c.id); c.para = 0;
+    say(`The party takes up ${c.name}'s body.`, 'muted');
+  }
+  while (S.carried.length > capacity() && alive().length) {
+    const id = S.carried[S.carried.length - 1]; leaveBody(id, true);
+    say(`Too many to carry. ${ch(id).name}'s body is left here, to fetch later.`, 'foe');
+  }
+}
+function useStairs() {
+  const {depth: d, x, y} = S.pos, t = tile(d, x, y);
+  if (t === '<') {
+    if (d === 1) return toTown();
+    S.pos = {depth: d - 1, x, y, f: S.pos.f}; quietRoom();
+    say(`You climb to ${lvl(d - 1).name}.`, 'note');
+  } else if (t === '>') {
+    if (!lvl(d + 1)) { say('Roots choke the stair below. The deeper levels are not open yet.', 'note'); return render(); }
+    S.pos = {depth: d + 1, x, y, f: S.pos.f}; quietRoom();
+    say(`You descend to ${lvl(d + 1).name}.`, 'note');
+  }
+  markSeen(); save(); render();
+}
+function drink() {
+  for (const c of alive()) { c.hp = Math.min(c.mhp, c.hp + roll('1d8') + 2); c.sp = Math.min(c.msp, c.sp + 2); }
+  say('The water is cold and tastes of stone. Everyone feels steadier.', 'good');
+  save(); render();
+}
+function searchChance() { const p = best('perception'); return pct(30 + (p ? rank(p, 'perception') * 12 : 0) + Math.max(...alive().map(c => mod(c.st.wis))) * 5); }
+function search() {
+  const {depth: d, x, y} = S.pos;
+  const rogue = best('perception');
+  const chance = searchChance();
+  let found = 0, any = false;
+  for (let f = 0; f < 4; f++) {
+    const nx = x + DX[f], ny = y + DY[f];
+    if (tile(d, nx, ny) === 'S' && !S.secrets[skey(d, nx, ny)]) { any = true; if (R(100) < chance) { S.secrets[skey(d, nx, ny)] = 1; found++; } }
+  }
+  say(found ? `${rogue ? rogue.name : 'Someone'} finds a hidden door in the stonework!` : 'You run your hands along the wet stone and find nothing.', found ? 'good' : '');
+  void any; save(); render();
+}
+
+/* ---------- combat ---------- */
+function startFight(mid, n, room) {
+  const m = MON[mid], lair = room && S.rooms[room]?.lair;
+  const mons = Array.from({length: n}, () => { const hp = roll(m.hp); return {hp, mhp: hp, asleep: false, gone: false}; });
+  ui.combat = {mid, mons, lair, room, round: 1, cur: 0, queue: [], target: 0, bless: false, xp: 0, killed: 0, first: true};
+  S.aid = false;
+  say(`${n > 1 ? n + ' ' + m.plural : 'A ' + m.name} ${lair ? (n > 1 ? 'guard' : 'guards') + ' this hollow' : (n > 1 ? 'wait' : 'waits') + ' in the dark here'}!`, 'foe');
+  nextChooser(0); save(); render();
+}
+function choosers() { return party().filter(c => c.status === 'ok' && !c.para); }
+function nextChooser(i) { ui.combat.cur = i; if (i >= choosers().length) resolveRound(); }
+function liveFoes() { return ui.combat.mons.map((m, i) => ({m, i})).filter(o => !o.m.gone); }
+function choose(a) {
+  const C = ui.combat, c = choosers()[C.cur];
+  if (a.act === 'run') { return flee(); }
+  C.queue.push({id: c.id, ...a});
+  ui.pick = null;
+  nextChooser(C.cur + 1); render();
+}
+function undo() { const C = ui.combat; if (C.cur > 0) { C.queue.pop(); C.cur--; ui.pick = null; render(); } }
+function flee() {
+  const C = ui.combat, m = MON[C.mid];
+  const best = Math.max(...alive().map(c => mod(c.st.dex)));
+  if (C.lair && R(100) < 30) { say('The way back is blocked!', 'foe'); }
+  else if (R(100) < 55 + best * 8) {
+    say('You flee back the way you came.', 'good');
+    if (C.room && S.rooms[C.room]) S.rooms[C.room].n = liveFoes().length;
+    ui.combat = null;
+    if (S.pos.prev) { S.pos.x = S.pos.prev.x; S.pos.y = S.pos.prev.y; S.pos.room = roomKey(S.pos.depth, S.pos.x, S.pos.y); }
+    settleBodies(); save(); return render();
+  } else say(`The ${m.plural.toLowerCase()} cut off your escape!`, 'foe');
+  C.queue = []; monstersAct(); endRound();
+}
+function hitFoe(i, dmg, who) {
+  const C = ui.combat, f = C.mons[i], m = MON[C.mid];
+  f.hp -= dmg; f.asleep = false;
+  if (f.hp <= 0) { f.gone = true; C.xp += m.xp; C.killed++; say(`${who} kills a ${m.name.toLowerCase()}.`, 'good'); }
+}
+function targetFor(i) { const live = liveFoes(); if (!live.length) return -1; return live.some(o => o.i === i) ? i : live[0].i; }
+function partyActs() {
+  const C = ui.combat, m = MON[C.mid];
+  for (const q of C.queue) {
+    const c = ch(q.id);
+    if (!c || c.status !== 'ok') continue;
+    if (!liveFoes().length) break;
+    c.def = false;
+    if (q.act === 'fight') {
+      const swings = c.guild === 'fighter' && c.lvl >= 5 ? 2 : 1;
+      for (let s = 0; s < swings; s++) {
+        const t = targetFor(q.t); if (t < 0) break;
+        const w = weaponOf(c), r = d20(), crit = r === 20;
+        const total = r + prof(c) + atkMod(c) + (w ? w.it.plus : 0) + (C.bless ? roll('1d4') : 0) - armorPenalty(c);
+        const foe = C.mons[t];
+        if (r !== 1 && (crit || foe.asleep || total >= m.ac)) {
+          let dmg = (w ? roll(w.b.dmg, crit) : 1) + atkMod(c) + (w ? w.it.plus : 0);
+          if (c.guild === 'rogue' && C.first) dmg += roll(Math.ceil(c.lvl / 2) + 'd6', crit);
+          dmg = Math.max(1, dmg);
+          say(`${c.name} ${crit ? 'lands a crushing blow on' : 'hits'} a ${m.name.toLowerCase()} for ${dmg}.`);
+          hitFoe(t, dmg, c.name);
+        } else say(`${c.name} misses.`, 'muted');
+      }
+    } else if (q.act === 'defend') { c.def = true; say(`${c.name} raises a guard.`, 'muted'); }
+    else if (q.act === 'item') {
+      const it = c.inv[q.idx];
+      if (it && ITEMS[it.base].kind === 'potion') quaff(c, q.idx, ch(q.on) || c);
+    } else if (q.act === 'cast') {
+      const sp = SPELLS[q.spell];
+      if (c.sp < sp.sp) { say(`${c.name} has too little spell power.`, 'muted'); continue; }
+      c.sp -= sp.sp;
+      const dc = 8 + prof(c) + mod(c.st[GUILDS[c.guild].caster]);
+      if (q.spell === 'missile') { const t = targetFor(q.t); const dmg = roll('3d4+3'); say(`${c.name}'s missiles strike for ${dmg}.`); hitFoe(t, dmg, c.name); }
+      if (q.spell === 'sleep') {
+        if (m.undead) say(`The dead do not sleep. ${c.name}'s spell fails.`, 'muted');
+        else { let budget = roll('5d8'), n = 0; for (const o of liveFoes().filter(o => !o.m.asleep).sort((a, b) => a.m.hp - b.m.hp)) { if (o.m.hp > budget) break; budget -= o.m.hp; o.m.asleep = true; n++; } say(n ? `${n} ${n > 1 ? m.plural.toLowerCase() : m.name.toLowerCase()} slump${n > 1 ? '' : 's'} into sleep.` : 'The foes shake off the drowse.', n ? 'good' : 'muted'); }
+      }
+      if (q.spell === 'flame') { for (const o of liveFoes()) { let dmg = roll('3d6'); if (d20() + 1 >= dc) dmg = Math.floor(dmg / 2); hitFoe(o.i, dmg, c.name); } say(`${c.name} sweeps fire across the foes.`); }
+      if (q.spell === 'cure') { const t = ch(q.on) || alive().sort((a, b) => a.hp / a.mhp - b.hp / b.mhp)[0]; heal(t, roll('1d8') + mod(c.st.wis), c.name); }
+      if (q.spell === 'bless') { C.bless = true; say(`${c.name} blesses the party.`, 'good'); }
+      if (q.spell === 'turn') {
+        if (!m.undead) say(`Nothing here fears ${c.name}'s holy symbol.`, 'muted');
+        else { let n = 0; for (const o of liveFoes()) if (d20() < dc) { o.m.gone = true; C.xp += Math.floor(m.xp / 2); n++; } say(n ? `${n} undead flee from the light.` : 'The dead stand their ground.', n ? 'good' : 'muted'); }
+      }
+    }
+  }
+  C.first = false;
+}
+function heal(t, n, by) { if (!t) return; const before = t.hp; t.hp = Math.min(t.mhp, t.hp + Math.max(1, n)); say(`${by ? by + ' heals ' + t.name : t.name + ' recovers'} (${t.hp - before} hits).`, 'good'); }
+function quaff(c, idx, on) {
+  const it = c.inv[idx], b = ITEMS[it.base];
+  c.inv.splice(idx, 1);
+  S.known[it.base] = 1;
+  say(`${c.name} ${on === c ? 'drinks' : 'gives ' + on.name} ${b.name.toLowerCase()}.`);
+  heal(on, roll(b.heal));
+}
+function monstersAct() {
+  const C = ui.combat, m = MON[C.mid];
+  for (const o of liveFoes()) {
+    if (o.m.asleep) continue;
+    const live = alive();
+    if (!live.length) return;
+    const front = live.filter(c => S.party.indexOf(c.id) < 2);
+    const t = front.length && R(100) < 65 ? pick(front) : pick(live);
+    const r = d20();
+    const ac = acOf(t) + (t.def ? 2 : 0);
+    if (r === 20 || (r !== 1 && r + m.atk >= ac)) {
+      let dmg = roll(m.dmg, r === 20);
+      let extra = '';
+      if (m.poison && t.race !== 'dwarf' && R(3) === 0) { dmg += roll(m.poison); extra = ' Poison burns in the wound.'; }
+      if (m.paralyze && t.race !== 'elf' && d20() + mod(t.st.con) < 10) { t.para = 2; extra = ` ${t.name} goes rigid!`; }
+      t.hp -= dmg;
+      say(`A ${m.name.toLowerCase()} hits ${t.name} for ${dmg}.${extra}`, 'foe');
+      if (t.hp <= 0) { t.hp = 0; t.status = 'dead'; t.para = 0; say(`${t.name} falls and does not rise.`, 'foe'); }
+    }
+  }
+}
+function resolveRound() {
+  const C = ui.combat, m = MON[C.mid];
+  const best = Math.max(...alive().map(c => mod(c.st.dex)));
+  if (d20() + best >= d20() + 1) { partyActs(); monstersAct(); }
+  else { monstersAct(); partyActs(); }
+  void m; endRound();
+}
+function endRound() {
+  const C = ui.combat;
+  for (const c of party()) { if (c.para) c.para--; }
+  if (!liveFoes().length) return win();
+  if (!alive().length) return wipe();
+  C.round++; C.queue = []; ui.pick = null;
+  nextChooser(0); save(); render();
+}
+function win() {
+  const C = ui.combat, m = MON[C.mid], d = S.pos.depth;
+  const live = alive();
+  const each = Math.floor(C.xp / Math.max(1, live.length));
+  for (const c of live) c.xp += each;
+  let gold = 0; for (let i = 0; i < C.killed; i++) gold += 1 + R(Math.max(2, Math.floor(m.xp / 5)));
+  S.gold += gold;
+  say(`Victory. ${each} experience each${gold ? `, and ${gold} gold` : ''}.`, 'gold');
+  for (const c of live) if (c.xp >= XP_NEXT[c.lvl] && !c.told) { c.told = 1; say(`${c.name} can advance at the guild.`, 'good'); }
+  if (C.room && S.rooms[C.room]) S.rooms[C.room].held = false;
+  ui.combat = null;
+  S.aid = true;
+  settleBodies();
+  if (C.lair || R(100) < 35) {
+    const items = [makeItem(d)];
+    if (C.lair && R(100) < 35) items.push(makeItem(d));
+    if (!C.lair && R(100) < 45) items.pop();
+    const trap = R(100) < 40 ? null : pick(['needle','spores','alarm','blast']);
+    ui.chest = {trap, locked: R(100) < 40, found: false, disarmed: false, gold: (roll('3d10') + 5) * d, items};
+    say('The foes guarded a chest, slick with moss.', 'gold');
+  }
+  save(); render();
+}
+function wipe() {
+  const {depth, x, y} = S.pos;
+  S.fallen.push({ids: [...S.party, ...S.carried], depth, x, y, gold: S.gold});
+  for (const id of S.party) { const c = ch(id); c.where = 'dungeon'; c.status = c.status === 'ok' ? 'dead' : c.status; c.para = 0; }
+  for (const id of S.carried) { const c = ch(id); if (c) c.where = 'dungeon'; }
+  S.party = []; S.carried = []; S.gold = 0; S.inDungeon = false; S.pos = null;
+  ui.combat = null; ui.chest = null; ui.screen = 'town'; ui.place = 'morgue';
+  say(`The party has fallen on ${lvl(depth).name}. Their bodies lie where they fell.`, 'foe');
+  save(); render();
+}
+
+/* ---------- chests ---------- */
+/* Chest skills: Perception spots a trap, Disarm clears it, Locks picks a locked
+   chest. Anyone can force a locked chest, but forcing smashes the potions inside. */
+const inspectChance = c => pct(35 + rank(c, 'perception') * 12 + mod(c.st.wis) * 5);
+const skillRoll = (c, k) => d20() + mod(c.st[SKILLS[k].stat]) + rank(c, k);
+function chestAct(a) {
+  const K = ui.chest, d = S.pos.depth, dc = 10 + 2 * d;
+  if (a === 'leave') { ui.chest = null; say('You leave the chest where it sits.'); return save(), render(); }
+  if (a === 'inspect') {
+    const c = best('perception'); if (!c) return;
+    if (R(100) < inspectChance(c)) { K.found = true; say(K.trap ? `${c.name} spots a trap: ${trapName(K.trap)}.` : `${c.name} finds no trap.`, 'good'); }
+    else say(`${c.name} can't tell.`, 'muted');
+    K.inspected = true; return render();
+  }
+  if (a === 'disarm') {
+    const c = best('disarm'); if (!c) return;
+    if (!K.trap) { say(`${c.name} works over the chest. There was nothing to disarm.`, 'muted'); K.disarmed = true; return render(); }
+    const r = skillRoll(c, 'disarm');
+    if (r >= dc) { K.disarmed = true; K.found = true; say(`${c.name} disarms the ${trapName(K.trap)}.`, 'good'); return render(); }
+    if (r < dc - 5) { say(`${c.name} slips!`, 'foe'); spring(K); if (!alive().length) return wipe(); }
+    else say(`${c.name} can't work the mechanism loose.`, 'muted');
+    return render();
+  }
+  if (a === 'pick') {
+    const c = best('locks'); if (!c || K.picked) return;
+    K.picked = true;
+    if (skillRoll(c, 'locks') >= dc) { K.locked = false; say(`${c.name} picks the lock. The lid lifts an inch.`, 'good'); }
+    else say(`${c.name} can't turn the lock. It will have to be forced.`, 'muted');
+    return render();
+  }
+  if (a === 'open' || a === 'force') {
+    if (a === 'open' && K.locked) return;
+    if (K.trap && !K.disarmed) spring(K);
+    if (!alive().length) return wipe();
+    settleBodies();
+    S.gold += K.gold;
+    let items = K.items, smashed = 0;
+    if (a === 'force') { smashed = items.filter(it => ITEMS[it.base].kind === 'potion').length; items = items.filter(it => ITEMS[it.base].kind !== 'potion'); }
+    const got = [];
+    for (const it of items) { const c = alive().find(c => c.inv.length < 10); if (c) { c.inv.push(it); got.push(`${c.name} takes ${itemName(it).toLowerCase()}`); } }
+    say(`${a === 'force' ? 'The hasp gives way. ' : ''}Inside: ${K.gold} gold.${got.length ? ' ' + got.join('; ') + '.' : ''}${smashed ? ` ${smashed > 1 ? smashed + ' potions' : 'A potion'} shattered in the forcing.` : ''}`, 'gold');
+    ui.chest = null; save(); render();
+  }
+}
+const trapName = t => ({needle: 'poison needle', spores: 'spore cloud', alarm: 'alarm bell', blast: 'blast rune'}[t]);
+function spring(K) {
+  const d = S.pos.depth, live = alive();
+  if (K.trap === 'needle') { const t = pick(live); hurt(t, roll(d + 'd6'), 'A needle jabs'); }
+  if (K.trap === 'spores') for (const t of live) hurt(t, roll('1d4') * d, 'Spores choke');
+  if (K.trap === 'blast') for (const t of live) hurt(t, roll('2d6') + d, 'The rune bursts and scorches');
+  if (K.trap === 'alarm') {
+    const open = [...Array(ROOMS[d - 1].n).keys()].filter(r => !S.rooms[d + ':' + r]);
+    if (open.length) { const r = pick(open); S.rooms[d + ':' + r] = rollRoom(d, r, true); }
+    say('A bell clangs. Somewhere on this level, something is now awake and waiting.', 'foe');
+  }
+  K.disarmed = true;
+}
+/* First aid: once after each fight, the party's best medic tends everyone hurt. */
+const canTend = () => S.aid && best('firstaid') && alive().some(c => c.hp < c.mhp);
+function tend() {
+  const c = best('firstaid'); if (!canTend()) return;
+  S.aid = false;
+  const n = rank(c, 'firstaid'), wis = mod(c.st.wis);
+  say(`${c.name} binds wounds with moss and clean cloth.`, 'good');
+  for (const t of alive()) if (t.hp < t.mhp) heal(t, roll('1d4') + n + wis, c.name);
+  save(); render();
+}
+function hurt(t, n, how) { t.hp -= n; say(`${how} ${t.name} for ${n}.`, 'foe'); if (t.hp <= 0) { t.hp = 0; t.status = 'dead'; say(`${t.name} falls.`, 'foe'); } }
+
+/* ---------- inventory actions ---------- */
+function equip(c, i) {
+  const it = c.inv[i], k = ITEMS[it.base].kind;
+  if (it.eq) {
+    if (it.cursed) { it.id = 2; say(`${itemName(it)} will not come off. It is cursed. The temple can break it.`, 'foe'); return; }
+    it.eq = false; return;
+  }
+  if (!canUse(c, it)) { say(`A ${GUILDS[c.guild].name.toLowerCase()} cannot use that.`, 'muted'); return; }
+  const cur = worn(c, k);
+  if (cur) { if (cur.cursed) { cur.id = 2; say(`${c.name} cannot remove ${itemName(cur)}. It is cursed.`, 'foe'); return; } cur.eq = false; }
+  it.eq = true; it.id = Math.max(it.id, 1);
+  if (it.cursed) say(`${itemName(it)} tightens around ${c.name}. Something is wrong with it.`, 'foe');
+}
+const studyChance = c => pct(20 + rank(c, 'lore') * 15 + mod(c.st.int) * 5);
+function study(c, i) {
+  const it = c.inv[i];
+  if (!rank(c, 'lore')) return;
+  if (it.tried === S.trip) { say(`${c.name} has already studied that this trip. Try again after a trip to town.`, 'muted'); return; }
+  it.tried = S.trip;
+  if (R(100) < studyChance(c)) { it.id = Math.min(2, it.id + 1); if (['potion','scroll','ring'].includes(ITEMS[it.base].kind)) { it.id = 2; S.known[it.base] = 1; } say(it.id >= 2 ? `${c.name} studies it and knows it fully: ${itemName(it)}.` : `${c.name} studies it: ${itemName(it)}. Its enchantment is still hidden.`, 'good'); }
+  else say(`${c.name} studies it and learns nothing new.`, 'muted');
+}
+
+/* ---------- rendering: first-person view ---------- */
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const hash = (a, b, c, d) => ((a * 73856093) ^ (b * 19349663) ^ (c * 83492791) ^ (d * 2654435761)) | 0;
+function drawView(cv) {
+  const g = cv.getContext('2d'), W = cv.width, H = cv.height, cx = W / 2, cy = H / 2, F = W / 2;
+  const {depth: D, x: px, y: py, f} = S.pos;
+  const fx = DX[f], fy = DY[f], rx = DX[(f + 1) % 4], ry = DY[(f + 1) % 4];
+  const P = (x, z, y) => [cx + x / z * F, cy + y / z * F];
+  // ceiling and floor
+  let gr = g.createLinearGradient(0, 0, 0, cy); gr.addColorStop(0, '#1b2016'); gr.addColorStop(1, '#050605');
+  g.fillStyle = gr; g.fillRect(0, 0, W, cy);
+  gr = g.createLinearGradient(0, cy, 0, H); gr.addColorStop(0, '#050605'); gr.addColorStop(1, '#1d2219');
+  g.fillStyle = gr; g.fillRect(0, cy, W, H - cy);
+  g.strokeStyle = 'rgba(120,140,90,.07)'; g.lineWidth = 1;
+  for (let z = 1; z <= 6; z++) { const [, yy] = P(0, z, .5); g.beginPath(); g.moveTo(0, yy); g.lineTo(W, yy); g.stroke(); const [, yc] = P(0, z, -.5); g.beginPath(); g.moveTo(0, yc); g.lineTo(W, yc); g.stroke(); }
+  const kind = (lx, d) => {
+    const ax = px + fx * d + rx * lx, ay = py + fy * d + ry * lx, t = tile(D, ax, ay);
+    if (t === '#') return {k: 'rock', ax, ay, t};
+    if (t === 'S') return {k: S.secrets[skey(D, ax, ay)] ? 'door' : 'rock', ax, ay, t};
+    if (t === 'D') return {k: (lx === 0 && d === 0) ? null : 'door', ax, ay, t};
+    return {k: null, ax, ay, t};
+  };
+  const shadeA = z => Math.min(.92, z * .17);
+  const face = (pts, z, info, side) => {
+    const [TL, TR, BR, BL] = pts;
+    g.beginPath(); g.moveTo(...TL); g.lineTo(...TR); g.lineTo(...BR); g.lineTo(...BL); g.closePath();
+    const base = side ? '#363d2f' : '#414a39';
+    g.fillStyle = base; g.fill();
+    const map = (u, v) => { const a = [TL[0] + (TR[0] - TL[0]) * u, TL[1] + (TR[1] - TL[1]) * u], b = [BL[0] + (BR[0] - BL[0]) * u, BL[1] + (BR[1] - BL[1]) * u]; return [a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v]; };
+    const hAt = u => { const a = map(u, 0), b = map(u, 1); return b[1] - a[1]; };
+    g.save(); g.clip();
+    const rnd = rng(hash(D, info.ax, info.ay, info.dir));
+    const v0 = r => .2 * (1 + Math.floor(r() * 4)) + (r() - .5) * .03; // moss in the mortar joints
+    // courses of stone, each block its own shade
+    const quadAt = (u0, u1, v0, v1) => { const q = [map(u0, v0), map(u1, v0), map(u1, v1), map(u0, v1)]; g.beginPath(); g.moveTo(...q[0]); for (const p of q.slice(1)) g.lineTo(...p); g.closePath(); };
+    for (let r = 0; r < 5; r++) {
+      const off = r % 2 ? .25 : 0;
+      for (let u = -off; u < 1; u += .5) {
+        const l = Math.max(0, u), rr = Math.min(1, u + .5), t = rnd();
+        quadAt(l, rr, r * .2, r * .2 + .2);
+        g.fillStyle = `rgba(${t < .5 ? '20,24,16' : '120,128,104'},${.08 + rnd() * .18})`; g.fill();
+        g.strokeStyle = 'rgba(8,10,6,.6)'; g.lineWidth = Math.max(.6, hAt(.5) / 110); g.stroke();
+      }
+    }
+    if (info.k === 'door') {
+      const q = [map(.22, .12), map(.78, .12), map(.78, 1), map(.22, 1)];
+      g.beginPath(); g.moveTo(...q[0]); g.lineTo(...q[1]); g.lineTo(...q[2]); g.lineTo(...q[3]); g.closePath();
+      g.fillStyle = '#3d2b1b'; g.fill(); g.strokeStyle = '#1c130b'; g.lineWidth = Math.max(1, hAt(.5) / 60); g.stroke();
+      for (const u of [.36, .5, .64]) { const a = map(u, .12), b = map(u, 1); g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke(); }
+      const ring = map(.66, .6); g.beginPath(); g.arc(ring[0], ring[1], Math.max(1.5, hAt(.66) / 28), 0, 7); g.strokeStyle = '#8a7b55'; g.stroke();
+    }
+    // moss, low and in the joints
+    // moss: speckled clumps, thickest low down and in the joints
+    const clumps = 3 + Math.floor(rnd() * 6);
+    for (let i = 0; i < clumps; i++) {
+      const cu = rnd(), cv = rnd() < .6 ? .78 + rnd() * .22 : v0(rnd), spread = .04 + rnd() * .1, dots = 30 + Math.floor(rnd() * 50);
+      const hue = rnd();
+      for (let k = 0; k < dots; k++) {
+        const a = rnd() * 6.283, dist = Math.pow(rnd(), .6) * spread;
+        const u = cu + Math.cos(a) * dist * 1.6, v = cv + Math.sin(a) * dist * .7;
+        if (u < 0 || u > 1 || v < 0 || v > 1) continue;
+        const [mx, my] = map(u, v), r = Math.max(.6, hAt(u) * (.004 + rnd() * .012));
+        g.fillStyle = hue < .7 ? `rgba(${88 + Math.floor(rnd() * 40)},${118 + Math.floor(rnd() * 50)},${42 + Math.floor(rnd() * 22)},${.45 + rnd() * .4})` : `rgba(${150 + Math.floor(rnd() * 40)},${160 + Math.floor(rnd() * 30)},${90},${.4 + rnd() * .3})`;
+        g.beginPath(); g.arc(mx, my, r, 0, 7); g.fill();
+      }
+    }
+    // a damp stain running down from the top
+    if (rnd() < .5) { const u = .1 + rnd() * .8, a = map(u - .03, 0), b = map(u + .03, 0), c2 = map(u + .02, .3 + rnd() * .5), d2 = map(u - .02, .3 + rnd() * .5); g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.lineTo(...c2); g.lineTo(...d2); g.closePath(); g.fillStyle = 'rgba(10,16,8,.28)'; g.fill(); }
+    if (rnd() < .4) for (let i = 0, k = 1 + Math.floor(rnd() * 3); i < k; i++) {
+      const u = .1 + rnd() * .8, len = .15 + rnd() * .45, a = map(u, 0), b = map(u + (rnd() - .5) * .1, len), c2 = map(u + (rnd() - .5) * .2, len * .5);
+      g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(c2[0], c2[1], b[0], b[1]); g.strokeStyle = '#3a2c1d'; g.lineWidth = Math.max(1, hAt(u) / 50); g.stroke();
+    }
+    if (rnd() < .5) for (let i = 0, k = 1 + Math.floor(rnd() * 4); i < k; i++) {
+      const [mx, my] = map(rnd(), .78 + rnd() * .2), r = Math.max(1, hAt(.5) / 70);
+      g.shadowColor = '#9ff0c4'; g.shadowBlur = r * 6; g.fillStyle = '#b8f5d2';
+      g.beginPath(); g.arc(mx, my, r, 0, 7); g.fill(); g.shadowBlur = 0;
+    }
+    g.fillStyle = `rgba(0,0,0,${shadeA(z)})`; g.fillRect(0, 0, W, H);
+    g.restore();
+  };
+  const floorMark = (d, t) => {
+    const z0 = Math.max(.5, d + .2), z1 = d + .8;
+    if (t === '>') { const p = [P(-.32, z1, .5), P(.32, z1, .5), P(.32, z0, .5), P(-.32, z0, .5)]; g.beginPath(); p.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.closePath(); g.fillStyle = '#000'; g.fill(); g.strokeStyle = '#4a3a26'; g.lineWidth = 2; g.stroke(); }
+    if (t === 'F') { const [ax, ay] = P(0, d + .5, .5), [bx] = P(.3, d + .5, .5); const ry2 = (P(0, z0, .5)[1] - P(0, z1, .5)[1]) / 2; g.beginPath(); g.ellipse(ax, ay, bx - ax, Math.max(2, ry2), 0, 0, 7); g.fillStyle = '#1f5a52'; g.fill(); g.strokeStyle = '#6cc5b3'; g.lineWidth = 1.5; g.stroke(); }
+    if (t === '<') { const z = d + .5, [l] = P(-.18, z, 0), [r] = P(.18, z, 0), [, top] = P(0, z, -.5), [, bot] = P(0, z, .5); g.strokeStyle = '#5b4a30'; g.lineWidth = Math.max(1.5, (bot - top) / 40); g.beginPath(); g.moveTo(l, top); g.lineTo(l, bot); g.moveTo(r, top); g.lineTo(r, bot); for (let k = 1; k < 8; k++) { const yy = top + (bot - top) * k / 8; g.moveTo(l, yy); g.lineTo(r, yy); } g.stroke(); }
+    if (t === 'N') { const [ax, ay] = P(0, d + .5, .5), [bx] = P(.14, d + .5, .5), [, tp] = P(0, d + .5, .2); g.fillStyle = '#5c6150'; g.fillRect(ax - (bx - ax), tp, (bx - ax) * 2, ay - tp); }
+  };
+  const MAXD = 5;
+  for (let d = MAXD; d >= 0; d--) {
+    for (const lx of [-3, 3, -2, 2, -1, 1]) {
+      const c = kind(lx, d); if (!c.k) continue;
+      const x = lx < 0 ? lx + .5 : lx - .5, z0 = Math.max(.5, d), z1 = d + 1;
+      if (z1 <= .5) continue;
+      const dir = lx < 0 ? (f + 1) % 4 : (f + 3) % 4;
+      const pts = lx < 0 ? [P(x, z1, -.5), P(x, z0, -.5), P(x, z0, .5), P(x, z1, .5)] : [P(x, z0, -.5), P(x, z1, -.5), P(x, z1, .5), P(x, z0, .5)];
+      face(pts, (z0 + z1) / 2, {...c, dir}, true);
+    }
+    if (d >= 1) for (const lx of [-3, 3, -2, 2, -1, 1, 0]) {
+      const c = kind(lx, d);
+      if (!c.k) { if (lx === 0) floorMark(d, c.t); continue; }
+      face([P(lx - .5, d, -.5), P(lx + .5, d, -.5), P(lx + .5, d, .5), P(lx - .5, d, .5)], d, {...c, dir: (f + 2) % 4}, false);
+    }
+  }
+  if (ui.combat) drawFoes(g, W, H);
+}
+function drawFoes(g, W, H) {
+  const C = ui.combat, m = MON[C.mid], n = C.mons.length;
+  const col = m.undead ? '#bfe3ff' : (C.mid.includes('fungus') ? '#d6a3ff' : '#ffb347');
+  C.mons.forEach((f, i) => {
+    if (f.gone) return;
+    const x = W * (i + 1) / (n + 1) + (i % 2 ? 6 : -6), y = H * (.42 + (i % 3) * .07), s = Math.max(4, 16 - n);
+    g.fillStyle = 'rgba(0,0,0,.6)'; g.beginPath(); g.ellipse(x, y + s * 2.4, s * 3.4, s * 4, 0, 0, 7); g.fill();
+    if (f.asleep) { g.strokeStyle = col; g.lineWidth = 2; g.beginPath(); g.moveTo(x - s * 1.6, y); g.lineTo(x - s * .5, y); g.moveTo(x + s * .5, y); g.lineTo(x + s * 1.6, y); g.stroke(); return; }
+    g.shadowColor = col; g.shadowBlur = s * 1.6; g.fillStyle = col;
+    for (const ex of [-1, 1]) { g.beginPath(); g.ellipse(x + ex * s, y, s * .55, s * .35, 0, 0, 7); g.fill(); }
+    g.shadowBlur = 0;
+    if (i === targetFor(C.target)) { g.strokeStyle = 'rgba(226,180,90,.7)'; g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, s * 2.4, 0, 7); g.stroke(); }
+  });
+}
+function drawMap(cv) {
+  const g = cv.getContext('2d'), {depth: D, x: px, y: py, f} = S.pos, m = lvl(D).map, n = m.length, s = cv.width / n;
+  g.fillStyle = '#0b0f0c'; g.fillRect(0, 0, cv.width, cv.height);
+  const seen = S.seen[D] || {};
+  for (const k in seen) {
+    const [x, y] = k.split(',').map(Number);
+    g.fillStyle = '#2b3626'; g.fillRect(x * s, y * s, s, s);
+    for (let dd = 0; dd < 4; dd++) { const nx = x + DX[dd], ny = y + DY[dd]; if (!passable(D, nx, ny)) { g.fillStyle = tile(D, nx, ny) === 'D' ? '#7a5a34' : '#56634a'; g.fillRect(nx * s + 1, ny * s + 1, s - 2, s - 2); } }
+    const t = tile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b', 'L': '#cf5a42', 'D': '#7a5a34'}[t];
+    if (mark) { g.fillStyle = mark; g.fillRect(x * s + s * .3, y * s + s * .3, s * .4, s * .4); }
+  }
+  const cxp = px * s + s / 2, cyp = py * s + s / 2;
+  g.fillStyle = '#ffffff'; g.beginPath();
+  g.moveTo(cxp + DX[f] * s * .4, cyp + DY[f] * s * .4);
+  g.lineTo(cxp + DX[(f + 1) % 4] * s * .3 - DX[f] * s * .3, cyp + DY[(f + 1) % 4] * s * .3 - DY[f] * s * .3);
+  g.lineTo(cxp - DX[(f + 1) % 4] * s * .3 - DX[f] * s * .3, cyp - DY[(f + 1) % 4] * s * .3 - DY[f] * s * .3);
+  g.closePath(); g.fill();
+}
+
+/* ---------- rendering: HTML ---------- */
+const $ = s => document.querySelector(s);
+function bar(v, mx, color) { const p = mx ? Math.max(0, Math.min(100, 100 * v / mx)) : 0; return `<i><b style="width:${p}%;background:${color}"></b></i>`; }
+function memberCard(c, acting) {
+  const g = GUILDS[c.guild];
+  const st = c.status !== 'ok' ? (c.status === 'lost' ? 'lost' : 'dead') : c.para ? 'paralysed' : '';
+  return `<button class="member ${c.status !== 'ok' ? 'dead' : ''} ${acting ? 'acting' : ''}" data-a="sheet" data-id="${c.id}">
+    <span class="nm">${esc(c.name)}</span><span class="cls">${RACES[c.race].name} ${g.name} ${c.lvl}${st ? ', ' + st : ''}</span>
+    <span class="meter"><span>HP</span>${bar(c.hp, c.mhp, c.hp / c.mhp < .34 ? 'var(--blood)' : 'var(--moss)')}<span>${c.hp} / ${c.mhp}</span></span>
+    ${c.msp ? `<span class="meter"><span>SP</span>${bar(c.sp, c.msp, 'var(--mana)')}<span>${c.sp} / ${c.msp}</span></span>` : ''}
+  </button>`;
+}
+function partyPanel(actingId) {
+  const p = party(), busy = !!(ui.combat || ui.chest);
+  const carried = S.carried.map(ch).filter(Boolean);
+  const canOrder = p.length > 1 && !busy;
+  const rows = p.map((c, i) => ui.order && canOrder
+    ? `<div class="mrow">${memberCard(c, false)}<button class="btn up" data-a="up" data-id="${c.id}" ${i ? '' : 'disabled'} aria-label="Move ${esc(c.name)} up">Up</button></div>`
+    : memberCard(c, c.id === actingId)).join('');
+  const bodies = carried.map(c => `<li>${esc(c.name)}${S.inDungeon && !busy ? ` <button class="link" data-a="setdown" data-id="${c.id}">Set down here</button>` : ''}</li>`).join('');
+  return `<div class="panel"><h2>Party</h2>${p.length ? rows : '<p class="muted">Nobody yet. Form a party in the Roster.</p>'}
+    ${canOrder ? `<p class="small muted" style="margin:6px 0 0">${ui.order ? 'The first two in line take most of the blows. ' : ''}<button class="link" data-a="order">${ui.order ? 'Done' : 'Change marching order'}</button></p>` : ''}
+    ${carried.length ? `<h3>Carried bodies (${carried.length} of ${capacity()})</h3><ul class="small bodies">${bodies}</ul><p class="small muted" style="margin:0">Each living member carries one body. Take them to the temple in town.</p>` : ''}
+    <p class="small muted" style="margin:8px 0 0">Purse: <b style="color:var(--lamp)">${S.gold}</b> gold${S.bank ? `. Bank: ${S.bank}` : ''}</p></div>`;
+}
+function logPanel() { return `<div class="panel"><h2>Messages</h2><div class="log">${S.log.slice(0, 40).map(l => `<div class="${l.cls}">${esc(l.t)}</div>`).join('')}</div></div>`; }
+
+function render() {
+  const app = $('#app');
+  if (ui.screen === 'title') { app.innerHTML = titleHTML(); return; }
+  const where = ui.screen === 'dungeon' ? `${lvl(S.pos.depth).name}, depth ${S.pos.depth}` : 'The town above';
+  let body = ui.screen === 'dungeon' ? dungeonHTML() : townHTML();
+  app.innerHTML = `<header><h1>Sunken Sanctum</h1><span class="where">${where}</span><span class="btns"><button class="hbtn" data-a="settings">Settings</button></span></header>${body}${modalHTML()}`;
+  if (ui.screen === 'dungeon') { drawView($('#view')); if (ui.map) drawMap($('#map')); }
+}
+function titleHTML() {
+  const has = !!loadSave();
+  return `<div class="title"><h1>Sunken Sanctum</h1>
+    <p>Beneath the town, old halls have sunk into the roots of a drowned forest. Moss has taken the stone. Things live down there that should not.</p>
+    <p class="small">Form a party, join the guilds, learn what your treasure really is, and go deeper than anyone has come back from.</p>
+    <div class="btns">${has ? '<button class="btn go" data-a="continue">Continue</button>' : ''}
+    <button class="btn ${has ? '' : 'go'}" data-a="new" data-ready="1">Begin with a ready party of four</button>
+    <button class="btn" data-a="new">Make your own party</button></div>
+    ${ui.confirm === 'new' ? `<p class="small" style="margin-top:12px">This replaces your saved game. <button class="link" data-a="new" data-ready="${ui.ready || ''}" data-sure="1">Start over</button> <button class="link" data-a="cancel">Keep it</button></p>` : ''}
+    ${fine()}</div>`;
+}
+function fine() { return `<p class="fine">This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC, available at <a href="https://dnd.wizards.com/resources/systems-reference-document" target="_blank" rel="noopener">dnd.wizards.com</a>. The SRD 5.1 is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" rel="noopener">Creative Commons Attribution 4.0 International License</a>.</p>`; }
+
+function dungeonHTML() {
+  const C = ui.combat, K = ui.chest, t = tile(S.pos.depth, S.pos.x, S.pos.y);
+  let controls;
+  if (C) controls = combatHTML();
+  else if (K) controls = chestHTML();
+  else {
+    const extra = [];
+    if (t === '<') extra.push(`<button class="btn go" data-a="stairs">${S.pos.depth === 1 ? 'Climb to town' : 'Climb up'}</button>`);
+    if (t === '>') extra.push(`<button class="btn go" data-a="stairs">Go down</button>`);
+    if (t === 'F') extra.push(`<button class="btn go" data-a="drink">Drink from the spring</button>`);
+    if (canTend()) extra.push(`<button class="btn" data-a="tend">Tend wounds (${esc(best('firstaid').name)})</button>`);
+    controls = `<div class="pad">
+      <button class="btn" data-a="turn" data-t="-1" aria-label="Turn left">Turn left</button>
+      <button class="btn" data-a="step" aria-label="Forward">Forward</button>
+      <button class="btn" data-a="turn" data-t="1" aria-label="Turn right">Turn right</button>
+      <button class="btn" data-a="search">Search</button>
+      <button class="btn" data-a="step" data-back="1">Back</button>
+      <button class="btn" data-a="map">${ui.map ? 'Hide map' : 'Map'}</button></div>
+      ${extra.length ? `<div class="btns">${extra.join('')}</div>` : ''}
+      <p class="small muted" style="margin:0">Keys: arrows or W A S D to move, F to search, M for the map, Enter for stairs.</p>`;
+  }
+  const actingId = C && choosers()[C.cur] ? choosers()[C.cur].id : null;
+  return `<div class="grid"><div class="col">
+      <div class="view"><canvas id="view" width="640" height="480" aria-label="View down the corridor"></canvas>
+        <div class="bar"><span>Facing ${DIRN[S.pos.f]}</span><span>${S.pos.x}, ${S.pos.y}</span></div></div>
+      ${controls}
+      ${ui.map ? `<div class="mapwrap"><canvas id="map" width="320" height="320" aria-label="Map of the squares you have walked"></canvas></div>` : ''}
+    </div><div class="col">${partyPanel(actingId)}${logPanel()}</div></div>`;
+}
+const condition = f => f.asleep ? 'asleep' : f.hp >= f.mhp ? 'unhurt' : f.hp > f.mhp * .6 ? 'scratched' : f.hp > f.mhp * .3 ? 'wounded' : 'near death';
+function combatHTML() {
+  const C = ui.combat, m = MON[C.mid], c = choosers()[C.cur];
+  const foes = C.mons.map((f, i) => f.gone ? '' : `<button class="row ${i === targetFor(C.target) ? 'sel' : ''}" data-a="target" data-i="${i}"><span>${m.name}</span><span class="st">${condition(f)}</span></button>`).join('');
+  if (!c) return `<div class="panel"><div class="foes">${foes}</div></div>`;
+  let opts;
+  if (ui.pick === 'spell') {
+    opts = spellsOf(c).map(([k, s]) => `<button class="btn" data-a="cast" data-s="${k}" ${c.sp < s.sp ? 'disabled' : ''}>${s.name} <span class="small muted">${s.sp} SP</span></button>`).join('') + '<button class="btn" data-a="pick" data-p="">Back</button>';
+  } else if (ui.pick === 'item') {
+    const pots = c.inv.map((it, i) => ({it, i})).filter(o => ITEMS[o.it.base].kind === 'potion');
+    opts = pots.map(o => `<button class="btn" data-a="usepot" data-i="${o.i}">${esc(itemName(o.it))}</button>`).join('') + '<button class="btn" data-a="pick" data-p="">Back</button>';
+  } else {
+    const hasSpell = spellsOf(c).length, hasPot = c.inv.some(it => ITEMS[it.base].kind === 'potion');
+    opts = `<button class="btn go" data-a="fight">Fight</button>
+      ${hasSpell ? '<button class="btn" data-a="pick" data-p="spell">Cast</button>' : ''}
+      ${hasPot ? '<button class="btn" data-a="pick" data-p="item">Potion</button>' : ''}
+      <button class="btn" data-a="defend">Defend</button>
+      ${C.cur === 0 ? '<button class="btn warn" data-a="run">Run</button>' : '<button class="btn" data-a="undo">Back</button>'}`;
+  }
+  return `<div class="panel"><h2>Round ${C.round}</h2><div class="foes">${foes}</div>
+    <p><b>${esc(c.name)}</b> <span class="muted small">acts. Tap a foe to aim.</span></p><div class="btns">${opts}</div></div>`;
+}
+function chestHTML() {
+  const K = ui.chest, eye = best('perception'), hand = best('disarm'), pick_ = best('locks');
+  const state = K.found ? (K.trap ? `Trapped: ${trapName(K.trap)}${K.disarmed ? ', disarmed' : ''}.` : 'No trap found.') : 'Moss-slick iron bands. It may be trapped.';
+  const btns = [];
+  if (K.locked) {
+    if (pick_) btns.push(`<button class="btn go" data-a="chest" data-c="pick" ${K.picked ? 'disabled' : ''}>Pick the lock (${esc(pick_.name)})</button>`);
+    btns.push(`<button class="btn ${pick_ && !K.picked ? '' : 'go'}" data-a="chest" data-c="force">Force it open</button>`);
+  } else btns.push(`<button class="btn go" data-a="chest" data-c="open">Open</button>`);
+  if (eye) btns.push(`<button class="btn" data-a="chest" data-c="inspect" ${K.inspected ? 'disabled' : ''}>Inspect (${esc(eye.name)})</button>`);
+  if (hand) btns.push(`<button class="btn" data-a="chest" data-c="disarm" ${K.disarmed ? 'disabled' : ''}>Disarm (${esc(hand.name)})</button>`);
+  btns.push(`<button class="btn" data-a="chest" data-c="leave">Leave it</button>`);
+  return `<div class="panel"><h2>A chest</h2><p class="muted">${state}${K.locked ? ' It is locked. Forcing it will break any potions inside.' : ''}</p>
+    <div class="btns">${btns.join('')}</div></div>`;
+}
+
+/* ---------- town screens ---------- */
+const PLACES = [
+  ['square', 'Town square', 'Where the party gathers'],
+  ['roster', 'Roster', 'Make characters, form the party'],
+  ['guild', 'Guild hall', 'Advance and train skills'],
+  ['store', 'Store', 'Buy, sell, identify'],
+  ['temple', 'Temple', 'Raise the dead, break curses'],
+  ['morgue', 'Morgue', 'Recover the fallen'],
+  ['bank', 'Bank', 'Keep gold safe'],
+];
+function townHTML() {
+  const places = PLACES.map(([k, n, s]) => `<button class="place ${ui.place === k ? 'on' : ''}" data-a="place" data-p="${k}"><b>${n}</b><span>${s}</span></button>`).join('');
+  const fn = {square: squareHTML, roster: rosterHTML, guild: guildHTML, store: storeHTML, temple: templeHTML, morgue: morgueHTML, bank: bankHTML}[ui.place];
+  return `<div class="grid"><div class="col"><div class="places">${places}</div>${ui.msg ? `<p class="small" style="color:var(--lamp)">${esc(ui.msg)}</p>` : ''}${fn()}</div>
+    <div class="col">${partyPanel()}${logPanel()}</div></div>`;
+}
+function squareHTML() {
+  const ok = alive().length;
+  return `<div class="panel"><h2>The town square</h2><p>Rain on slate roofs. Between two great roots at the square's edge, a stair goes down into the dark.</p>
+    <p class="muted small">${S.fallen.length ? `${S.fallen.length} fallen party${S.fallen.length > 1 ? ' groups lie' : ' lies'} below. The morgue can send rescuers, or you can go and carry them home yourself.` : 'Everyone you know of is accounted for.'}</p>
+    <div class="btns"><button class="btn go" data-a="enter" ${ok ? '' : 'disabled'}>Go down the stair</button></div>
+    ${ok ? '' : '<p class="small muted">Form a party with at least one living member first.</p>'}</div>`;
+}
+function rosterHTML() {
+  const rows = S.roster.map(c => {
+    const inP = S.party.includes(c.id), away = c.where === 'dungeon';
+    const st = c.status === 'lost' ? 'lost forever' : away ? 'lies in the dungeon' : c.status === 'dead' ? 'dead' : inP ? 'in the party' : 'in town';
+    return `<tr><td><button class="link" data-a="sheet" data-id="${c.id}">${esc(c.name)}</button></td><td class="small">${RACES[c.race].name} ${GUILDS[c.guild].name} ${c.lvl}</td><td class="small muted">${st}</td>
+      <td class="n">${c.status === 'lost' ? `<button class="link" data-a="del" data-id="${c.id}">Remove</button>` : away ? '' : inP ? `<button class="link" data-a="unparty" data-id="${c.id}">Leave party</button>` : `<button class="link" data-a="party" data-id="${c.id}" ${S.party.length >= 4 ? 'disabled' : ''}>Join party</button>`}</td></tr>`;
+  }).join('');
+  const N = ui.newc;
+  let form = `<div class="btns"><button class="btn go" data-a="newc">Make a character</button></div>`;
+  if (N) {
+    const g = GUILDS[N.guild], st = withRace(N.base, N.race), left = PB_POINTS - pbSpent(N.base), okReq = st[g.req] >= 11;
+    form = `<h3>New character</h3><div class="form">
+      <label>Name<input id="nc-name" value="${esc(N.name)}" maxlength="16" autocomplete="off"></label>
+      <label>Race<select id="nc-race">${Object.entries(RACES).map(([k, r]) => `<option value="${k}" ${k === N.race ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label>
+      <label>Guild<select id="nc-guild">${Object.entries(GUILDS).map(([k, r]) => `<option value="${k}" ${k === N.guild ? 'selected' : ''}>${r.name}</option>`).join('')}</select></label></div>
+      <p class="small">Points left: <b style="color:var(--lamp)">${left}</b> of ${PB_POINTS}. Scores run 8 to 15 before race.</p>
+      <div class="pb">${STATS.map(k => { const v = N.base[k], up = v < 15 && PB_COST[v + 1] - PB_COST[v] <= left, rb = RACES[N.race].b[k] || 0;
+        return `<div><small>${k.toUpperCase()}</small><b>${st[k]}</b>${rb ? `<span class="small muted">${v} +${rb}</span>` : `<span class="small muted">${v}</span>`}
+          <span class="pbb"><button class="btn" data-a="pb" data-k="${k}" data-d="-1" ${v > 8 ? '' : 'disabled'} aria-label="Lower ${k}">-</button><button class="btn" data-a="pb" data-k="${k}" data-d="1" ${up ? '' : 'disabled'} aria-label="Raise ${k}">+</button></span></div>`; }).join('')}</div>
+      <p class="small muted">${g.about}${RACES[N.race].note ? ' ' + RACES[N.race].name + 's ' + RACES[N.race].note + '.' : ''}</p>
+      ${okReq ? '' : `<p class="small" style="color:var(--blood)">The ${g.name} guild needs ${g.req.toUpperCase()} of 11 or more.</p>`}
+      <div class="btns"><button class="btn" data-a="preset">Suggested for a ${g.name.toLowerCase()}</button><button class="btn go" data-a="makec" ${okReq ? '' : 'disabled'}>Add to roster</button><button class="btn" data-a="cancelc">Cancel</button></div>`;
+  }
+  return `<div class="panel"><h2>Roster</h2>${S.roster.length ? `<div class="tablewrap"><table class="list">${rows}</table></div>` : '<p class="muted">No characters yet.</p>'}
+    <p class="small muted">Up to four go down together. A party of one works too.</p>${form}</div>`;
+}
+function townFolk() { return S.roster.filter(c => c.where === 'town' && c.status !== 'lost'); }
+function selChar() { let c = ch(ui.sel); if (!c || c.where !== 'town' || c.status === 'lost') { c = party().find(x => x.status === 'ok') || townFolk()[0]; ui.sel = c && c.id; } return c; }
+function charPicker() { return `<div class="btns">${townFolk().filter(c => c.status === 'ok').map(c => `<button class="btn ${c.id === ui.sel ? 'go' : ''}" data-a="sel" data-id="${c.id}">${esc(c.name)}</button>`).join('')}</div>`; }
+function guildHTML() {
+  const rows = townFolk().filter(c => c.status === 'ok').map(c => {
+    const need = XP_NEXT[c.lvl], fee = 30 * c.lvl;
+    return `<tr><td>${esc(c.name)}</td><td class="small">${GUILDS[c.guild].name} ${c.lvl}</td><td class="n small">${c.xp} / ${need} xp</td>
+      <td class="n"><button class="link" data-a="advance" data-id="${c.id}" ${c.xp >= need && S.gold >= fee ? '' : 'disabled'}>Advance (${fee} gold)</button></td></tr>`;
+  }).join('');
+  const lore = Object.values(GUILDS).map(g => `<p class="small"><b style="color:var(--lamp)">${g.name}.</b> ${g.about}</p>`).join('');
+  return `<div class="panel"><h2>Guild hall</h2>${rows ? `<div class="tablewrap"><table class="list">${rows}</table></div>` : '<p class="muted">Nobody here can train.</p>'}
+    ${trainHTML()}<h3>The four guilds</h3>${lore}</div>`;
+}
+function trainHTML() {
+  const c = selChar(); if (!c) return '';
+  ensureSkills(c);
+  const cap = skillCap(c);
+  const rows = Object.entries(SKILLS).map(([k, s]) => {
+    const r = rank(c, k), cost = skillCost(c, k), ok = c.tp >= cost && r < cap;
+    return `<tr><td><b>${s.name}</b> <span class="small muted">${s.stat.toUpperCase()}</span><div class="small muted">${s.about}</div></td>
+      <td class="n">${r} / ${cap}</td>
+      <td class="n"><button class="link" data-a="train" data-id="${c.id}" data-k="${k}" ${ok ? '' : 'disabled'}>Train (${cost} pt${cost > 1 ? 's' : ''})</button></td></tr>`;
+  }).join('');
+  return `<h3>Train skills</h3>${charPicker()}
+    <p class="small">${esc(c.name)} has <b style="color:var(--lamp)">${c.tp}</b> training point${c.tp === 1 ? '' : 's'}. Each level brings ${SK.points_per_level} more. Ranks top out at ${cap} at level ${c.lvl}; each ${GUILDS[c.guild].name.toLowerCase()} pays the guild's own price per rank.</p>
+    <div class="tablewrap"><table class="list">${rows}</table></div>`;
+}
+function storeHTML() {
+  const c = selChar();
+  if (!c) return `<div class="panel"><h2>Store</h2><p class="muted">Nobody in town to shop.</p></div>`;
+  const buy = STOCK.map(k => { const b = ITEMS[k], use = ['potion','scroll'].includes(b.kind) || canUse(c, {base: k}); return `<tr><td>${b.name}${use ? '' : ' <span class="small muted">(not for a ' + GUILDS[c.guild].name.toLowerCase() + ')</span>'}</td><td class="n">${b.cost}</td><td class="n"><button class="link" data-a="buy" data-k="${k}" ${S.gold >= b.cost && c.inv.length < 10 ? '' : 'disabled'}>Buy</button></td></tr>`; }).join('');
+  const sell = c.inv.map((it, i) => `<tr><td>${esc(itemName(it))}${it.eq ? ' <span class="small muted">(worn)</span>' : ''}</td><td class="n">${sellPrice(it)}</td><td class="n">
+    <button class="link" data-a="sell" data-i="${i}" ${it.eq ? 'disabled' : ''}>Sell</button> <button class="link" data-a="ident" data-i="${i}" ${it.id >= 2 || S.gold < 25 ? 'disabled' : ''}>Identify (25)</button></td></tr>`).join('');
+  return `<div class="panel"><h2>Store</h2><p class="small muted">Shopping for:</p>${charPicker()}
+    <h3>Sell or identify</h3>${sell ? `<div class="tablewrap"><table class="list">${sell}</table></div>` : '<p class="muted small">Nothing carried.</p>'}
+    <p class="small muted">Unknown goods sell for a quarter of their base price.</p>
+    <h3>Buy</h3><div class="tablewrap"><table class="list">${buy}</table></div></div>`;
+}
+/* Raising and rescue. Below level 5 the temple's rite is cheap and certain, and
+   rescue is free, so a new party is never stranded. From level 5 the old costs
+   and the chance of failure apply. */
+const NOVICE = 5;
+const raiseCost = c => c.lvl < NOVICE ? 5 * c.lvl : 60 * c.lvl;
+const rescueCost = f => f.ids.reduce((t, id) => t + ((ch(id)?.lvl || 1) < NOVICE ? 0 : 40 * f.depth), 0);
+const canPay = n => S.gold + S.bank >= n;
+function pay(n) { const a = Math.min(S.gold, n); S.gold -= a; S.bank -= n - a; }
+function raiseOne(c) {
+  const cost = raiseCost(c), novice = c.lvl < NOVICE;
+  if (!canPay(cost) && !novice) return false;
+  if (canPay(cost)) pay(cost); else say(`The priests waive the fee for ${c.name}.`, 'muted');
+  if (novice || R(100) < 70 + mod(c.st.con) * 5) { c.status = 'ok'; c.hp = c.mhp; c.sp = c.msp; say(`${c.name} draws a ragged breath and lives.`, 'good'); }
+  else if (S.settings.lasting) { c.status = 'lost'; S.party = S.party.filter(x => x !== c.id); say(`The rite fails. ${c.name}'s body crumbles to ash.`, 'foe'); }
+  else say(`The rite fails. ${c.name} does not stir.`, 'foe');
+  return true;
+}
+function rescueOne(i) {
+  const f = S.fallen[i], cost = rescueCost(f), own = Math.min(f.gold, cost);
+  if (!canPay(cost - own)) return false;
+  pay(cost - own); S.gold += f.gold - own;
+  S.fallen.splice(i, 1);
+  for (const id of f.ids) { const c = ch(id); if (c) c.where = 'town'; }
+  say(`Rescuers bring home ${f.ids.map(id => ch(id)?.name).join(', ')}${cost ? ` for ${cost} gold` : ''}. The temple can raise them.`, 'good');
+  return true;
+}
+function templeHTML() {
+  const dead = S.roster.filter(c => c.status === 'dead' && c.where === 'town');
+  const total = dead.reduce((t, c) => t + raiseCost(c), 0);
+  const cursed = townFolk().filter(c => c.inv.some(it => it.eq && it.cursed && it.id >= 2));
+  const rows = dead.map(c => { const cost = raiseCost(c); return `<tr><td>${esc(c.name)}</td><td class="small muted">${GUILDS[c.guild].name} ${c.lvl}</td><td class="n"><button class="link" data-a="raise" data-id="${c.id}" ${canPay(cost) || c.lvl < NOVICE ? '' : 'disabled'}>Raise (${cost} gold)</button></td></tr>`; }).join('');
+  const crows = cursed.flatMap(c => c.inv.map((it, i) => it.eq && it.cursed && it.id >= 2 ? `<tr><td>${esc(c.name)}: ${esc(itemName(it))}</td><td class="n"><button class="link" data-a="uncurse" data-id="${c.id}" data-i="${i}" ${S.gold >= 30 ? '' : 'disabled'}>Break it (30 gold)</button></td></tr>` : '')).join('');
+  return `<div class="panel"><h2>Temple</h2>
+    <p class="small muted">Below level ${NOVICE} a raising costs 5 gold a level and always works; the priests waive the fee if you cannot pay. From level ${NOVICE} it costs 60 gold a level and can fail${S.settings.lasting ? ', and with Lasting death on a failure turns the body to ash' : '. The gold is spent, and you may try again'}.</p>
+    <h3>The dead</h3>${rows ? `<div class="tablewrap"><table class="list">${rows}</table></div>${dead.length > 1 ? `<div class="btns"><button class="btn go" data-a="raiseall">Raise everyone (${total} gold)</button></div>` : ''}` : '<p class="muted small">No bodies in the temple. The fallen must be brought home first.</p>'}
+    <h3>Curses</h3>${crows ? `<div class="tablewrap"><table class="list">${crows}</table></div>` : '<p class="muted small">No known curses. A cursed item shows itself when someone tries to take it off.</p>'}</div>`;
+}
+function morgueHTML() {
+  const rows = S.fallen.map((f, i) => { const cost = rescueCost(f); return `<tr><td>${f.ids.map(id => esc(ch(id)?.name || '?')).join(', ')}</td><td class="small muted">depth ${f.depth}, square ${f.x}, ${f.y}</td>
+    <td class="n"><button class="link" data-a="rescue" data-i="${i}" ${canPay(Math.max(0, cost - f.gold)) ? '' : 'disabled'}>${cost ? `Hire rescuers (${cost} gold)` : 'Bring them home (free)'}</button></td></tr>`; }).join('');
+  return `<div class="panel"><h2>Morgue</h2><p class="small muted">Rescue is free for anyone below level ${NOVICE}. Above that, rescuers cost 40 gold a body per depth, paid from the gold the fallen carried, then the purse, then the bank. Or go down and find the bodies yourself: walking onto their square brings them home with you, with whatever gold they carried.</p>
+    ${rows ? `<div class="tablewrap"><table class="list">${rows}</table></div>${S.fallen.length > 1 ? '<div class="btns"><button class="btn go" data-a="rescueall">Bring everyone home</button></div>' : ''}` : '<p class="muted">No one lies in the dungeon.</p>'}</div>`;
+}
+function bankHTML() {
+  return `<div class="panel"><h2>Bank</h2><p>Purse: <b style="color:var(--lamp)">${S.gold}</b> gold. In the bank: <b style="color:var(--lamp)">${S.bank}</b> gold.</p>
+    <p class="small muted">Gold in the bank stays in town. Gold in the purse goes where the party goes, and lies with them if they fall.</p>
+    <div class="btns"><button class="btn" data-a="dep" ${S.gold ? '' : 'disabled'}>Deposit all</button><button class="btn" data-a="wd" data-n="50" ${S.bank ? '' : 'disabled'}>Withdraw 50</button><button class="btn" data-a="wd" data-n="all" ${S.bank ? '' : 'disabled'}>Withdraw all</button></div></div>`;
+}
+
+/* ---------- modal: character sheet and settings ---------- */
+function modalHTML() {
+  if (ui.modal === 'settings') return `<div class="modal" data-a="close" data-self="1"><div class="panel"><h2>Settings</h2>
+    <label class="small" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="set-lasting" ${S.settings.lasting ? 'checked' : ''}> Lasting death: a failed raising destroys the character</label>
+    <h3>Save</h3><p class="small muted">The game saves itself in this browser after every move. To move it to another device, copy this code there.</p>
+    <textarea id="savecode" rows="3" style="width:100%" readonly>${esc(btoa(unescape(encodeURIComponent(JSON.stringify(S)))))}</textarea>
+    <div class="btns"><button class="btn" data-a="copysave">Copy save code</button><button class="btn" data-a="loadcode">Load a code</button></div>
+    ${ui.loadcode ? `<textarea id="incode" rows="3" style="width:100%" placeholder="Paste a save code"></textarea><div class="btns"><button class="btn go" data-a="loadgo">Load it</button></div>` : ''}
+    <h3>Start over</h3><div class="btns"><button class="btn warn" data-a="title">Back to the title</button><button class="btn" data-a="close">Close</button></div>${fine()}</div></div>`;
+  if (ui.modal !== 'sheet') return '';
+  const c = ch(ui.sheet.id); if (!c) return '';
+  const g = GUILDS[c.guild], town = ui.screen === 'town', fighting = !!ui.combat;
+  const others = (town ? townFolk() : party()).filter(o => o.id !== c.id && o.status === 'ok');
+  const pickId = ui.sheet.idPick;
+  const items = c.inv.map((it, i) => {
+    const b = ITEMS[it.base], acts = [];
+    if (pickId != null && pickId !== i) return `<tr><td>${esc(itemName(it))}</td><td class="n"><button class="link" data-a="idthis" data-i="${i}" ${it.id >= 2 ? 'disabled' : ''}>Identify this</button></td></tr>`;
+    if (!fighting && c.status === 'ok') {
+      if (['weapon','armor','shield','ring'].includes(b.kind)) acts.push(`<button class="link" data-a="equip" data-i="${i}">${it.eq ? 'Take off' : 'Wear'}</button>`);
+      if (b.kind === 'potion') acts.push(`<button class="link" data-a="drinkpot" data-i="${i}">Drink</button>`);
+      if (b.kind === 'scroll') acts.push(`<button class="link" data-a="readid" data-i="${i}">Read</button>`);
+      if (rank(c, 'lore') && it.id < 2) acts.push(`<button class="link" data-a="study" data-i="${i}">Study</button>`);
+      if (!it.eq) { for (const o of others.slice(0, 3)) acts.push(`<button class="link" data-a="give" data-i="${i}" data-to="${o.id}" ${o.inv.length >= 10 ? 'disabled' : ''}>To ${esc(o.name)}</button>`); acts.push(`<button class="link" data-a="drop" data-i="${i}">Drop</button>`); }
+    }
+    return `<tr><td>${esc(itemName(it))}${it.eq ? ' <span class="small muted">(worn)</span>' : ''}${itemInfo(c, it)}</td><td class="n" style="white-space:normal">${acts.join(' ')}</td></tr>`;
+  }).join('');
+  const w = weaponOf(c);
+  const spells = spellsOf(c);
+  return `<div class="modal" data-a="close" data-self="1"><div class="panel"><h2>${esc(c.name)}</h2>
+    <p class="muted">${RACES[c.race].name} ${g.name}, level ${c.lvl}. ${c.xp} of ${XP_NEXT[c.lvl]} xp to the next level.${c.status !== 'ok' ? ' <b style="color:var(--blood)">' + (c.status === 'lost' ? 'Lost.' : 'Dead.') + '</b>' : ''}</p>
+    <div class="stats">${STATS.map(k => `<div><small>${k.toUpperCase()}</small>${c.st[k]}</div>`).join('')}</div>
+    <p class="small">Armor class <b>${acOf(c)}</b>. Attack ${fmt(prof(c) + atkMod(c) + (w ? w.it.plus : 0) - armorPenalty(c)) || '+0'}${armorPenalty(c) ? ` <span class="down">(armor too heavy: &minus;${armorPenalty(c)})</span>` : ''} with ${w ? esc(itemName(w.it).toLowerCase()) : 'bare hands'}${w ? ' (' + w.b.dmg + ')' : ''}. Hits ${c.hp} / ${c.mhp}${c.msp ? `, spell points ${c.sp} / ${c.msp}` : ''}.</p>
+    <p class="small">Skills: ${Object.entries(SKILLS).filter(([k]) => rank(c, k)).map(([k, s]) => `${s.name} ${rank(c, k)}`).join(', ') || 'none yet'}.${c.tp ? ` <span style="color:var(--lamp)">${c.tp} training point${c.tp === 1 ? '' : 's'} to spend at the guild.</span>` : ''}</p>
+    ${spells.length ? `<p class="small">Spells: ${spells.map(([k, s]) => `${s.name} <span class="muted">(${s.sp} SP, ${s.about})</span>${s.field && !fighting && c.status === 'ok' ? ` <button class="link" data-a="fieldcast" data-s="${k}" ${c.sp >= s.sp ? '' : 'disabled'}>Cast</button>` : ''}`).join('; ')}</p>` : ''}
+    <h3>Pack (${c.inv.length} / 10)</h3>${pickId != null ? '<p class="small" style="color:var(--lamp)">Choose an item for the scroll to reveal.</p>' : ''}
+    ${items ? `<div class="tablewrap"><table class="list">${items}</table></div>` : '<p class="muted small">Empty.</p>'}
+    <div class="btns" style="margin-top:10px"><button class="btn" data-a="close">Close</button></div></div></div>`;
+}
+
+/* ---------- actions ---------- */
+const A = {
+  continue() { S = loadSave(); if (!S) return; S.roster.forEach(ensureSkills); ui.screen = S.inDungeon ? 'dungeon' : 'town'; ui.place = 'square'; render(); },
+  new(d) { if (loadSave() && !d.sure && ui.screen === 'title') { ui.confirm = 'new'; ui.ready = d.ready; return render(); } ui.confirm = null; newGame(!!d.ready); },
+  cancel() { ui.confirm = null; render(); },
+  title() { ui.modal = null; ui.screen = 'title'; render(); },
+  settings() { ui.modal = 'settings'; ui.loadcode = false; render(); },
+  close(d, e) { if (d.self && e.target !== e.currentTarget && !e.target.matches('[data-self]')) return; ui.modal = null; ui.sheet = null; render(); },
+  copysave() { const t = $('#savecode'); navigator.clipboard?.writeText(t.value).then(() => { ui.msg = 'Save code copied.'; }, () => { t.select(); }); },
+  loadcode() { ui.loadcode = true; render(); },
+  loadgo() { try { const s = JSON.parse(decodeURIComponent(escape(atob($('#incode').value.trim())))); if (!s.roster) throw 0; S = s; S.roster.forEach(ensureSkills); ui.modal = null; ui.screen = S.inDungeon ? 'dungeon' : 'town'; save(); render(); } catch (e) { ui.msg = 'That code did not load. Check that the whole code was pasted.'; ui.modal = null; render(); } },
+  place(d) { ui.place = d.p; ui.msg = ''; render(); },
+  enter() { enterDungeon(); },
+  step(d) { step(!!d.back); },
+  turn(d) { turn(+d.t); },
+  search() { search(); },
+  map() { ui.map = !ui.map; render(); },
+  stairs() { useStairs(); },
+  drink() { drink(); },
+  sheet(d) { ui.modal = 'sheet'; ui.sheet = {id: d.id}; render(); },
+  sel(d) { ui.sel = d.id; render(); },
+  order() { ui.order = !ui.order; render(); },
+  up(d) { const i = S.party.indexOf(d.id); if (i > 0) { [S.party[i - 1], S.party[i]] = [S.party[i], S.party[i - 1]]; save(); } render(); },
+  setdown(d) { if (ui.combat || ui.chest || !S.carried.includes(d.id)) return; leaveBody(d.id); save(); render(); },
+  target(d) { ui.combat.target = +d.i; render(); },
+  fight() { choose({act: 'fight', t: ui.combat.target}); },
+  defend() { choose({act: 'defend'}); },
+  run() { choose({act: 'run'}); },
+  undo() { undo(); },
+  pick(d) { ui.pick = d.p || null; render(); },
+  cast(d) { choose({act: 'cast', spell: d.s, t: ui.combat.target}); },
+  usepot(d) { choose({act: 'item', idx: +d.i}); },
+  chest(d) { chestAct(d.c); },
+  newc() { ui.newc = {name: '', race: 'human', guild: 'fighter', base: {...PB_PRESET.fighter}}; render(); },
+  preset() { grabForm(); ui.newc.base = {...PB_PRESET[ui.newc.guild]}; render(); },
+  pb(d) { grabForm(); const N = ui.newc, v = N.base[d.k] + +d.d; if (v < 8 || v > 15) return; const nb = {...N.base, [d.k]: v}; if (pbSpent(nb) > PB_POINTS) return; N.base = nb; render(); },
+  cancelc() { ui.newc = null; render(); },
+  makec() {
+    grabForm(); const N = ui.newc;
+    const name = N.name.trim() || pick(['Ash', 'Brin', 'Corra', 'Dell', 'Fen', 'Hollis', 'Ivo', 'Moss', 'Rook', 'Sorrel']);
+    const st = withRace(N.base, N.race); if (st[GUILDS[N.guild].req] < 11 || pbSpent(N.base) > PB_POINTS) return;
+    const c = makeChar(name, N.race, N.guild, st, START_GEAR[N.guild]);
+    S.roster.push(c); if (S.party.length < 4) S.party.push(c.id);
+    S.gold += 15; ui.newc = null; say(`${name} joins the ${GUILDS[N.guild].name.toLowerCase()}s' guild${S.party.includes(c.id) ? ' and the party' : ''}.`, 'good'); save(); render();
+  },
+  party(d) { if (S.party.length < 4) S.party.push(d.id); save(); render(); },
+  unparty(d) { S.party = S.party.filter(x => x !== d.id); save(); render(); },
+  del(d) { S.roster = S.roster.filter(c => c.id !== d.id); save(); render(); },
+  advance(d) {
+    const c = ch(d.id), fee = 30 * c.lvl; if (c.xp < XP_NEXT[c.lvl] || S.gold < fee) return;
+    S.gold -= fee; c.lvl++; c.told = 0;
+    const gain = Math.max(1, Math.floor(GUILDS[c.guild].hd / 2) + 1 + mod(c.st.con));
+    c.mhp += gain; c.hp = c.mhp; c.msp = maxSp(c); c.sp = c.msp;
+    ensureSkills(c); c.tp += SK.points_per_level;
+    const news = Object.values(SPELLS).filter(s => s.guild === c.guild && s.lvl === c.lvl).map(s => s.name);
+    say(`${c.name} reaches level ${c.lvl}: ${gain} more hits, ${SK.points_per_level} training points${news.length ? ', and learns ' + news.join(', ') : ''}${c.guild === 'fighter' && c.lvl === 5 ? ', and a second attack' : ''}.`, 'good');
+    ui.sel = c.id; save(); render();
+  },
+  train(d) {
+    const c = ch(d.id), k = d.k; if (!c || !SKILLS[k]) return;
+    ensureSkills(c);
+    const cost = skillCost(c, k);
+    if (c.tp < cost || rank(c, k) >= skillCap(c)) return;
+    c.tp -= cost; c.sk[k] = rank(c, k) + 1;
+    say(`${c.name} trains ${SKILLS[k].name} to ${c.sk[k]}.`, 'good');
+    save(); render();
+  },
+  tend() { tend(); },
+  buy(d) { const c = selChar(), b = ITEMS[d.k]; if (S.gold < b.cost || c.inv.length >= 10) return; S.gold -= b.cost; c.inv.push({base: d.k, plus: 0, cursed: false, id: 2}); say(`${c.name} buys ${b.name.toLowerCase()}.`); save(); render(); },
+  sell(d) { const c = selChar(), it = c.inv[+d.i]; if (!it || it.eq) return; const p = sellPrice(it); S.gold += p; c.inv.splice(+d.i, 1); say(`${c.name} sells ${itemName(it).toLowerCase()} for ${p} gold.`, 'gold'); save(); render(); },
+  ident(d) { const c = selChar(), it = c.inv[+d.i]; if (!it || S.gold < 25) return; S.gold -= 25; it.id = 2; S.known[it.base] = 1; say(`The shopkeeper squints at it: ${itemName(it)}.`, 'good'); save(); render(); },
+  raise(d) { raiseOne(ch(d.id)); save(); render(); },
+  raiseall() { for (const c of S.roster.filter(c => c.status === 'dead' && c.where === 'town')) if (!raiseOne(c)) { say('The purse runs dry before the last rite.', 'muted'); break; } save(); render(); },
+  uncurse(d) { const c = ch(d.id); if (S.gold < 30) return; S.gold -= 30; const it = c.inv[+d.i]; c.inv.splice(+d.i, 1); say(`The priests break ${itemName(it).toLowerCase()}. It falls away in pieces.`, 'good'); save(); render(); },
+  rescue(d) { rescueOne(+d.i); save(); render(); },
+  rescueall() { for (let i = S.fallen.length - 1; i >= 0; i--) rescueOne(i); save(); render(); },
+  dep() { S.bank += S.gold; S.gold = 0; save(); render(); },
+  wd(d) { const n = d.n === 'all' ? S.bank : Math.min(50, S.bank); S.bank -= n; S.gold += n; save(); render(); },
+  equip(d) { const c = ch(ui.sheet.id); equip(c, +d.i); save(); render(); },
+  drinkpot(d) { const c = ch(ui.sheet.id); quaff(c, +d.i, c); save(); render(); },
+  study(d) { const c = ch(ui.sheet.id); S.trip ||= 1; study(c, +d.i); save(); render(); },
+  readid(d) {
+    const c = ch(ui.sheet.id), it = c.inv[+d.i];
+    if (it.base !== 'scroll_id') return;
+    ui.sheet.scroll = +d.i; ui.sheet.idPick = +d.i; S.known.scroll_id = 1; it.id = 2; render();
+  },
+  idthis(d) {
+    const c = ch(ui.sheet.id), s = ui.sheet.scroll, it = c.inv[+d.i];
+    it.id = 2; if (['potion','scroll','ring'].includes(ITEMS[it.base].kind)) S.known[it.base] = 1;
+    say(`${c.name} reads the scroll. It shows: ${itemName(it)}.`, 'good');
+    c.inv.splice(s, 1); ui.sheet.idPick = null; save(); render();
+  },
+  give(d) { const c = ch(ui.sheet.id), o = ch(d.to), it = c.inv[+d.i]; if (!it || it.eq || o.inv.length >= 10) return; c.inv.splice(+d.i, 1); o.inv.push(it); save(); render(); },
+  drop(d) { const c = ch(ui.sheet.id), it = c.inv[+d.i]; if (!it || it.eq) return; c.inv.splice(+d.i, 1); say(`${c.name} leaves ${itemName(it).toLowerCase()} behind.`, 'muted'); save(); render(); },
+  fieldcast(d) {
+    const c = ch(ui.sheet.id), s = SPELLS[d.s]; if (c.sp < s.sp) return;
+    const t = (ui.screen === 'town' ? townFolk() : alive()).filter(x => x.status === 'ok').sort((a, b) => a.hp / a.mhp - b.hp / b.mhp)[0];
+    c.sp -= s.sp; heal(t, roll('1d8') + mod(c.st.wis), c.name); save(); render();
+  },
+};
+function grabForm() { const N = ui.newc; if (!N) return; const n = $('#nc-name'); if (n) N.name = n.value; const r = $('#nc-race'), g = $('#nc-guild'); if (r) N.race = r.value; if (g) N.guild = g.value; }
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const f = A[b.dataset.a]; if (!f) return;
+  if (b.dataset.a === 'close' && b.dataset.self && e.target !== b) return;
+  f(b.dataset, e);
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'nc-race') { grabForm(); render(); }
+  if (e.target.id === 'nc-guild') { grabForm(); ui.newc.base = {...PB_PRESET[ui.newc.guild]}; render(); }
+  if (e.target.id === 'set-lasting') { S.settings.lasting = e.target.checked; save(); }
+});
+document.addEventListener('keydown', e => {
+  if (ui.screen !== 'dungeon' || ui.modal || e.target.matches('input, textarea, select')) return;
+  const k = e.key.toLowerCase();
+  const map = {arrowup: () => step(false), w: () => step(false), arrowdown: () => step(true), s: () => step(true), arrowleft: () => turn(-1), a: () => turn(-1), arrowright: () => turn(1), d: () => turn(1), f: () => !ui.combat && !ui.chest && search(), m: () => A.map(), enter: () => !ui.combat && !ui.chest && '<>'.includes(tile(S.pos.depth, S.pos.x, S.pos.y)) && useStairs()};
+  if (map[k]) { e.preventDefault(); map[k](); }
+});
+if (LV.length) render(); else document.body.textContent = 'No levels were built into this page.';
+</script>
