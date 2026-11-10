@@ -7,6 +7,7 @@ Play it at **https://xerafinatalesedrin.github.io/sunken-sanctum/**
 ## Play
 
 - Single player, with a party of one to four characters.
+- Two ways to play: the written campaign, or a random five-level dungeon that is different every new game.
 - Four guilds (Fighter, Rogue, Wizard, Cleric) and four races.
 - Point-buy character creation.
 - Six trainable skills: Lore, Perception, Disarm, Locks, First aid, Armor use. Each guild pays its own price per rank.
