@@ -116,21 +116,23 @@ input, select, textarea { background: #0c100d; color: var(--ink); border: 1px so
 <div id="app"></div>
 
 <script>
-const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"map":["################","#<..##....##..F#","#...D...L.D....#","#...##....##...#","##D#####D###...#","##.#####.####D##","#....##...###.##","#....##.L.D....#","#.N..##...##...#","#....###D###...#","##D#####.#######","##.###....######","#...##....S....#","#...D...L.##.>.#","#...##....##...#","################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"map":["################","#...#....##...F#","#.L.D....##....#","#...#....##....#","##D###D######D##","#...#....##....#","#...#....D...L.#","#...D.N..##....#","#...#....##....#","##.###.#####.###","##S###D#####D###","#...#....##....#","#...#.....D....#","#.>.#....##..<.#","#...#....##....#","################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,5],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,6],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,5],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,6],"group":[1,3],"undead":true,"paralyze":true}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null}};
+const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"grid":["#################################","#################################","##+-+-+-+###+-+-+-+-+###+-+-+-+##","##|< . .|###|. . . .|###|. . F|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L . .D. . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+D+-+###+-+-+D+-+###+ + + +##","####|.|#########|.|#####|. . .|##","####+ +#########+ +#####+-+D+-+##","####|.|#########|.|#######|.|####","##+-+ +-+-+###+-+ +-+#####+ +####","##|. . . .|###|. . .|#####|.|####","##+ + + + +###+ + + +-+-+-+ +-+##","##|. . . .|###|. L . .D. . . .|##","##+ + + + +###+ + + +-+-+ + + +##","##|. N . .|###|. . .|###|. . .|##","##+ + + + +###+-+D+-+###+ + + +##","##|. . . .|#####|.|#####|. . .|##","##+-+D+-+-+#####+ +#####+-+-+-+##","####|.|#########|.|##############","####+ +#####+-+-+ +-+############","####|.|#####|. . . .|############","##+-+ +-+###+ + + + +-+-+-+-+-+##","##|. . .|###|. . . .S. . . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L .|###|. > .|##","##+ + + +-+-+ + + + +###+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+-+-+###+-+-+-+-+###+-+-+-+##","#################################","#################################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"grid":["#################################","#################################","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","##|. . .|#|. . . .|###|. . . F|##","##+ + + +-+ + + + +###+ + + + +##","##|. L . .D. . . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+D+-+#+-+D+-+-+###+-+-+D+-+##","####|.|#####|.|###########|.|####","##+-+ +-+#+-+ +-+-+###+-+-+ +-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . .D. . . L .|##","##+ + + +-+ + + + +-+-+ + + + +##","##|. . . .D. N . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","####|.|#####|.|#########|.|######","####+S+#####+D+#########+D+######","####|.|#####|.|#########|.|######","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . . .D. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. > .|#|. . . .|###|. . < .|##","##+ + + +#+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","#################################","#################################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,5],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,6],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,5],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,6],"group":[1,3],"undead":true,"paralyze":true}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null}};
 const MON = DATA.monsters, SK = DATA.skills, PARTS = DATA.parts;
 /* Random dungeon generator.
 
-   Each level is a 4 x 4 grid of 3 x 3 chambers inside a 17 x 17 map. A spanning
-   tree joins every chamber with doors, a few extra doors add loops, and some
-   neighbouring chambers merge into larger halls. There are no corridors, so no
-   straight run can grow past the 4-square limit.
+   Each level is a 4 x 4 grid of 3 x 3 chambers, 12 x 12 squares in all, with
+   thin walls between squares. A spanning tree joins every chamber with doors,
+   a few extra doors add loops (one may be hidden), some neighbouring chambers
+   merge into larger halls, and a chamber or two is split by a wall with a door
+   in it. There are no corridors, so no straight run can grow past the
+   4-square limit.
 
-   The output has the same shape as a level file in data/levels/, and the build
-   checks a few hundred seeds against tools/check_levels.py.
+   The output has the same shape as a level file in data/levels/ (a "grid"),
+   and the tests check a few hundred seeds against tools/check_levels.py.
 
    genDungeon(seed, monsters, depths) -> array of levels. Same seed, same dungeon. */
 function genDungeon(seed, monsters, depths) {
-  const N = 4, CELL = 3, SIZE = N * (CELL + 1) + 1;
+  const N = 4, CELL = 3;
   const NAMES = ['The Moss Halls', 'The Root Cellars', 'The Weeping Vaults', 'The Silt Galleries', 'The Drowned Crypts',
     'The Lantern Deeps', 'The Fern Catacombs', 'The Blackwater Stair', 'The Hollow Chapels', 'The Sunken Nave'];
   const NOTES = [
@@ -149,12 +151,20 @@ function genDungeon(seed, monsters, depths) {
     const r = mk(seed * 31 + d * 7919);
     const ri = n => Math.floor(r() * n), pickR = a => a[ri(a.length)];
     const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = ri(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-    const g = Array.from({length: SIZE}, () => Array(SIZE).fill('#'));
-    const ox = c => 1 + c * (CELL + 1), oy = ox;
-    for (let cy = 0; cy < N; cy++) for (let cx = 0; cx < N; cx++)
-      for (let y = 0; y < CELL; y++) for (let x = 0; x < CELL; x++) g[oy(cy) + y][ox(cx) + x] = '.';
+    const W = N * CELL, GS = 2 * W + 1;
+    const g = Array.from({length: GS}, (_, gy) => Array.from({length: GS}, (_, gx) => gy % 2 && gx % 2 ? '.' : (gy % 2 || gx % 2 ? ' ' : '+')));
+    const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];
+    const side = (x, y, d, c) => { g[2 * y + 1 + DY[d]][2 * x + 1 + DX[d]] = c; };
+    // walls on every chamber boundary
+    for (let y = 0; y < W; y++) for (let x = 0; x < W; x++) {
+      if (x % CELL === 0) side(x, y, 3, '|');
+      if (x === W - 1) side(x, y, 1, '|');
+      if (y % CELL === 0) side(x, y, 0, '-');
+      if (y === W - 1) side(x, y, 2, '-');
+    }
+    const ox = c => c * CELL, oy = ox;
 
-    // edges between neighbouring cells; a spanning tree first, then extras
+    // edges between neighbouring chambers; a spanning tree first, then extras
     const id = (cx, cy) => cy * N + cx;
     const edges = [];
     for (let cy = 0; cy < N; cy++) for (let cx = 0; cx < N; cx++) {
@@ -172,31 +182,37 @@ function genDungeon(seed, monsters, depths) {
     const hroot = a => hall[a] === a ? a : (hall[a] = hroot(hall[a]));
     const merges = Math.min(3, 1 + ri(3));
     let merged = 0;
-    const doorAt = e => e[2] === 'h' ? [ox(e[3]) + CELL, oy(e[4]) + ri(CELL)] : [ox(e[3]) + ri(CELL), oy(e[4]) + CELL];
+    // the square on the near side of the shared wall, and the direction across it
+    const across = (e, k) => e[2] === 'h' ? [ox(e[3]) + CELL - 1, oy(e[4]) + k, 1] : [ox(e[3]) + k, oy(e[4]) + CELL - 1, 2];
+    const door = (e, c) => { const [x, y, d] = across(e, ri(CELL)); side(x, y, d, c); };
     for (const e of tree) {
       if (merged < merges && r() < 0.35) {
         merged++; hall[hroot(e[0])] = hroot(e[1]);
-        for (let k = 0; k < CELL; k++) {
-          if (e[2] === 'h') g[oy(e[4]) + k][ox(e[3]) + CELL] = '.';
-          else g[oy(e[4]) + CELL][ox(e[3]) + k] = '.';
-        }
-      } else { const [x, y] = doorAt(e); g[y][x] = 'D'; }
+        for (let k = 0; k < CELL; k++) { const [x, y, d] = across(e, k); side(x, y, d, ' '); }
+      } else door(e, 'D');
     }
     // loops: a couple of extra doors, some of them hidden
     const loops = shuffle(spare).slice(0, 1 + ri(3));
     let hidden = 0;
     for (const e of loops) {
       if (hroot(e[0]) === hroot(e[1])) continue; // inside one hall already
-      const [x, y] = doorAt(e);
-      if (hidden < 1 && r() < 0.6) { g[y][x] = 'S'; hidden++; } else g[y][x] = 'D';
+      if (hidden < 1 && r() < 0.6) { door(e, 'S'); hidden++; } else door(e, 'D');
+    }
+    // partitions: a wall across a chamber or two, with a door through it
+    for (const c of shuffle([...Array(N * N).keys()]).slice(0, ri(3))) {
+      const cx = c % N, cy = Math.floor(c / N), at = ri(CELL - 1), gap = ri(CELL), vert = r() < 0.5;
+      for (let k = 0; k < CELL; k++) {
+        const [x, y, d] = vert ? [ox(cx) + at, oy(cy) + k, 1] : [ox(cx) + k, oy(cy) + at, 2];
+        side(x, y, d, k === gap ? 'D' : (vert ? '|' : '-'));
+      }
     }
 
     // squares by cell, for placing features
     const cellSquares = c => { const cx = c % N, cy = Math.floor(c / N), out = [];
       for (let y = 0; y < CELL; y++) for (let x = 0; x < CELL; x++) out.push([ox(cx) + x, oy(cy) + y]); return out; };
-    const cellOf = (x, y) => Math.floor((y - 1) / (CELL + 1)) * N + Math.floor((x - 1) / (CELL + 1));
-    const used = new Set(), mark = (x, y, ch) => { g[y][x] = ch; used.add(x + ',' + y); };
-    const freeIn = c => shuffle(cellSquares(c).filter(([x, y]) => g[y][x] === '.' && !used.has(x + ',' + y)));
+    const cellOf = (x, y) => Math.floor(y / CELL) * N + Math.floor(x / CELL);
+    const used = new Set(), at = (x, y) => g[2 * y + 1][2 * x + 1], mark = (x, y, ch) => { g[2 * y + 1][2 * x + 1] = ch; used.add(x + ',' + y); };
+    const freeIn = c => shuffle(cellSquares(c).filter(([x, y]) => at(x, y) === '.' && !used.has(x + ',' + y)));
 
     // stairs up: where the last level's stairs down were, or a random cell
     const upSq = up || pickR(cellSquares(ri(N * N)));
@@ -241,7 +257,7 @@ function genDungeon(seed, monsters, depths) {
     for (const m of shuffle(band.slice()).slice(0, 4)) wander[m] = 1 + ri(3);
 
     levels.push({depth: d, name: NAMES[(seed + d * 3) % NAMES.length], room_chance: 45 + ri(16),
-      map: g.map(row => row.join('')), notes, lairs, wander});
+      grid: g.map(row => row.join('')), notes, lairs, wander});
     up = down;
   }
   return levels;
@@ -479,32 +495,57 @@ function makeItem(depth) {
   return it;
 }
 
-/* ---------- map ---------- */
+/* ---------- map ----------
+   Levels are thin-wall grids: square (x, y) sits at grid row 2y+1, column 2x+1,
+   and the characters around it are its sides. See tools/check_levels.py. */
 const lvl = d => LV[d - 1];
-function tile(d, x, y) { const m = lvl(d).map; if (y < 0 || y >= m.length || x < 0 || x >= m[0].length) return '#'; return m[y][x]; }
+const gw = d => (lvl(d).grid[0].length - 1) / 2, gh = d => (lvl(d).grid.length - 1) / 2;
+function tile(d, x, y) { if (y < 0 || y >= gh(d) || x < 0 || x >= gw(d)) return '#'; return lvl(d).grid[2 * y + 1][2 * x + 1]; }
 const skey = (d, x, y) => d + ':' + x + ',' + y;
-function passable(d, x, y) { const t = tile(d, x, y); if (t === '#') return false; if (t === 'S') return !!S.secrets[skey(d, x, y)]; return true; }
-function find(d, ch) { const m = lvl(d).map; for (let y = 0; y < m.length; y++) { const x = m[y].indexOf(ch); if (x >= 0) return {x, y}; } return null; }
+const ekey = (d, x, y, f) => d + ':e' + (2 * x + 1 + DX[f]) + ',' + (2 * y + 1 + DY[f]);
+/* The side of square (x, y) facing f: '#' wall, ' ' open, 'D' door, 'S' secret door. */
+function side(d, x, y, f) {
+  const G = lvl(d).grid, c = G[2 * y + 1 + DY[f]]?.[2 * x + 1 + DX[f]];
+  if (c === undefined || '#|-+'.includes(c)) return '#';
+  return c === '.' ? ' ' : c;
+}
+/* A secret side is found once searched for. Older saves keyed found secret doors by square. */
+const isFound = (d, x, y, f) => !!(S.secrets[ekey(d, x, y, f)] || S.secrets[skey(d, x, y)] || S.secrets[skey(d, x + DX[f], y + DY[f])]);
+/* What the party meets at a side: 'wall', 'door' or null (open). */
+function sideKind(d, x, y, f) { const e = side(d, x, y, f); return e === '#' ? 'wall' : e === 'S' ? (isFound(d, x, y, f) ? 'door' : 'wall') : e === 'D' ? 'door' : null; }
+function canPass(d, x, y, f) { return sideKind(d, x, y, f) !== 'wall' && tile(d, x + DX[f], y + DY[f]) !== '#'; }
+function find(d, chr) { for (let y = 0; y < gh(d); y++) for (let x = 0; x < gw(d); x++) if (tile(d, x, y) === chr) return {x, y}; return null; }
 function markSeen() { const {depth, x, y} = S.pos; (S.seen[depth] ||= {})[x + ',' + y] = 1; }
 
 /* ---------- rooms ----------
    A room is a patch of floor bounded by rock and doors. Each room holds at most
    one encounter: it is decided the first time the party walks in, and a beaten
    room stays empty until the party goes back to town. */
-function roomsOf(L) {
-  const m = L.map, ids = m.map(r => [...r].map(() => -1)); let n = 0;
-  for (let y = 0; y < m.length; y++) for (let x = 0; x < m[0].length; x++) {
-    if ('#DS'.includes(m[y][x]) || ids[y][x] >= 0) continue;
+function roomsOf(L, i) {
+  const d = i + 1, W = gw(d), H = gh(d), ids = Array.from({length: H}, () => Array(W).fill(-1)); let n = 0;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    if (tile(d, x, y) === '#' || ids[y][x] >= 0) continue;
     const q = [[x, y]]; ids[y][x] = n;
-    while (q.length) { const [cx, cy] = q.pop(); for (let f = 0; f < 4; f++) { const nx = cx + DX[f], ny = cy + DY[f]; if (!'#DS'.includes(m[ny][nx]) && ids[ny][nx] < 0) { ids[ny][nx] = n; q.push([nx, ny]); } } }
+    while (q.length) { const [cx, cy] = q.pop(); for (let f = 0; f < 4; f++) { const nx = cx + DX[f], ny = cy + DY[f]; if (side(d, cx, cy, f) === ' ' && ids[ny][nx] < 0) { ids[ny][nx] = n; q.push([nx, ny]); } } }
     n++;
   }
   return {ids, n};
+}
+/* The random generator changed shape in version 2 (thin walls). A random game
+   saved before that keeps its seed but gets the new levels, so anything placed by
+   square goes back to the stairs up of its depth. */
+const GEN_VERSION = 2;
+function moveToNewMaps() {
+  S.gen = GEN_VERSION; S.seen = {}; S.secrets = {}; S.rooms = {};
+  const up = d => find(d, '<') || {x: 1, y: 1};
+  if (S.pos) { const d = Math.min(S.pos.depth, LV.length), u = up(d); S.pos = {depth: d, x: u.x, y: u.y, f: openFacing(d, u.x, u.y)}; }
+  for (const b of S.fallen || []) { b.depth = Math.min(b.depth, LV.length); const u = up(b.depth); b.x = u.x; b.y = u.y; }
 }
 /* Load the levels for the current save. Older saves have no mode: campaign. */
 function useDungeon() {
   LV = S && S.mode === 'random' ? genDungeon(S.seed, MON, RANDOM_DEPTHS) : DATA.levels;
   ROOMS = LV.map(roomsOf);
+  if (S && S.mode === 'random' && S.gen !== GEN_VERSION) moveToNewMaps();
 }
 useDungeon();
 const roomAt = (d, x, y) => ROOMS[d - 1].ids[y]?.[x] ?? -1;
@@ -524,7 +565,7 @@ function quietRoom() { S.rooms ||= {}; const k = roomKey(S.pos.depth, S.pos.x, S
 function newGame(ready, mode) {
   S = fresh();
   S.mode = mode === 'random' ? 'random' : 'campaign';
-  if (S.mode === 'random') S.seed = 1 + R(2147483000);
+  if (S.mode === 'random') { S.seed = 1 + R(2147483000); S.gen = GEN_VERSION; }
   useDungeon();
   if (ready) {
     const mk = (n, r, g, st) => makeChar(n, r, g, st, START_GEAR[g]);
@@ -564,14 +605,14 @@ function enterDungeon() {
   say(`You descend into ${lvl(1).name}.`, 'note');
   ui.screen = 'dungeon'; markSeen(); save(); render();
 }
-function openFacing(d, x, y) { for (let f = 0; f < 4; f++) if (passable(d, x + DX[f], y + DY[f])) return f; return 0; }
+function openFacing(d, x, y) { for (let f = 0; f < 4; f++) if (canPass(d, x, y, f)) return f; return 0; }
 
 /* ---------- movement ---------- */
 function step(back) {
   if (ui.combat || ui.chest) return;
   const f = back ? (S.pos.f + 2) % 4 : S.pos.f;
   const nx = S.pos.x + DX[f], ny = S.pos.y + DY[f];
-  if (!passable(S.pos.depth, nx, ny)) { say(tile(S.pos.depth, nx, ny) === 'D' ? 'The door will not budge.' : 'Wet rock. No way through.'); return render(); }
+  if (!canPass(S.pos.depth, S.pos.x, S.pos.y, f)) { say('Wet rock. No way through.'); return render(); }
   S.pos.prev = {x: S.pos.x, y: S.pos.y}; S.carcass = null;
   S.pos.x = nx; S.pos.y = ny;
   arrive();
@@ -646,17 +687,24 @@ function drink() {
   say('The water is cold and tastes of stone. Everyone feels steadier.', 'good');
   save(); render();
 }
+/* Finding a secret door also opens the far side of the same hidden passage, if it has one. */
+function revealSecret(d, x, y, f) {
+  S.secrets[ekey(d, x, y, f)] = 1;
+  const nx = x + DX[f], ny = y + DY[f];
+  for (const [cx, cy] of [[x, y], [nx, ny]]) for (let g = 0; g < 4; g++) if (side(d, cx, cy, g) === 'S') S.secrets[ekey(d, cx, cy, g)] = 1;
+}
 function searchChance() { const p = best('perception'); return pct(30 + (p ? rank(p, 'perception') * 12 : 0) + Math.max(...alive().map(c => mod(c.st.wis))) * 5); }
 function search() {
   const {depth: d, x, y} = S.pos;
   const rogue = best('perception');
   const chance = searchChance();
-  let found = 0, any = false;
+  let nfound = 0, any = false;
   for (let f = 0; f < 4; f++) {
-    const nx = x + DX[f], ny = y + DY[f];
-    if (tile(d, nx, ny) === 'S' && !S.secrets[skey(d, nx, ny)]) { any = true; if (R(100) < chance) { S.secrets[skey(d, nx, ny)] = 1; found++; } }
+    if (side(d, x, y, f) !== 'S' || isFound(d, x, y, f)) continue;
+    any = true;
+    if (R(100) < chance) { revealSecret(d, x, y, f); nfound++; }
   }
-  say(found ? `${rogue ? rogue.name : 'Someone'} finds a hidden door in the stonework!` : 'You run your hands along the wet stone and find nothing.', found ? 'good' : '');
+  say(nfound ? `${rogue ? rogue.name : 'Someone'} finds a hidden door in the stonework!` : 'You run your hands along the wet stone and find nothing.', nfound ? 'good' : '');
   void any; save(); render();
 }
 
@@ -962,13 +1010,18 @@ function drawView(cv) {
   g.fillStyle = gr; g.fillRect(0, cy, W, H - cy);
   g.strokeStyle = 'rgba(120,140,90,.07)'; g.lineWidth = 1;
   for (let z = 1; z <= 6; z++) { const [, yy] = P(0, z, .5); g.beginPath(); g.moveTo(0, yy); g.lineTo(W, yy); g.stroke(); const [, yc] = P(0, z, -.5); g.beginPath(); g.moveTo(0, yc); g.lineTo(W, yc); g.stroke(); }
-  const kind = (lx, d) => {
-    const ax = px + fx * d + rx * lx, ay = py + fy * d + ry * lx, t = tile(D, ax, ay);
-    if (t === '#') return {k: 'rock', ax, ay, t};
-    if (t === 'S') return {k: S.secrets[skey(D, ax, ay)] ? 'door' : 'rock', ax, ay, t};
-    if (t === 'D') return {k: (lx === 0 && d === 0) ? null : 'door', ax, ay, t};
-    return {k: null, ax, ay, t};
-  };
+  // the square lx to the side and d ahead, and its sides
+  const at = (lx, d) => [px + fx * d + rx * lx, py + fy * d + ry * lx];
+  const LEFT = (f + 3) % 4, RIGHT = (f + 1) % 4, MAXD = 5;
+  // squares the eye can reach through open sides; faces behind nearer ones are painted over
+  const vis = new Set(['0,0']), q = [[0, 0]];
+  while (q.length) {
+    const [lx, d] = q.shift(), [ax, ay] = at(lx, d);
+    for (const [dir, nl, nd] of [[f, lx, d + 1], [LEFT, lx - 1, d], [RIGHT, lx + 1, d]]) {
+      if (nd > MAXD || Math.abs(nl) > 3 || vis.has(nl + ',' + nd)) continue;
+      if (sideKind(D, ax, ay, dir) === null && tile(D, ax + DX[dir], ay + DY[dir]) !== '#') { vis.add(nl + ',' + nd); q.push([nl, nd]); }
+    }
+  }
   const shadeA = z => Math.min(.92, z * .17);
   const face = (pts, z, info, side) => {
     const [TL, TR, BR, BL] = pts;
@@ -1034,20 +1087,18 @@ function drawView(cv) {
     if (t === '<') { const z = d + .5, [l] = P(-.18, z, 0), [r] = P(.18, z, 0), [, top] = P(0, z, -.5), [, bot] = P(0, z, .5); g.strokeStyle = '#5b4a30'; g.lineWidth = Math.max(1.5, (bot - top) / 40); g.beginPath(); g.moveTo(l, top); g.lineTo(l, bot); g.moveTo(r, top); g.lineTo(r, bot); for (let k = 1; k < 8; k++) { const yy = top + (bot - top) * k / 8; g.moveTo(l, yy); g.lineTo(r, yy); } g.stroke(); }
     if (t === 'N') { const [ax, ay] = P(0, d + .5, .5), [bx] = P(.14, d + .5, .5), [, tp] = P(0, d + .5, .2); g.fillStyle = '#5c6150'; g.fillRect(ax - (bx - ax), tp, (bx - ax) * 2, ay - tp); }
   };
-  const MAXD = 5;
   for (let d = MAXD; d >= 0; d--) {
-    for (const lx of [-3, 3, -2, 2, -1, 1]) {
-      const c = kind(lx, d); if (!c.k) continue;
-      const x = lx < 0 ? lx + .5 : lx - .5, z0 = Math.max(.5, d), z1 = d + 1;
-      if (z1 <= .5) continue;
-      const dir = lx < 0 ? (f + 1) % 4 : (f + 3) % 4;
-      const pts = lx < 0 ? [P(x, z1, -.5), P(x, z0, -.5), P(x, z0, .5), P(x, z1, .5)] : [P(x, z0, -.5), P(x, z1, -.5), P(x, z1, .5), P(x, z0, .5)];
-      face(pts, (z0 + z1) / 2, {...c, dir}, true);
+    const row = [-3, 3, -2, 2, -1, 1, 0].filter(lx => vis.has(lx + ',' + d));
+    for (const lx of row) {
+      const [ax, ay] = at(lx, d), k = sideKind(D, ax, ay, f);
+      if (k) face([P(lx - .5, d + 1, -.5), P(lx + .5, d + 1, -.5), P(lx + .5, d + 1, .5), P(lx - .5, d + 1, .5)], d + 1, {k, ax, ay, dir: f}, false);
     }
-    if (d >= 1) for (const lx of [-3, 3, -2, 2, -1, 1, 0]) {
-      const c = kind(lx, d);
-      if (!c.k) { if (lx === 0) floorMark(d, c.t); continue; }
-      face([P(lx - .5, d, -.5), P(lx + .5, d, -.5), P(lx + .5, d, .5), P(lx - .5, d, .5)], d, {...c, dir: (f + 2) % 4}, false);
+    if (d >= 1 && vis.has('0,' + d)) { const [ax, ay] = at(0, d); floorMark(d, tile(D, ax, ay)); }
+    const z0 = Math.max(.5, d), z1 = d + 1;
+    for (const lx of row) {
+      const [ax, ay] = at(lx, d);
+      if (lx <= 0) { const k = sideKind(D, ax, ay, LEFT), x = lx - .5; if (k) face([P(x, z1, -.5), P(x, z0, -.5), P(x, z0, .5), P(x, z1, .5)], (z0 + z1) / 2, {k, ax, ay, dir: LEFT}, true); }
+      if (lx >= 0) { const k = sideKind(D, ax, ay, RIGHT), x = lx + .5; if (k) face([P(x, z0, -.5), P(x, z1, -.5), P(x, z1, .5), P(x, z0, .5)], (z0 + z1) / 2, {k, ax, ay, dir: RIGHT}, true); }
     }
   }
   if (ui.combat) drawFoes(g, W, H);
@@ -1067,15 +1118,28 @@ function drawFoes(g, W, H) {
   });
 }
 function drawMap(cv) {
-  const g = cv.getContext('2d'), {depth: D, x: px, y: py, f} = S.pos, m = lvl(D).map, n = m.length, s = cv.width / n;
+  const g = cv.getContext('2d'), {depth: D, x: px, y: py, f} = S.pos, s = cv.width / Math.max(gw(D), gh(D));
   g.fillStyle = '#0b0f0c'; g.fillRect(0, 0, cv.width, cv.height);
   const seen = S.seen[D] || {};
   for (const k in seen) {
     const [x, y] = k.split(',').map(Number);
     g.fillStyle = '#2b3626'; g.fillRect(x * s, y * s, s, s);
-    for (let dd = 0; dd < 4; dd++) { const nx = x + DX[dd], ny = y + DY[dd]; if (!passable(D, nx, ny)) { g.fillStyle = tile(D, nx, ny) === 'D' ? '#7a5a34' : '#56634a'; g.fillRect(nx * s + 1, ny * s + 1, s - 2, s - 2); } }
-    const t = tile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b', 'D': '#7a5a34'}[t];
+    const t = tile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b'}[t];
     if (mark) { g.fillStyle = mark; g.fillRect(x * s + s * .3, y * s + s * .3, s * .4, s * .4); }
+  }
+  // walls as thin lines on the sides of the squares walked; doors as a gap with a brown leaf
+  g.lineCap = 'square';
+  for (const k in seen) {
+    const [x, y] = k.split(',').map(Number);
+    for (let dd = 0; dd < 4; dd++) {
+      const kind = sideKind(D, x, y, dd); if (!kind) continue;
+      const ax = x + (dd === 1 ? 1 : 0), ay = y + (dd === 2 ? 1 : 0), bx = ax + (dd % 2 ? 0 : 1), by = ay + (dd % 2 ? 1 : 0);
+      g.strokeStyle = '#a9b795'; g.lineWidth = Math.max(2, s / 9);
+      if (kind === 'wall') { g.beginPath(); g.moveTo(ax * s, ay * s); g.lineTo(bx * s, by * s); g.stroke(); continue; }
+      const lerp = u => [(ax + (bx - ax) * u) * s, (ay + (by - ay) * u) * s];
+      g.beginPath(); g.moveTo(...lerp(0)); g.lineTo(...lerp(.25)); g.moveTo(...lerp(.75)); g.lineTo(...lerp(1)); g.stroke();
+      g.strokeStyle = '#b07a3e'; g.beginPath(); g.moveTo(...lerp(.3)); g.lineTo(...lerp(.7)); g.stroke();
+    }
   }
   const cxp = px * s + s / 2, cyp = py * s + s / 2;
   g.fillStyle = '#ffffff'; g.beginPath();
