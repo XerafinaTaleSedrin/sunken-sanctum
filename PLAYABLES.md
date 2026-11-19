@@ -75,7 +75,7 @@ Audit of `index.html` at commit `b5a7fec` (120,676 bytes, one file).
 
 ## Build result (2026-11-19, branch `playables`)
 
-The bundle is `dist/sunken-sanctum-playables.zip`, made by `python build-playables.py`. It holds 8 files, 286 KB unpacked and 197 KB zipped: `index.html`, five `.woff2` fonts and their two SIL Open Font License texts. Upload it as is and pick `index.html` as the entry point.
+The bundle is `dist/sunken-sanctum-playables.zip`. It is built from the game's source in the `undergrove` project: `python tools/build.py` writes the website page and the Playables bundle together, so the two cannot drift apart. This branch holds a copy of that build. It holds 8 files, 286 KB unpacked and 197 KB zipped: `index.html`, five `.woff2` fonts and their two SIL Open Font License texts. Upload it as is and pick `index.html` as the entry point.
 
 What changed in `index.html`:
 
@@ -94,7 +94,7 @@ What the checks showed:
 
 | Check | How | Result |
 |---|---|---|
-| Bundle limits, file names, no outside URLs except the SDK, SDK before game code | `build-playables.py` | Pass |
+| Bundle limits, file names, no outside URLs except the SDK, SDK before game code | `undergrove/tools/build.py`, on every build | Pass |
 | No outside requests | Served with the Playables CSP from the [test suite guide][testguide], with the Google Fonts allowances removed; listed every resource the page loaded | Pass: only same-origin files |
 | SDK call order and save rules | A local stand-in for the SDK that records calls and rejects `saveData` before `loadData` | Pass: `firstFrameReady` → `loadData` → title shown → `gameReady`; no rejected saves; a new game plus moves made one save of about 2.5 KB |
 | Pause | Fired pause, then tried keys and clicks | Pass: no movement while paused; state saved on pause |
