@@ -95,7 +95,7 @@ Branch `playables`. The GitHub Pages version on `main` keeps working unchanged.
 ## Only Marika can do these
 
 1. **Decide which YouTube channel** will publish the game. Review weighs the channel's history. [Requirements][reqs]
-2. **Fill in the Playables interest form**, signed in as herself: <https://docs.google.com/forms/d/e/1FAIpQLSdvdQ0lgIq2369aemj1O6w8R8FwGn9O5ARRGODDDUbVINCRJQ/viewform> (linked from the [Overview][overview]).
+2. **Done 2026-11-19:** submitted the Playables interest form, giving the GitHub Pages link (https://xerafinatalesedrin.github.io/sunken-sanctum/). Now waiting for an invitation; Google gives no timeline. The form: <https://docs.google.com/forms/d/e/1FAIpQLSdvdQ0lgIq2369aemj1O6w8R8FwGn9O5ARRGODDDUbVINCRJQ/viewform> (linked from the [Overview][overview]).
 3. **If invited:** accept whatever agreements the portal requires, and sign in to the Developer Portal at <https://www.youtube.com/playables_portal>. [Developer Portal][portal]
 4. **In the portal:** upload the ZIP and pick `index.html` as the entry point; enter title, description, genre, publisher and developer; upload thumbnails in each required aspect ratio (sizes are shown only in the portal; no logos or branding in them, per [Design][design]); choose accessibility tags; set ad settings; run the device tests (desktop web, mobile web, YouTube for Android, YouTube for iOS); complete the IARC questionnaire with a contact email; submit for review. [Developer Portal][portal]
 5. **Tax and payment:** nothing to set up now. Revenue sharing is a closed pilot. If YouTube invites her into it, the terms will come with the invitation. [Monetization reference][monref]
