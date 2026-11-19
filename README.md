@@ -7,7 +7,7 @@ Play it at **https://xerafinatalesedrin.github.io/sunken-sanctum/**
 ## Play
 
 - Single player, with a party of one to four characters.
-- Two ways to play: the written campaign, or a random five-level dungeon that is different every new game.
+- Three ways to play: the written campaign, a random five-level dungeon that is different every new game, or a deep random dungeon of ten levels that grow larger as you go down.
 - Five guilds (Fighter, Rogue, Wizard, Cleric, Forager) and six races. The Forager skins, forages and salvages rather than fights.
 - A ready-made party: Sylene, Tharok, Elara and Grimjaw, the four adventurers of the Sunken Sanctum puzzle campaign.
 - Point-buy character creation.
