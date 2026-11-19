@@ -1,8 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sunken Sanctum</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
 <style>
+@font-face { font-family: 'IM Fell English SC'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/im-fell-english-sc-400.woff2) format('woff2'); }
+@font-face { font-family: 'Alegreya Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/alegreya-sans-400.woff2) format('woff2'); }
+@font-face { font-family: 'Alegreya Sans'; font-style: italic; font-weight: 400; font-display: swap; src: url(fonts/alegreya-sans-400-italic.woff2) format('woff2'); }
+@font-face { font-family: 'Alegreya Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/alegreya-sans-500.woff2) format('woff2'); }
+@font-face { font-family: 'Alegreya Sans'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/alegreya-sans-700.woff2) format('woff2'); }
 /* Layout: one screen. The first-person view and its controls on the left, the party and the log beside it; stacked on a phone. */
 :root {
   --rock: #111712; --slab: #1a221b; --slab2: #222c23; --line: #34412f;
@@ -30,6 +37,7 @@ header .where { color: var(--dim); font-size: .95rem; }
 
 .view { position: relative; border: 1px solid var(--line); background: #000; border-radius: 3px; overflow: hidden; }
 .view canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; }
+@media (min-width: 821px) { .view canvas { max-height: max(180px, calc(100dvh - 250px)); width: auto; max-width: 100%; margin: 0 auto; } }
 .view .bar { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 10px; background: linear-gradient(transparent, rgba(0,0,0,.75)); display: flex; justify-content: space-between; gap: 8px; font-size: .9rem; color: var(--lichen); pointer-events: none; }
 .mapwrap canvas { display: block; width: 100%; max-width: 100%; aspect-ratio: 1; height: auto; border: 1px solid var(--line); background: #0b0f0c; }
 
@@ -110,8 +118,13 @@ input, select, textarea { background: #0c100d; color: var(--ink); border: 1px so
 .title .btns { max-width: 420px; margin: 18px auto 0; flex-direction: column; }
 .fine { color: var(--dim); font-size: .78rem; margin-top: 28px; }
 .fine a { color: var(--dim); }
+.loading { display: grid; place-items: center; min-height: 80vh; text-align: center; color: var(--dim); }
+.loading h1 { font: clamp(2.4rem, 1.6rem + 5vw, 5rem)/1 var(--display); color: var(--lichen); margin: 0 0 12px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+<script src="https://www.youtube.com/game_api/v1"></script>
+</head>
+<body>
 
 <div id="app"></div>
 
@@ -362,8 +375,28 @@ const SAVE = 'undergrove-save-1';
 let S = null;
 const ui = {screen:'title', place:'square', modal:null, combat:null, chest:null, map:false, sheet:null, newc:null, confirm:null, msg:''};
 function fresh() { return {v:1, roster:[], party:[], gold:0, bank:0, inDungeon:false, pos:null, seen:{}, secrets:{}, rooms:{}, known:{}, fallen:[], carried:[], settings:{lasting:false}, log:[]}; }
-function save() { try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) {} }
-function loadSave() { try { const t = localStorage.getItem(SAVE); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
+/* YouTube Playables: progress goes to the SDK's cloud save there, and to localStorage everywhere else. */
+const YT = typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV === true;
+const PLAY = {loaded: false, text: '', sent: '', timer: 0, paused: false};
+function ytLog(m) { try { ytgame.health.logWarning(String(m)); } catch (e) {} }
+function flushSave() {
+  clearTimeout(PLAY.timer); PLAY.timer = 0;
+  if (!PLAY.loaded || PLAY.text === PLAY.sent) return;
+  const t = PLAY.text;
+  if (t.isWellFormed && !t.isWellFormed()) return ytLog('save text is not well-formed');
+  PLAY.sent = t;
+  ytgame.game.saveData(t).catch(e => { PLAY.sent = ''; ytLog('saveData failed: ' + (e && e.errorType)); });
+}
+function save() {
+  if (!S) return;
+  if (!YT) { try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) {} return; }
+  PLAY.text = JSON.stringify(S);
+  if (!PLAY.paused && !PLAY.timer) PLAY.timer = setTimeout(flushSave, 1000);
+}
+function loadSave() {
+  if (YT) { try { return PLAY.text ? JSON.parse(PLAY.text) : null; } catch (e) { return null; } }
+  try { const t = localStorage.getItem(SAVE); return t ? JSON.parse(t) : null; } catch (e) { return null; }
+}
 function say(t, cls) { S.log.unshift({t, cls: cls || ''}); S.log.length = Math.min(S.log.length, 80); }
 const ch = id => S.roster.find(c => c.id === id);
 const party = () => S.party.map(ch).filter(Boolean);
@@ -676,9 +709,10 @@ function useStairs() {
     S.pos = {depth: d - 1, x, y, f: S.pos.f}; quietRoom();
     say(`You climb to ${lvl(d - 1).name}.`, 'note');
   } else if (t === '>') {
-    if (!lvl(d + 1)) { say('Roots choke the stair below. The deeper levels are not open yet.', 'note'); return render(); }
+    if (!lvl(d + 1)) { say(S.mode === 'random' ? 'Roots choke the stair below. This is the bottom of this dungeon; there is nothing deeper. A new game grows a new one.' : 'Roots choke the stair below. This is the deepest level of the campaign; there is nothing further down.', 'note'); return render(); }
     S.pos = {depth: d + 1, x, y, f: S.pos.f}; quietRoom();
     say(`You descend to ${lvl(d + 1).name}.`, 'note');
+    if (!lvl(d + 2)) say(S.mode === 'random' ? 'This is the last level of this dungeon. Nothing lies deeper; a new game grows a new dungeon.' : 'This is the deepest level of the campaign. Nothing lies further down.', 'note');
   }
   markSeen(); save(); render();
 }
@@ -998,8 +1032,13 @@ function study(c, i) {
 /* ---------- rendering: first-person view ---------- */
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 const hash = (a, b, c, d) => ((a * 73856093) ^ (b * 19349663) ^ (c * 83492791) ^ (d * 2654435761)) | 0;
+function crisp(cv, w, h) {
+  const k = Math.min(4, Math.max(1, (cv.clientWidth || w) * (window.devicePixelRatio || 1) / w));
+  cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+  const g = cv.getContext('2d'); g.setTransform(cv.width / w, 0, 0, cv.height / h, 0, 0); return g;
+}
 function drawView(cv) {
-  const g = cv.getContext('2d'), W = cv.width, H = cv.height, cx = W / 2, cy = H / 2, F = W / 2;
+  const W = 640, H = 480, g = crisp(cv, W, H), cx = W / 2, cy = H / 2, F = W / 2;
   const {depth: D, x: px, y: py, f} = S.pos;
   const fx = DX[f], fy = DY[f], rx = DX[(f + 1) % 4], ry = DY[(f + 1) % 4];
   const P = (x, z, y) => [cx + x / z * F, cy + y / z * F];
@@ -1118,8 +1157,8 @@ function drawFoes(g, W, H) {
   });
 }
 function drawMap(cv) {
-  const g = cv.getContext('2d'), {depth: D, x: px, y: py, f} = S.pos, s = cv.width / Math.max(gw(D), gh(D));
-  g.fillStyle = '#0b0f0c'; g.fillRect(0, 0, cv.width, cv.height);
+  const g = crisp(cv, 320, 320), {depth: D, x: px, y: py, f} = S.pos, s = 320 / Math.max(gw(D), gh(D));
+  g.fillStyle = '#0b0f0c'; g.fillRect(0, 0, 320, 320);
   const seen = S.seen[D] || {};
   for (const k in seen) {
     const [x, y] = k.split(',').map(Number);
@@ -1198,7 +1237,7 @@ function titleHTML() {
     ${ui.confirm === 'new' ? `<p class="small" style="margin-top:12px">This replaces your saved game. <button class="link" data-a="new" data-ready="${ui.ready || ''}" data-sure="1">Start over</button> <button class="link" data-a="cancel">Keep it</button></p>` : ''}
     ${fine()}</div>`;
 }
-function fine() { return `<p class="fine">This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC, available at <a href="https://dnd.wizards.com/resources/systems-reference-document" target="_blank" rel="noopener">dnd.wizards.com</a>. The SRD 5.1 is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" rel="noopener">Creative Commons Attribution 4.0 International License</a>.</p>`; }
+function fine() { return `<p class="fine">This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC, available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode).</p>`; }
 
 function dungeonHTML() {
   const C = ui.combat, K = ui.chest, t = tile(S.pos.depth, S.pos.x, S.pos.y);
@@ -1412,10 +1451,10 @@ function bankHTML() {
 function modalHTML() {
   if (ui.modal === 'settings') return `<div class="modal" data-a="close" data-self="1"><div class="panel"><h2>Settings</h2>
     <label class="small" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="set-lasting" ${S.settings.lasting ? 'checked' : ''}> Lasting death: a failed raising destroys the character</label>
-    <h3>Save</h3><p class="small muted">The game saves itself in this browser after every move. To move it to another device, copy this code there.</p>
+    ${YT ? `<h3>Save</h3><p class="small muted">The game saves itself as you play.</p>` : `<h3>Save</h3><p class="small muted">The game saves itself in this browser after every move. To move it to another device, copy this code there.</p>
     <textarea id="savecode" rows="3" style="width:100%" readonly>${esc(btoa(unescape(encodeURIComponent(JSON.stringify(S)))))}</textarea>
     <div class="btns"><button class="btn" data-a="copysave">Copy save code</button><button class="btn" data-a="loadcode">Load a code</button></div>
-    ${ui.loadcode ? `<textarea id="incode" rows="3" style="width:100%" placeholder="Paste a save code"></textarea><div class="btns"><button class="btn go" data-a="loadgo">Load it</button></div>` : ''}
+    ${ui.loadcode ? `<textarea id="incode" rows="3" style="width:100%" placeholder="Paste a save code"></textarea><div class="btns"><button class="btn go" data-a="loadgo">Load it</button></div>` : ''}`}
     <h3>Start over</h3><div class="btns"><button class="btn warn" data-a="title">Back to the title</button><button class="btn" data-a="close">Close</button></div>${fine()}</div></div>`;
   if (ui.modal !== 'sheet') return '';
   const c = ch(ui.sheet.id); if (!c) return '';
@@ -1456,9 +1495,9 @@ const A = {
   title() { ui.modal = null; ui.screen = 'title'; render(); },
   settings() { ui.modal = 'settings'; ui.loadcode = false; render(); },
   close(d, e) { if (d.self && e.target !== e.currentTarget && !e.target.matches('[data-self]')) return; ui.modal = null; ui.sheet = null; render(); },
-  copysave() { const t = $('#savecode'); navigator.clipboard?.writeText(t.value).then(() => { ui.msg = 'Save code copied.'; }, () => { t.select(); }); },
+  copysave() { if (YT) return; const t = $('#savecode'); navigator.clipboard?.writeText(t.value).then(() => { ui.msg = 'Save code copied.'; }, () => { t.select(); }); },
   loadcode() { ui.loadcode = true; render(); },
-  loadgo() { try { const s = JSON.parse(decodeURIComponent(escape(atob($('#incode').value.trim())))); if (!s.roster) throw 0; S = s; S.roster.forEach(ensureSkills); useDungeon(); ui.modal = null; ui.screen = S.inDungeon ? 'dungeon' : 'town'; save(); render(); } catch (e) { ui.msg = 'That code did not load. Check that the whole code was pasted.'; ui.modal = null; render(); } },
+  loadgo() { if (YT) return; try { const s = JSON.parse(decodeURIComponent(escape(atob($('#incode').value.trim())))); if (!s.roster) throw 0; S = s; S.roster.forEach(ensureSkills); useDungeon(); ui.modal = null; ui.screen = S.inDungeon ? 'dungeon' : 'town'; save(); render(); } catch (e) { ui.msg = 'That code did not load. Check that the whole code was pasted.'; ui.modal = null; render(); } },
   place(d) { ui.place = d.p; ui.msg = ''; render(); },
   enter() { enterDungeon(); },
   step(d) { step(!!d.back); },
@@ -1554,21 +1593,43 @@ const A = {
 function grabForm() { const N = ui.newc; if (!N) return; const n = $('#nc-name'); if (n) N.name = n.value; const r = $('#nc-race'), g = $('#nc-guild'); if (r) N.race = r.value; if (g) N.guild = g.value; }
 
 document.addEventListener('click', e => {
+  if (PLAY.paused) return;
   const b = e.target.closest('[data-a]'); if (!b) return;
   const f = A[b.dataset.a]; if (!f) return;
   if (b.dataset.a === 'close' && b.dataset.self && e.target !== b) return;
   f(b.dataset, e);
 });
 document.addEventListener('change', e => {
+  if (PLAY.paused) return;
   if (e.target.id === 'nc-race') { grabForm(); render(); }
   if (e.target.id === 'nc-guild') { grabForm(); ui.newc.base = {...PB_PRESET[ui.newc.guild]}; render(); }
   if (e.target.id === 'set-lasting') { S.settings.lasting = e.target.checked; save(); }
 });
 document.addEventListener('keydown', e => {
+  if (PLAY.paused) return;
+  if (e.key === 'Escape') { if (ui.modal) { ui.modal = null; ui.sheet = null; render(); } return; }
   if (ui.screen !== 'dungeon' || ui.modal || e.target.matches('input, textarea, select')) return;
   const k = e.key.toLowerCase();
   const map = {arrowup: () => step(false), w: () => step(false), arrowdown: () => step(true), s: () => step(true), arrowleft: () => turn(-1), a: () => turn(-1), arrowright: () => turn(1), d: () => turn(1), f: () => !ui.combat && !ui.chest && search(), m: () => A.map(), enter: () => !ui.combat && !ui.chest && '<>'.includes(tile(S.pos.depth, S.pos.x, S.pos.y)) && useStairs()};
   if (map[k]) { e.preventDefault(); map[k](); }
 });
-if (LV.length) render(); else document.body.textContent = 'No levels were built into this page.';
+function redraw() { if (S && ui.screen === 'dungeon' && !ui.modal) { const v = $('#view'), m = $('#map'); if (v) drawView(v); if (m) drawMap(m); } }
+window.addEventListener('resize', redraw);
+async function boot() {
+  if (!LV.length) { document.body.textContent = 'No levels were built into this page.'; return; }
+  if (!YT) return render();
+  $('#app').innerHTML = '<div class="loading"><div><h1>Sunken Sanctum</h1><p>Loading</p></div></div>';
+  ytgame.game.firstFrameReady();
+  ytgame.system.isAudioEnabled();                  // The game makes no sound, so there is nothing to start or stop.
+  ytgame.system.onAudioEnabledChange(() => {});
+  ytgame.system.onPause(() => { PLAY.paused = true; if (S) PLAY.text = JSON.stringify(S); flushSave(); });
+  ytgame.system.onResume(() => { PLAY.paused = false; if (PLAY.text !== PLAY.sent) save(); });
+  try { PLAY.text = (await ytgame.game.loadData()) || ''; PLAY.sent = PLAY.text; PLAY.loaded = true; }
+  catch (e) { ytLog('loadData failed: ' + (e && e.errorType)); }
+  render();
+  ytgame.game.gameReady();
+}
+boot();
 </script>
+</body>
+</html>

@@ -73,7 +73,45 @@ Audit of `index.html` at commit `b5a7fec` (120,676 bytes, one file).
 - The `<meta name="claude:viewport-fit-sides">` tag left from the authoring tool.
 - The file has no `<!doctype html>`; add one.
 
+## Build result (2026-11-19, branch `playables`)
+
+The bundle is `dist/sunken-sanctum-playables.zip`, made by `python build-playables.py`. It holds 8 files, 286 KB unpacked and 197 KB zipped: `index.html`, five `.woff2` fonts and their two SIL Open Font License texts. Upload it as is and pick `index.html` as the entry point.
+
+What changed in `index.html`:
+
+- The SDK script loads in `<head>`, before the game code. Added a doctype, charset and viewport. Removed the authoring-tool meta tag.
+- Fonts are served from `fonts/`. Nothing loads from Google Fonts any more. Both fonts are under the SIL Open Font License, confirmed from each font's licence file.
+- A loading panel shows, then `firstFrameReady()`, `loadData()`, the title screen, and `gameReady()`.
+- Inside Playables, progress saves only through `saveData()`. Saves are grouped to at most one per second, plus one on pause. Outside Playables the game still uses `localStorage`.
+- `onPause` saves and stops all input. `onResume` lets input through again. The audio callbacks are registered; the game has no sound.
+- Settings shows no save code inside Playables.
+- The SRD credit is plain text with the URLs written out. There are no links.
+- Esc closes Settings and the character sheet.
+- Canvases draw at the screen's pixel density. On short, wide windows the view shrinks so the controls stay on screen.
+- The game now says when the player reaches the last level: on arrival and at the blocked stair, in both the campaign and the random dungeon.
+
+What the checks showed:
+
+| Check | How | Result |
+|---|---|---|
+| Bundle limits, file names, no outside URLs except the SDK, SDK before game code | `build-playables.py` | Pass |
+| No outside requests | Served with the Playables CSP from the [test suite guide][testguide], with the Google Fonts allowances removed; listed every resource the page loaded | Pass: only same-origin files |
+| SDK call order and save rules | A local stand-in for the SDK that records calls and rejects `saveData` before `loadData` | Pass: `firstFrameReady` → `loadData` → title shown → `gameReady`; no rejected saves; a new game plus moves made one save of about 2.5 KB |
+| Pause | Fired pause, then tried keys and clicks | Pass: no movement while paused; state saved on pause |
+| Continue after reload | Reloaded with the stand-in's stored cloud save | Pass: Continue returned to the same square |
+| Aspect ratios | 360×640 (9:16), 600×600, 1280×720 (16:9), 1260×540 (21:9), 1600×450 (32:9) | Pass: no sideways scrolling, movement buttons on screen, game state kept through each resize |
+| Esc, settings, credits | Opened Settings, pressed Esc | Pass |
+| Last level message | Took the stairs to the last level in both modes | Pass |
+| Plain web version | Loaded `index.html` locally: the real SDK reports it is not in Playables | Pass: title screen, `localStorage` path |
+
+Not yet checked:
+
+- **The real SDK.** It does nothing outside YouTube, so the real calls can only be checked in the [SDK Test Suite][testsuite] or the portal's test step. That needs portal access.
+- **Real phones.** The YouTube Android and iOS apps, and a high-density screen, are covered by the portal's test step.
+
 ## Build plan (after Marika says go)
+
+Done; see Build result above.
 
 Branch `playables`. The GitHub Pages version on `main` keeps working unchanged.
 
