@@ -125,7 +125,7 @@ input, select, textarea { background: #0c100d; color: var(--ink); border: 1px so
 <div id="app"></div>
 
 <script>
-const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"grid":["#################################","#################################","##+-+-+-+###+-+-+-+-+###+-+-+-+##","##|< . .|###|. . . .|###|. . F|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L . .D. . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+D+-+###+-+-+D+-+###+ + + +##","####|.|#########|.|#####|. . .|##","####+ +#########+ +#####+-+D+-+##","####|.|#########|.|#######|.|####","##+-+ +-+-+###+-+ +-+#####+ +####","##|. . . .|###|. . .|#####|.|####","##+ + + + +###+ + + +-+-+-+ +-+##","##|. . . .|###|. L . .D. . . .|##","##+ + + + +###+ + + +-+-+ + + +##","##|. N . .|###|. . .|###|. . .|##","##+ + + + +###+-+D+-+###+ + + +##","##|. . . .|#####|.|#####|. . .|##","##+-+D+-+-+#####+ +#####+-+-+-+##","####|.|#########|.|##############","####+ +#####+-+-+ +-+############","####|.|#####|. . . .|############","##+-+ +-+###+ + + + +-+-+-+-+-+##","##|. . .|###|. . . .S. . . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L .|###|. > .|##","##+ + + +-+-+ + + + +###+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+-+-+###+-+-+-+-+###+-+-+-+##","#################################","#################################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"grid":["#################################","#################################","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","##|. . .|#|. . . .|###|. . . F|##","##+ + + +-+ + + + +###+ + + + +##","##|. L . .D. . . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+D+-+#+-+D+-+-+###+-+-+D+-+##","####|.|#####|.|###########|.|####","##+-+ +-+#+-+ +-+-+###+-+-+ +-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . .D. . . L .|##","##+ + + +-+ + + + +-+-+ + + + +##","##|. . . .D. N . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","####|.|#####|.|#########|.|######","####+S+#####+D+#########+D+######","####|.|#####|.|#########|.|######","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . . .D. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. > .|#|. . . .|###|. . < .|##","##+ + + +#+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","#################################","#################################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,5],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,6],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,5],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,6],"group":[1,3],"undead":true,"paralyze":true}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null}};
+const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"grid":["#################################","#################################","##+-+-+-+###+-+-+-+-+###+-+-+-+##","##|< . .|###|. . . .|###|. . F|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L . .D. . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+D+-+###+-+-+D+-+###+ + + +##","####|.|#########|.|#####|. . .|##","####+ +#########+ +#####+-+D+-+##","####|.|#########|.|#######|.|####","##+-+ +-+-+###+-+ +-+#####+ +####","##|. . . .|###|. . .|#####|.|####","##+ + + + +###+ + + +-+-+-+ +-+##","##|. . . .|###|. L . .D. . . .|##","##+ + + + +###+ + + +-+-+ + + +##","##|. N . .|###|. . .|###|. . .|##","##+ + + + +###+-+D+-+###+ + + +##","##|. . . .|#####|.|#####|. . .|##","##+-+D+-+-+#####+ +#####+-+-+-+##","####|.|#########|.|##############","####+ +#####+-+-+ +-+############","####|.|#####|. . . .|############","##+-+ +-+###+ + + + +-+-+-+-+-+##","##|. . .|###|. . . .S. . . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L .|###|. > .|##","##+ + + +-+-+ + + + +###+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+-+-+###+-+-+-+-+###+-+-+-+##","#################################","#################################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"grid":["#################################","#################################","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","##|. . .|#|. . . .|###|. . . F|##","##+ + + +-+ + + + +###+ + + + +##","##|. L . .D. . . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+D+-+#+-+D+-+-+###+-+-+D+-+##","####|.|#####|.|###########|.|####","##+-+ +-+#+-+ +-+-+###+-+-+ +-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . .D. . . L .|##","##+ + + +-+ + + + +-+-+ + + + +##","##|. . . .D. N . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","####|.|#####|.|#########|.|######","####+S+#####+D+#########+D+######","####|.|#####|.|#########|.|######","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . . .D. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. > .|#|. . . .|###|. . < .|##","##+ + + +#+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","#################################","#################################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,6],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,8],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,6],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,8],"group":[1,3],"undead":true,"paralyze":true},"hobgoblin":{"name":"Hobgoblin","plural":"Hobgoblins","ac":18,"hp":"2d8+2","atk":3,"dmg":"1d8+1","xp":100,"depth":[3,6],"group":[2,4]},"gnoll":{"name":"Gnoll","plural":"Gnolls","ac":15,"hp":"5d8","atk":4,"dmg":"1d8+2","xp":100,"depth":[4,7],"group":[2,4]},"bugbear":{"name":"Bugbear","plural":"Bugbears","ac":16,"hp":"5d8+5","atk":4,"dmg":"2d8+2","xp":200,"depth":[4,8],"group":[1,3]},"dire_wolf":{"name":"Dire Wolf","plural":"Dire Wolves","ac":14,"hp":"5d10+10","atk":5,"dmg":"2d6+3","xp":200,"depth":[5,8],"group":[1,3]},"ghast":{"name":"Ghast","plural":"Ghasts","ac":13,"hp":"8d8","atk":5,"dmg":"2d6+3","xp":450,"depth":[6,10],"group":[1,2],"undead":true,"paralyze":true},"ogre":{"name":"Ogre","plural":"Ogres","ac":11,"hp":"7d10+21","atk":6,"dmg":"2d8+4","xp":450,"depth":[6,10],"group":[1,1]},"wight":{"name":"Wight","plural":"Wights","ac":14,"hp":"6d8+18","atk":4,"dmg":"2d8+4","xp":700,"depth":[7,10],"group":[1,2],"undead":true},"owlbear":{"name":"Owlbear","plural":"Owlbears","ac":13,"hp":"7d10+21","atk":7,"dmg":"4d8+6","xp":700,"depth":[7,10],"group":[1,1]},"minotaur":{"name":"Minotaur","plural":"Minotaurs","ac":14,"hp":"9d10+27","atk":6,"dmg":"2d12+4","xp":700,"depth":[8,10],"group":[1,1]},"phase_spider":{"name":"Phase Spider","plural":"Phase Spiders","ac":13,"hp":"5d10+10","atk":4,"dmg":"1d10+2","xp":700,"depth":[8,10],"group":[1,2],"poison":"4d8"}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null,"hobgoblin":{"name":"hobgoblin insignia","value":10},"gnoll":{"name":"gnoll hide","value":12},"bugbear":{"name":"bugbear pelt","value":18},"dire_wolf":{"name":"dire wolf pelt","value":25},"ghast":null,"ogre":{"name":"ogre tooth","value":30},"wight":null,"owlbear":{"name":"owlbear feathers","value":45},"minotaur":{"name":"minotaur horn","value":60},"phase_spider":{"name":"phase spider silk","value":55}}};
 const MON = DATA.monsters, SK = DATA.skills, PARTS = DATA.parts;
 /* Random dungeon generator.
 
@@ -139,8 +139,18 @@ const MON = DATA.monsters, SK = DATA.skills, PARTS = DATA.parts;
    The output has the same shape as a level file in data/levels/ (a "grid"),
    and the tests check a few hundred seeds against tools/check_levels.py.
 
-   genDungeon(seed, monsters, depths) -> array of levels. Same seed, same dungeon. */
-function genDungeon(seed, monsters, depths) {
+   genDungeon(seed, monsters, depths, version) -> array of levels. Same seed,
+   same version, same dungeon. Version 2 is the layout above and stays exactly
+   as it was, so games saved with it keep their maps. Version 3 (genV3, below)
+   grows with depth and varies the chamber sizes. */
+function genDungeon(seed, monsters, depths, version) {
+  return version >= 3 ? genV3(seed, monsters, depths) : genV2(seed, monsters, depths);
+}
+function genV2(seed, monsters, depths) {
+  // Version 2 picks only from the monsters it was made with, so later monsters do not change old maps.
+  const V2_ROSTER = ['giant_rat', 'kobold', 'stirge', 'giant_centipede', 'goblin', 'skeleton', 'zombie', 'giant_frog',
+    'violet_fungus', 'wolf', 'orc', 'shadow', 'giant_spider', 'ghoul'];
+  monsters = Object.fromEntries(V2_ROSTER.filter(k => monsters[k]).map(k => [k, monsters[k]]));
   const N = 4, CELL = 3;
   const NAMES = ['The Moss Halls', 'The Root Cellars', 'The Weeping Vaults', 'The Silt Galleries', 'The Drowned Crypts',
     'The Lantern Deeps', 'The Fern Catacombs', 'The Blackwater Stair', 'The Hollow Chapels', 'The Sunken Nave'];
@@ -271,15 +281,160 @@ function genDungeon(seed, monsters, depths) {
   }
   return levels;
 }
+
+/* Version 3: levels grow with depth, and chambers come in different sizes.
+
+   Each level is a grid of chambers, as in version 2, but the grid widens as the
+   party goes down: 4 x 4 chambers on depths 1-2, 5 x 5 on 3-5, 6 x 6 on 6-8 and
+   7 x 7 from depth 9. Every column of chambers gets its own width and every row
+   its own height, 2 to 4 squares, so rooms are long, narrow, square or wide
+   rather than all 3 x 3. Bigger levels get more halls, more loops and more
+   lairs, and deeper lairs hold bigger groups. A chamber is never wider than 4
+   squares, so the 4-square corridor limit still holds without corridors. */
+function genV3(seed, monsters, depths) {
+  const NAMES = ['The Moss Halls', 'The Root Cellars', 'The Weeping Vaults', 'The Silt Galleries', 'The Drowned Crypts',
+    'The Lantern Deeps', 'The Fern Catacombs', 'The Blackwater Stair', 'The Hollow Chapels', 'The Sunken Nave',
+    'The Lichen Cloister', 'The Eel Cisterns', 'The Bone Orchard', 'The Mire Gate', 'The Pale Ossuary',
+    'The Heartwood Vault', 'The Tide Chambers', 'The Weir of Names', 'The Choir of Roots', 'The Last Well'];
+  const NOTES = [
+    'Scratched into the stone: count the doors, not the rooms.',
+    'A rusted plaque, mostly unreadable. The last line says only: deeper is older.',
+    'Someone has drawn a lantern on the wall in soot, and an arrow pointing down.',
+    'Moss has been scraped from a carving of a tree whose roots hold a door.',
+    'A tally of days cut into the wall stops at forty-one.',
+    'Water drips through the ceiling here. The stone below it is worn smooth.',
+    'A name is carved here, and under it another, and another, each in a different hand.',
+    'The roots in this wall have grown around an iron key. It will not come free.',
+    'Chalk on the floor: a circle, and inside it the words do not wait here.',
+    'The air smells of rain, though no rain has reached this deep in an age.',
+  ];
+  const chambersAt = d => d <= 2 ? 4 : d <= 5 ? 5 : d <= 8 ? 6 : 7;
+  const mk = s => () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];
+  const levels = [];
+  let up = null; // the square of the previous level's '>'
+  for (let d = 1; d <= depths; d++) {
+    const r = mk(seed * 31 + d * 7919 + 3);
+    const ri = n => Math.floor(r() * n), pickR = a => a[ri(a.length)];
+    const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = ri(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const N = chambersAt(d);
+    const SIZES = [2, 3, 3, 4];
+    const cw = Array.from({length: N}, () => pickR(SIZES)), rh = Array.from({length: N}, () => pickR(SIZES));
+    // the stairs up must land inside this level: widen narrow chambers until it reaches the last level's '>'
+    const grow = (a, need) => { while (a.reduce((s, v) => s + v, 0) <= need) { const i = a.indexOf(Math.min(...a)); a[i]++; } };
+    if (up) { grow(cw, up[0]); grow(rh, up[1]); }
+    const colX = cw.map((_, i) => cw.slice(0, i).reduce((a, b) => a + b, 0));
+    const rowY = rh.map((_, i) => rh.slice(0, i).reduce((a, b) => a + b, 0));
+    const W = colX[N - 1] + cw[N - 1], H = rowY[N - 1] + rh[N - 1];
+    const g = Array.from({length: 2 * H + 1}, (_, gy) => Array.from({length: 2 * W + 1}, (_, gx) => gy % 2 && gx % 2 ? '.' : (gy % 2 || gx % 2 ? ' ' : '+')));
+    const side = (x, y, dir, c) => { g[2 * y + 1 + DY[dir]][2 * x + 1 + DX[dir]] = c; };
+    const colOf = x => { let c = 0; while (c + 1 < N && colX[c + 1] <= x) c++; return c; };
+    const rowOf = y => { let c = 0; while (c + 1 < N && rowY[c + 1] <= y) c++; return c; };
+    // walls on every chamber boundary
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (colX.includes(x)) side(x, y, 3, '|');
+      if (x === W - 1) side(x, y, 1, '|');
+      if (rowY.includes(y)) side(x, y, 0, '-');
+      if (y === H - 1) side(x, y, 2, '-');
+    }
+    const id = (cx, cy) => cy * N + cx;
+    const edges = [];
+    for (let cy = 0; cy < N; cy++) for (let cx = 0; cx < N; cx++) {
+      if (cx + 1 < N) edges.push([id(cx, cy), id(cx + 1, cy), 'h', cx, cy]);
+      if (cy + 1 < N) edges.push([id(cx, cy), id(cx, cy + 1), 'v', cx, cy]);
+    }
+    shuffle(edges);
+    const parent = [...Array(N * N).keys()];
+    const root = a => parent[a] === a ? a : (parent[a] = root(parent[a]));
+    const tree = [], spare = [];
+    for (const e of edges) { const a = root(e[0]), b = root(e[1]); if (a !== b) { parent[a] = b; tree.push(e); } else spare.push(e); }
+    // the shared wall of an edge: its length, and the square on the near side of it
+    const wallLen = e => e[2] === 'h' ? rh[e[4]] : cw[e[3]];
+    const across = (e, k) => e[2] === 'h' ? [colX[e[3]] + cw[e[3]] - 1, rowY[e[4]] + k, 1] : [colX[e[3]] + k, rowY[e[4]] + rh[e[4]] - 1, 2];
+    const door = (e, c) => { const [x, y, dir] = across(e, ri(wallLen(e))); side(x, y, dir, c); };
+    // halls: merge a few tree edges (open the whole wall); the rest become doors
+    const hall = [...Array(N * N).keys()];
+    const hroot = a => hall[a] === a ? a : (hall[a] = hroot(hall[a]));
+    const merges = Math.min(N - 1, 1 + ri(N - 1));
+    let merged = 0;
+    for (const e of tree) {
+      if (merged < merges && r() < 0.35) {
+        merged++; hall[hroot(e[0])] = hroot(e[1]);
+        for (let k = 0; k < wallLen(e); k++) { const [x, y, dir] = across(e, k); side(x, y, dir, ' '); }
+      } else door(e, 'D');
+    }
+    // loops: extra doors, at most one of them hidden
+    const loops = shuffle(spare).slice(0, 1 + ri(Math.max(2, N - 2)));
+    let hidden = 0;
+    for (const e of loops) {
+      if (hroot(e[0]) === hroot(e[1])) continue;
+      if (hidden < 1 && r() < 0.6) { door(e, 'S'); hidden++; } else door(e, 'D');
+    }
+    // partitions: a wall across a chamber or two, with a door through it
+    for (const c of shuffle([...Array(N * N).keys()]).slice(0, ri(Math.max(3, N - 1)))) {
+      const cx = c % N, cy = Math.floor(c / N), vert = r() < 0.5;
+      const across_ = vert ? cw[cx] : rh[cy], len = vert ? rh[cy] : cw[cx];
+      if (across_ < 2) continue;
+      const at = ri(across_ - 1), gap = ri(len);
+      for (let k = 0; k < len; k++) {
+        const [x, y, dir] = vert ? [colX[cx] + at, rowY[cy] + k, 1] : [colX[cx] + k, rowY[cy] + at, 2];
+        side(x, y, dir, k === gap ? 'D' : (vert ? '|' : '-'));
+      }
+    }
+    const cellSquares = c => { const cx = c % N, cy = Math.floor(c / N), out = [];
+      for (let y = 0; y < rh[cy]; y++) for (let x = 0; x < cw[cx]; x++) out.push([colX[cx] + x, rowY[cy] + y]); return out; };
+    const cellOf = (x, y) => rowOf(y) * N + colOf(x);
+    const used = new Set(), at = (x, y) => g[2 * y + 1][2 * x + 1], mark = (x, y, ch) => { g[2 * y + 1][2 * x + 1] = ch; used.add(x + ',' + y); };
+    const freeIn = c => shuffle(cellSquares(c).filter(([x, y]) => at(x, y) === '.' && !used.has(x + ',' + y)));
+    // stairs up: under the last level's stairs down (levels only grow, so it fits), or a random chamber
+    const upSq = up || pickR(cellSquares(ri(N * N)));
+    mark(upSq[0], upSq[1], '<');
+    const upCell = cellOf(upSq[0], upSq[1]);
+    const adj = Array.from({length: N * N}, () => []);
+    for (const e of [...tree, ...loops]) { adj[e[0]].push(e[1]); adj[e[1]].push(e[0]); }
+    const dist = Array(N * N).fill(-1); dist[upCell] = 0; const q = [upCell];
+    while (q.length) { const c = q.shift(); for (const n of adj[c]) if (dist[n] < 0) { dist[n] = dist[c] + 1; q.push(n); } }
+    let down = null;
+    if (d < depths) {
+      const far = Math.max(...dist), cand = [...Array(N * N).keys()].filter(c => dist[c] === far);
+      const sq = freeIn(pickR(cand))[0]; mark(sq[0], sq[1], '>'); down = sq;
+    }
+    // lairs: one per hall, away from the stairs up; more on bigger levels
+    const halls = {};
+    for (let c = 0; c < N * N; c++) (halls[hroot(c)] ||= []).push(c);
+    const band = Object.entries(monsters).filter(([, m]) => m.depth && m.depth[0] <= d && d <= m.depth[1]).map(([k]) => k);
+    const lairs = {};
+    const hallList = shuffle(Object.values(halls).filter(cs => hroot(cs[0]) !== hroot(upCell)));
+    const nLairs = 2 + ri(2) + (N - 4);
+    const hi = d < 3 ? 2 : d < 6 ? 3 : 4;
+    for (const cs of hallList.slice(0, nLairs)) {
+      const sq = freeIn(pickR(cs))[0]; if (!sq) continue;
+      mark(sq[0], sq[1], 'L');
+      lairs[sq[0] + ',' + sq[1]] = {monster: pickR(band), count: [1, hi], chest: true};
+    }
+    const anyFree = () => { for (const c of shuffle([...Array(N * N).keys()])) { const s = freeIn(c)[0]; if (s) return s; } return null; };
+    const spring = anyFree(); if (spring) mark(spring[0], spring[1], 'F');
+    const notes = {};
+    const nsq = anyFree(); if (nsq) { mark(nsq[0], nsq[1], 'N'); notes[nsq[0] + ',' + nsq[1]] = pickR(NOTES); }
+    const wander = {};
+    for (const m of shuffle(band.slice()).slice(0, 5)) wander[m] = 1 + ri(3);
+    levels.push({depth: d, name: NAMES[(seed + d * 7) % NAMES.length], room_chance: 45 + ri(16),
+      grid: g.map(row => row.join('')), notes, lairs, wander});
+    up = down;
+  }
+  return levels;
+}
 if (typeof module !== 'undefined') module.exports = {genDungeon};
 
 /* The dungeon in play: the written campaign, or a random one grown from the
    save's seed. Saves keep only the seed, so a random dungeon reloads the same. */
 const DUNGEONS = {
   campaign: {name: 'The campaign', about: `${DATA.levels.length} written levels: The Root Gate and what lies under it.`},
-  random:   {name: 'A random dungeon', about: '5 levels grown fresh for this game. Different every new game.'},
+  random:   {name: 'A random dungeon', about: '5 levels grown fresh for this game. Different every new game.', depths: 5},
+  deep:     {name: 'A deep random dungeon', about: '10 levels that grow larger as you go down, with stronger monsters below the fifth.', depths: 10},
 };
-const RANDOM_DEPTHS = 5;
+const RANDOM_DEPTHS = 5; // random games saved before the choice of depth
+const dungeonKind = () => S.mode !== 'random' ? 'campaign' : (S.depths || RANDOM_DEPTHS) > 5 ? 'deep' : 'random';
 let LV = DATA.levels, ROOMS = [];
 
 /* ---------- dice ---------- */
@@ -563,18 +718,20 @@ function roomsOf(L, i) {
 /* The random generator changed shape in version 2 (thin walls). A random game
    saved before that keeps its seed but gets the new levels, so anything placed by
    square goes back to the stairs up of its depth. */
-const GEN_VERSION = 2;
+/* Generator versions: 2 is the even 4 x 4 layout, 3 grows with depth (src/gen.js).
+   A save keeps the version it was made with; saves older than 2 move to 2. */
+const GEN_VERSION = 3;
 function moveToNewMaps() {
-  S.gen = GEN_VERSION; S.seen = {}; S.secrets = {}; S.rooms = {};
+  S.gen = 2; S.seen = {}; S.secrets = {}; S.rooms = {};
   const up = d => find(d, '<') || {x: 1, y: 1};
   if (S.pos) { const d = Math.min(S.pos.depth, LV.length), u = up(d); S.pos = {depth: d, x: u.x, y: u.y, f: openFacing(d, u.x, u.y)}; }
   for (const b of S.fallen || []) { b.depth = Math.min(b.depth, LV.length); const u = up(b.depth); b.x = u.x; b.y = u.y; }
 }
 /* Load the levels for the current save. Older saves have no mode: campaign. */
 function useDungeon() {
-  LV = S && S.mode === 'random' ? genDungeon(S.seed, MON, RANDOM_DEPTHS) : DATA.levels;
+  LV = S && S.mode === 'random' ? genDungeon(S.seed, MON, S.depths || RANDOM_DEPTHS, S.gen || 2) : DATA.levels;
   ROOMS = LV.map(roomsOf);
-  if (S && S.mode === 'random' && S.gen !== GEN_VERSION) moveToNewMaps();
+  if (S && S.mode === 'random' && !(S.gen >= 2)) moveToNewMaps();
 }
 useDungeon();
 const roomAt = (d, x, y) => ROOMS[d - 1].ids[y]?.[x] ?? -1;
@@ -593,8 +750,9 @@ function quietRoom() { S.rooms ||= {}; const k = roomKey(S.pos.depth, S.pos.x, S
 /* ---------- town ---------- */
 function newGame(ready, mode) {
   S = fresh();
-  S.mode = mode === 'random' ? 'random' : 'campaign';
-  if (S.mode === 'random') { S.seed = 1 + R(2147483000); S.gen = GEN_VERSION; }
+  const kind = DUNGEONS[mode] ? mode : 'campaign';
+  S.mode = kind === 'campaign' ? 'campaign' : 'random';
+  if (S.mode === 'random') { S.seed = 1 + R(2147483000); S.gen = GEN_VERSION; S.depths = DUNGEONS[kind].depths; }
   useDungeon();
   if (ready) {
     const mk = (n, r, g, st) => makeChar(n, r, g, st, START_GEAR[g]);
@@ -1322,7 +1480,7 @@ function townHTML() {
 function squareHTML() {
   const ok = alive().length;
   return `<div class="panel"><h2>The town square</h2><p>Rain on slate roofs. Between two great roots at the square's edge, a stair goes down into the dark.</p>
-    <p class="small">This game's dungeon: <b>${DUNGEONS[S.mode === 'random' ? 'random' : 'campaign'].name.toLowerCase()}</b>, ${LV.length} levels deep.</p>
+    <p class="small">This game's dungeon: <b>${DUNGEONS[dungeonKind()].name.toLowerCase()}</b>, ${LV.length} levels deep.</p>
     <p class="muted small">${S.fallen.length ? `${S.fallen.length} fallen party${S.fallen.length > 1 ? ' groups lie' : ' lies'} below. The morgue can send rescuers, or you can go and carry them home yourself.` : 'Everyone you know of is accounted for.'}</p>
     <div class="btns"><button class="btn go" data-a="enter" ${ok ? '' : 'disabled'}>Go down the stair</button></div>
     ${ok ? '' : '<p class="small muted">Form a party with at least one living member first.</p>'}</div>`;
