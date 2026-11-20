@@ -125,7 +125,7 @@ input, select, textarea { background: #0c100d; color: var(--ink); border: 1px so
 <div id="app"></div>
 
 <script>
-const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"grid":["#################################","#################################","##+-+-+-+###+-+-+-+-+###+-+-+-+##","##|< . .|###|. . . .|###|. . F|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L . .D. . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+D+-+###+-+-+D+-+###+ + + +##","####|.|#########|.|#####|. . .|##","####+ +#########+ +#####+-+D+-+##","####|.|#########|.|#######|.|####","##+-+ +-+-+###+-+ +-+#####+ +####","##|. . . .|###|. . .|#####|.|####","##+ + + + +###+ + + +-+-+-+ +-+##","##|. . . .|###|. L . .D. . . .|##","##+ + + + +###+ + + +-+-+ + + +##","##|. N . .|###|. . .|###|. . .|##","##+ + + + +###+-+D+-+###+ + + +##","##|. . . .|#####|.|#####|. . .|##","##+-+D+-+-+#####+ +#####+-+-+-+##","####|.|#########|.|##############","####+ +#####+-+-+ +-+############","####|.|#####|. . . .|############","##+-+ +-+###+ + + + +-+-+-+-+-+##","##|. . .|###|. . . .S. . . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L .|###|. > .|##","##+ + + +-+-+ + + + +###+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+-+-+###+-+-+-+-+###+-+-+-+##","#################################","#################################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"grid":["#################################","#################################","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","##|. . .|#|. . . .|###|. . . F|##","##+ + + +-+ + + + +###+ + + + +##","##|. L . .D. . . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+D+-+#+-+D+-+-+###+-+-+D+-+##","####|.|#####|.|###########|.|####","##+-+ +-+#+-+ +-+-+###+-+-+ +-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . .D. . . L .|##","##+ + + +-+ + + + +-+-+ + + + +##","##|. . . .D. N . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","####|.|#####|.|#########|.|######","####+S+#####+D+#########+D+######","####|.|#####|.|#########|.|######","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . . .D. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. > .|#|. . . .|###|. . < .|##","##+ + + +#+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","#################################","#################################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,6],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,8],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,6],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,8],"group":[1,3],"undead":true,"paralyze":true},"hobgoblin":{"name":"Hobgoblin","plural":"Hobgoblins","ac":18,"hp":"2d8+2","atk":3,"dmg":"1d8+1","xp":100,"depth":[3,6],"group":[2,4]},"gnoll":{"name":"Gnoll","plural":"Gnolls","ac":15,"hp":"5d8","atk":4,"dmg":"1d8+2","xp":100,"depth":[4,7],"group":[2,4]},"bugbear":{"name":"Bugbear","plural":"Bugbears","ac":16,"hp":"5d8+5","atk":4,"dmg":"2d8+2","xp":200,"depth":[4,8],"group":[1,3]},"dire_wolf":{"name":"Dire Wolf","plural":"Dire Wolves","ac":14,"hp":"5d10+10","atk":5,"dmg":"2d6+3","xp":200,"depth":[5,8],"group":[1,3]},"ghast":{"name":"Ghast","plural":"Ghasts","ac":13,"hp":"8d8","atk":5,"dmg":"2d6+3","xp":450,"depth":[6,10],"group":[1,2],"undead":true,"paralyze":true},"ogre":{"name":"Ogre","plural":"Ogres","ac":11,"hp":"7d10+21","atk":6,"dmg":"2d8+4","xp":450,"depth":[6,10],"group":[1,1]},"wight":{"name":"Wight","plural":"Wights","ac":14,"hp":"6d8+18","atk":4,"dmg":"2d8+4","xp":700,"depth":[7,10],"group":[1,2],"undead":true},"owlbear":{"name":"Owlbear","plural":"Owlbears","ac":13,"hp":"7d10+21","atk":7,"dmg":"4d8+6","xp":700,"depth":[7,10],"group":[1,1]},"minotaur":{"name":"Minotaur","plural":"Minotaurs","ac":14,"hp":"9d10+27","atk":6,"dmg":"2d12+4","xp":700,"depth":[8,10],"group":[1,1]},"phase_spider":{"name":"Phase Spider","plural":"Phase Spiders","ac":13,"hp":"5d10+10","atk":4,"dmg":"1d10+2","xp":700,"depth":[8,10],"group":[1,2],"poison":"4d8"}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null,"hobgoblin":{"name":"hobgoblin insignia","value":10},"gnoll":{"name":"gnoll hide","value":12},"bugbear":{"name":"bugbear pelt","value":18},"dire_wolf":{"name":"dire wolf pelt","value":25},"ghast":null,"ogre":{"name":"ogre tooth","value":30},"wight":null,"owlbear":{"name":"owlbear feathers","value":45},"minotaur":{"name":"minotaur horn","value":60},"phase_spider":{"name":"phase spider silk","value":55}}};
+const DATA = {"levels":[{"depth":1,"name":"The Root Gate","room_chance":45,"grid":["#################################","#################################","##+-+-+-+###+-+-+-+-+###+-+-+-+##","##|< . .|###|. . . .|###|. . F|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L . .D. . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+D+-+###+-+-+D+-+###+ + + +##","####|.|#########|.|#####|. . .|##","####+ +#########+ +#####+-+D+-+##","####|.|#########|.|#######|.|####","##+-+ +-+-+###+-+ +-+#####+ +####","##|. . . .|###|. . .|#####|.|####","##+ + + + +###+ + + +-+-+-+ +-+##","##|. . . .|###|. L . .D. X . .|##","##+ + + + +###+ + + +-+-+ + + +##","##|. N . .|###|. . .|###|. . .|##","##+ + + + +###+-+D+-+###+ + + +##","##|. . . .|#####|.|#####|. . .|##","##+-+D+-+-+#####+ +#####+-+-+-+##","####|.|#########|.|##############","####+ +#####+-+-+ +-+############","####|.|#####|. . . .|############","##+-+ +-+###+ + + + +-+-+-+-+-+##","##|. . .|###|P . . .S. . . . .|##","##+ + + +-+-+ + + + +-+-+ + + +##","##|. . . .D. . . L .|###|. > .|##","##+ + + +-+-+ + + + +###+ + + +##","##|. . .|###|. . . .|###|. . .|##","##+-+-+-+###+-+-+-+-+###+-+-+-+##","#################################","#################################"],"notes":{"2,8":"Moss covers a stone tablet. Scratched beneath it: the bone hall's east wall is not a wall."},"lairs":{"8,2":{"monster":"kobold","count":[1,2],"chest":true},"8,7":{"monster":"goblin","count":[1,2],"chest":true},"8,13":{"monster":"skeleton","count":[1,1],"chest":true}},"wander":{"giant_rat":3,"kobold":3,"stirge":2,"giant_centipede":1,"goblin":1}},{"depth":2,"name":"The Drowned Hollows","room_chance":55,"grid":["#################################","#################################","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","##|. . .|#|. . . .|###|. . . F|##","##+ + + +-+ + + + +###+ + + + +##","##|. L . .D. . . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|K X K K|###|. . . .|##","##+-+D+-+#+-+D+-+-+###+-+-+D+-+##","####|.|#####|.|###########|.|####","##+-+ +-+#+-+ +-+-+###+-+-+ +-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . T . .D. . . L .|##","##+ + + +-+ + + + +-+-+ + + + +##","##|. . . .D. N . .|###|. . . .|##","##+ + + +-+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","####|.|#####|.|#########|.|######","####+S+#####+D+#########+D+######","####|.|#####|.|#########|.|######","##+-+ +-+#+-+ +-+-+###+-+ +-+-+##","##|. . .|#|. . . .|###|. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. . .|#|. . . . . .D. . . .|##","##+ + + +#+ + + + +-+-+ + + + +##","##|. > .|#|K K K K|###|. . < .|##","##+ + + +#+ + + + +###+ + + + +##","##|. . .|#|. . . .|###|. . . .|##","##+-+-+-+#+-+-+-+-+###+-+-+-+-+##","#################################","#################################"],"notes":{"6,7":"Roots have broken through the ceiling. Water drips steadily. Under the west cellar, something hums behind the stone."},"lairs":{"2,2":{"monster":"violet_fungus","count":[1,2],"chest":true},"13,6":{"monster":"giant_spider","count":[1,1],"chest":true}},"wander":{"goblin":2,"skeleton":2,"zombie":1,"giant_frog":2,"violet_fungus":1,"wolf":1,"stirge":1}}],"monsters":{"giant_rat":{"name":"Giant Rat","plural":"Giant Rats","ac":12,"hp":"2d6","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"kobold":{"name":"Kobold","plural":"Kobolds","ac":12,"hp":"2d6-2","atk":4,"dmg":"1d4+2","xp":25,"depth":[1,2],"group":[2,4]},"stirge":{"name":"Stirge","plural":"Stirges","ac":14,"hp":"1d4","atk":5,"dmg":"1d4+3","xp":25,"depth":[1,3],"group":[2,4]},"giant_centipede":{"name":"Giant Centipede","plural":"Giant Centipedes","ac":13,"hp":"1d6+1","atk":4,"dmg":"1d4+2","xp":50,"depth":[1,3],"group":[1,3],"poison":"1d6"},"goblin":{"name":"Goblin","plural":"Goblins","ac":15,"hp":"2d6","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,3],"group":[2,4]},"skeleton":{"name":"Skeleton","plural":"Skeletons","ac":13,"hp":"2d8+4","atk":4,"dmg":"1d6+2","xp":50,"depth":[1,4],"group":[1,3],"undead":true},"zombie":{"name":"Zombie","plural":"Zombies","ac":8,"hp":"3d8+9","atk":3,"dmg":"1d6+1","xp":50,"depth":[2,4],"group":[1,3],"undead":true},"giant_frog":{"name":"Giant Frog","plural":"Giant Frogs","ac":11,"hp":"4d8","atk":3,"dmg":"1d6+1","xp":50,"depth":[1,3],"group":[1,2]},"violet_fungus":{"name":"Violet Fungus","plural":"Violet Fungi","ac":5,"hp":"4d8","atk":2,"dmg":"1d8","xp":50,"depth":[2,4],"group":[1,3]},"wolf":{"name":"Wolf","plural":"Wolves","ac":13,"hp":"2d8+2","atk":4,"dmg":"2d4+2","xp":50,"depth":[2,4],"group":[2,3]},"orc":{"name":"Orc","plural":"Orcs","ac":13,"hp":"2d8+6","atk":5,"dmg":"1d12+3","xp":100,"depth":[2,6],"group":[1,3]},"shadow":{"name":"Shadow","plural":"Shadows","ac":12,"hp":"3d8+3","atk":4,"dmg":"2d6+2","xp":100,"depth":[3,8],"group":[1,2],"undead":true},"giant_spider":{"name":"Giant Spider","plural":"Giant Spiders","ac":14,"hp":"4d10+4","atk":5,"dmg":"1d8+3","xp":200,"depth":[2,6],"group":[1,1],"poison":"2d8"},"ghoul":{"name":"Ghoul","plural":"Ghouls","ac":12,"hp":"5d8","atk":4,"dmg":"2d6+2","xp":200,"depth":[3,8],"group":[1,3],"undead":true,"paralyze":true},"hobgoblin":{"name":"Hobgoblin","plural":"Hobgoblins","ac":18,"hp":"2d8+2","atk":3,"dmg":"1d8+1","xp":100,"depth":[3,6],"group":[2,4]},"gnoll":{"name":"Gnoll","plural":"Gnolls","ac":15,"hp":"5d8","atk":4,"dmg":"1d8+2","xp":100,"depth":[4,7],"group":[2,4]},"bugbear":{"name":"Bugbear","plural":"Bugbears","ac":16,"hp":"5d8+5","atk":4,"dmg":"2d8+2","xp":200,"depth":[4,8],"group":[1,3]},"dire_wolf":{"name":"Dire Wolf","plural":"Dire Wolves","ac":14,"hp":"5d10+10","atk":5,"dmg":"2d6+3","xp":200,"depth":[5,8],"group":[1,3]},"ghast":{"name":"Ghast","plural":"Ghasts","ac":13,"hp":"8d8","atk":5,"dmg":"2d6+3","xp":450,"depth":[6,10],"group":[1,2],"undead":true,"paralyze":true},"ogre":{"name":"Ogre","plural":"Ogres","ac":11,"hp":"7d10+21","atk":6,"dmg":"2d8+4","xp":450,"depth":[6,10],"group":[1,1]},"wight":{"name":"Wight","plural":"Wights","ac":14,"hp":"6d8+18","atk":4,"dmg":"2d8+4","xp":700,"depth":[7,10],"group":[1,2],"undead":true},"owlbear":{"name":"Owlbear","plural":"Owlbears","ac":13,"hp":"7d10+21","atk":7,"dmg":"4d8+6","xp":700,"depth":[7,10],"group":[1,1]},"minotaur":{"name":"Minotaur","plural":"Minotaurs","ac":14,"hp":"9d10+27","atk":6,"dmg":"2d12+4","xp":700,"depth":[8,10],"group":[1,1]},"phase_spider":{"name":"Phase Spider","plural":"Phase Spiders","ac":13,"hp":"5d10+10","atk":4,"dmg":"1d10+2","xp":700,"depth":[8,10],"group":[1,2],"poison":"4d8"}},"skills":{"skills":{"lore":{"name":"Lore","stat":"int","about":"Study an unknown item to learn what it is."},"perception":{"name":"Perception","stat":"wis","about":"Find hidden doors and spot chest traps."},"disarm":{"name":"Disarm","stat":"dex","about":"Clear a chest trap without setting it off."},"locks":{"name":"Locks","stat":"dex","about":"Pick a locked chest instead of forcing it."},"firstaid":{"name":"First aid","stat":"wis","about":"Tend the party's wounds once after each fight."},"armor":{"name":"Armor use","stat":"str","about":"Wear heavier armor without losing accuracy, even armor outside the guild's usual kit."},"skinning":{"name":"Skinning","stat":"dex","about":"Take pelts, bone and other parts from fallen foes, to sell in town."},"foraging":{"name":"Foraging","stat":"wis","about":"Search a room for herbs and fungi: salves to heal with, or finds to sell."}},"costs":{"fighter":{"lore":3,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":1,"skinning":2,"foraging":3},"rogue":{"lore":2,"perception":1,"disarm":1,"locks":1,"firstaid":2,"armor":2,"skinning":2,"foraging":2},"wizard":{"lore":1,"perception":2,"disarm":3,"locks":3,"firstaid":2,"armor":4,"skinning":3,"foraging":2},"cleric":{"lore":2,"perception":2,"disarm":3,"locks":3,"firstaid":1,"armor":2,"skinning":2,"foraging":2},"forager":{"lore":1,"perception":1,"disarm":2,"locks":2,"firstaid":1,"armor":3,"skinning":1,"foraging":1}},"start":{"fighter":{"armor":4,"perception":1},"rogue":{"lore":2,"perception":2,"disarm":2,"locks":2,"armor":1},"wizard":{"lore":2},"cleric":{"firstaid":2,"armor":2},"forager":{"skinning":2,"foraging":2,"perception":2,"lore":1,"firstaid":1,"armor":1}},"start_armor":{"fighter":"chain_shirt","rogue":"leather","cleric":"chain_shirt","forager":"leather"},"points_per_level":6,"max_ranks":{"base":2,"per_level":2},"armor_need":{"leather":1,"studded":1,"chain_shirt":2,"scale":2,"chain_mail":4}},"parts":{"giant_rat":{"name":"rat pelt","value":2},"kobold":{"name":"kobold trinket","value":3},"stirge":{"name":"stirge proboscis","value":4},"giant_centipede":{"name":"centipede plate","value":4},"goblin":{"name":"goblin trinket","value":4},"skeleton":{"name":"clean bone","value":3},"zombie":null,"giant_frog":{"name":"frog skin","value":5},"violet_fungus":{"name":"violet spore sac","value":8},"wolf":{"name":"wolf pelt","value":10},"orc":{"name":"orc tusk","value":8},"shadow":null,"giant_spider":{"name":"spider silk","value":14},"ghoul":null,"hobgoblin":{"name":"hobgoblin insignia","value":10},"gnoll":{"name":"gnoll hide","value":12},"bugbear":{"name":"bugbear pelt","value":18},"dire_wolf":{"name":"dire wolf pelt","value":25},"ghast":null,"ogre":{"name":"ogre tooth","value":30},"wight":null,"owlbear":{"name":"owlbear feathers","value":45},"minotaur":{"name":"minotaur horn","value":60},"phase_spider":{"name":"phase spider silk","value":55}}};
 const MON = DATA.monsters, SK = DATA.skills, PARTS = DATA.parts;
 /* Random dungeon generator.
 
@@ -142,8 +142,11 @@ const MON = DATA.monsters, SK = DATA.skills, PARTS = DATA.parts;
    genDungeon(seed, monsters, depths, version) -> array of levels. Same seed,
    same version, same dungeon. Version 2 is the layout above and stays exactly
    as it was, so games saved with it keep their maps. Version 3 (genV3, below)
-   grows with depth and varies the chamber sizes. */
+   grows with depth and varies the chamber sizes. Version 4 is version 3 with
+   traps added afterwards (addTraps, at the end), so version 3 maps stay as
+   they were too. */
 function genDungeon(seed, monsters, depths, version) {
+  if (version >= 4) return addTraps(genV3(seed, monsters, depths), seed);
   return version >= 3 ? genV3(seed, monsters, depths) : genV2(seed, monsters, depths);
 }
 function genV2(seed, monsters, depths) {
@@ -424,6 +427,82 @@ function genV3(seed, monsters, depths) {
   }
   return levels;
 }
+/* Traps for version 4, placed on finished levels with their own random numbers.
+   Spinners (X) from depth 1, teleporters (T) from 2, chutes (P) from 3 and a
+   dark hall (K) from 4, more of each further down; from depth 6 a dark hall
+   hides a spinner. Traps stay out of the hall with the stairs up, never sit
+   where a chute from above lands, and a chute or teleporter is never the only
+   way into part of a level (the rules in tools/check_levels.py). */
+function addTraps(levels, seed) {
+  const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];
+  let landed = new Set(); // squares a chute from the level above drops onto
+  return levels.map((L, i) => {
+    const d = L.depth, next = levels[i + 1];
+    let s = (seed * 131 + d * 977 + 11) | 0;
+    const r = () => { s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const ri = n => Math.floor(r() * n);
+    const shuffle = a => { for (let k = a.length - 1; k > 0; k--) { const j = ri(k + 1); [a[k], a[j]] = [a[j], a[k]]; } return a; };
+    const g = L.grid.map(row => row.split(''));
+    const W = (g[0].length - 1) / 2, H = (g.length - 1) / 2;
+    const cell = (x, y) => x < 0 || y < 0 || x >= W || y >= H ? '#' : g[2 * y + 1][2 * x + 1];
+    const side = (x, y, f) => { const c = g[2 * y + 1 + DY[f]][2 * x + 1 + DX[f]]; return '#|-+'.includes(c) ? '#' : c; };
+    const reach = (from, blocked) => {
+      const seen = new Set([from[0] + ',' + from[1]]), q = [from];
+      while (q.length) {
+        const [x, y] = q.pop();
+        for (let f = 0; f < 4; f++) {
+          const nx = x + DX[f], ny = y + DY[f], k = nx + ',' + ny;
+          if (side(x, y, f) !== '#' && k !== blocked && !seen.has(k) && cell(nx, ny) !== '#') { seen.add(k); q.push([nx, ny]); }
+        }
+      }
+      return seen;
+    };
+    let up; for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (cell(x, y) === '<') up = [x, y];
+    // halls: squares joined by open sides
+    const hall = {}, halls = [];
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (cell(x, y) === '#' || hall[x + ',' + y] !== undefined) continue;
+      const n = halls.length, q = [[x, y]], list = []; hall[x + ',' + y] = n;
+      while (q.length) {
+        const [cx, cy] = q.pop(); list.push([cx, cy]);
+        for (let f = 0; f < 4; f++) { const nx = cx + DX[f], ny = cy + DY[f], k = nx + ',' + ny; if (side(cx, cy, f) === ' ' && hall[k] === undefined) { hall[k] = n; q.push([nx, ny]); } }
+      }
+      halls.push(list);
+    }
+    const home = hall[up[0] + ',' + up[1]], total = halls.reduce((a, h) => a + h.length, 0);
+    const free = ([x, y]) => cell(x, y) === '.' && hall[x + ',' + y] !== home && !landed.has(x + ',' + y);
+    const set = ([x, y], t) => { g[2 * y + 1][2 * x + 1] = t; };
+    const keepsLevelWhole = ([x, y]) => reach(up, x + ',' + y).size === total - 1;
+    const floor = shuffle(halls.flatMap(h => h).filter(free));
+    const take = (n, t, ok) => {
+      const got = [];
+      for (const sq of floor) {
+        if (got.length >= n) break;
+        if (!free(sq) || (ok && !ok(sq))) continue;
+        set(sq, t); got.push(sq);
+      }
+      return got;
+    };
+    // a dark hall first, so the traps below can fall inside it
+    if (d >= 4) {
+      const dark = shuffle(halls.filter((h, n) => n !== home && h.filter(free).length >= 4));
+      for (const h of dark.slice(0, d >= 8 ? 2 : 1)) {
+        for (const sq of h) if (free(sq)) set(sq, 'K');
+        if (d >= 6) { const spot = h.find(([x, y]) => cell(x, y) === 'K' && !landed.has(x + ',' + y)); if (spot) set(spot, 'X'); }
+      }
+    }
+    take(1 + Math.floor(d / 3), 'X');
+    if (d >= 2) take(d >= 7 ? 2 : 1, 'T', keepsLevelWhole);
+    const drops = new Set();
+    if (d >= 3 && next) {
+      const below = next.grid;
+      const lands = ([x, y]) => below[2 * y + 1] && below[2 * y + 1][2 * x + 1] === '.';
+      for (const [x, y] of take(d >= 6 ? 2 : 1, 'P', sq => lands(sq) && keepsLevelWhole(sq))) drops.add(x + ',' + y);
+    }
+    landed = drops;
+    return {...L, grid: g.map(row => row.join(''))};
+  });
+}
 if (typeof module !== 'undefined') module.exports = {genDungeon};
 
 /* The dungeon in play: the written campaign, or a random one grown from the
@@ -525,7 +604,7 @@ const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0], DIRN = ['north', 'east', 'south', 
 const SAVE = 'undergrove-save-1';
 let S = null;
 const ui = {screen:'title', place:'square', modal:null, combat:null, chest:null, map:false, sheet:null, newc:null, confirm:null, msg:''};
-function fresh() { return {v:1, roster:[], party:[], gold:0, bank:0, inDungeon:false, pos:null, seen:{}, secrets:{}, rooms:{}, known:{}, fallen:[], carried:[], settings:{lasting:false}, log:[]}; }
+function fresh() { return {v:1, roster:[], party:[], gold:0, bank:0, inDungeon:false, pos:null, seen:{}, secrets:{}, traps:{}, rooms:{}, known:{}, fallen:[], carried:[], settings:{lasting:false}, log:[]}; }
 /* YouTube Playables: progress goes to the SDK's cloud save there, and to localStorage everywhere else. */
 const YT = typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV === true;
 const PLAY = {loaded: false, text: '', sent: '', timer: 0, paused: false};
@@ -718,11 +797,11 @@ function roomsOf(L, i) {
 /* The random generator changed shape in version 2 (thin walls). A random game
    saved before that keeps its seed but gets the new levels, so anything placed by
    square goes back to the stairs up of its depth. */
-/* Generator versions: 2 is the even 4 x 4 layout, 3 grows with depth (src/gen.js).
+/* Generator versions: 2 is the even 4 x 4 layout, 3 grows with depth, 4 adds traps (src/gen.js).
    A save keeps the version it was made with; saves older than 2 move to 2. */
-const GEN_VERSION = 3;
+const GEN_VERSION = 4;
 function moveToNewMaps() {
-  S.gen = 2; S.seen = {}; S.secrets = {}; S.rooms = {};
+  S.gen = 2; S.seen = {}; S.secrets = {}; S.traps = {}; S.rooms = {};
   const up = d => find(d, '<') || {x: 1, y: 1};
   if (S.pos) { const d = Math.min(S.pos.depth, LV.length), u = up(d); S.pos = {depth: d, x: u.x, y: u.y, f: openFacing(d, u.x, u.y)}; }
   for (const b of S.fallen || []) { b.depth = Math.min(b.depth, LV.length); const u = up(b.depth); b.x = u.x; b.y = u.y; }
@@ -806,9 +885,10 @@ function step(back) {
 }
 function turn(t) { if (ui.combat || ui.chest) return; S.pos.f = (S.pos.f + t + 4) % 4; render(); }
 function arrive() {
-  markSeen();
   const {depth: d, x, y} = S.pos, t = tile(d, x, y), k = x + ',' + y, L = lvl(d);
+  if (t !== 'K') markSeen();
   pickUpBodies();
+  if (springTrap(t)) return;
   if (t === 'N') say(L.notes[k], 'note');
   if (t === 'F') say('Clear water wells up through the moss here.', 'note');
   if (t === '>') say('A root-tangled stair leads down.', 'note');
@@ -821,6 +901,52 @@ function arrive() {
     if (rec.held) return startFight(rec.mid, rec.n, rk);
   }
   save(); render();
+}
+
+/* ---------- traps ----------
+   P chute: the floor drops the party to the same square one level down.
+   T teleporter: the party lands on a random floor square of the same level.
+   X spinner: turns the party to face a random way, without a word.
+   K darkness: no view, no compass, and nothing gets mapped.
+   Chutes, teleporters and spinners look like floor until sprung or found by
+   searching. A chute or teleporter is known once sprung; a spinner only once found. */
+const TRAPS = {P: 'a chute', T: 'a teleporter', X: 'a spinner'};
+const trapKnown = (d, x, y) => !!(S.traps && S.traps[skey(d, x, y)]);
+function knowTrap(d, x, y) { (S.traps ||= {})[skey(d, x, y)] = 1; }
+/* The square as the party sees it: a hidden trap looks like plain floor. */
+function shownTile(d, x, y) { const t = tile(d, x, y); return TRAPS[t] && !trapKnown(d, x, y) ? '.' : t; }
+const inDark = () => !!S.pos && tile(S.pos.depth, S.pos.x, S.pos.y) === 'K';
+/* Returns true when the trap moved the party and has seen to its arrival. */
+function springTrap(t) {
+  const {depth: d, x, y} = S.pos, known = trapKnown(d, x, y);
+  if (t === 'X') {
+    S.pos.f = R(4);
+    if (known) say('The floor turns under you. You have lost your bearings.', 'muted');
+    return false;
+  }
+  if (t === 'T') {
+    knowTrap(d, x, y);
+    const spots = [];
+    for (let yy = 0; yy < gh(d); yy++) for (let xx = 0; xx < gw(d); xx++) if (tile(d, xx, yy) === '.' && (xx !== x || yy !== y)) spots.push([xx, yy]);
+    const [nx, ny] = spots[R(spots.length)];
+    say(known ? 'The teleporter takes you again.' : 'The air folds around you. When it opens out, you are somewhere else.', 'foe');
+    S.pos.x = nx; S.pos.y = ny; S.pos.prev = null;
+    arrive(); return true;
+  }
+  if (t === 'P' && lvl(d + 1)) {
+    knowTrap(d, x, y);
+    say(known ? 'You step onto the chute again and slide down into the dark.' : 'The floor tips away under you and you slide down a chute into the dark!', 'foe');
+    for (const c of alive()) c.hp -= Math.min(roll('1d4'), c.hp - 1);
+    S.pos = {depth: d + 1, x, y, f: S.pos.f, room: null, prev: null};
+    say(`You land, bruised, in ${lvl(d + 1).name}.`, 'note');
+    if (!lvl(d + 2)) say(S.mode === 'random' ? 'This is the last level of this dungeon. Nothing lies deeper; a new game grows a new dungeon.' : 'This is the deepest level of the campaign. Nothing lies further down.', 'note');
+    arrive(); return true;
+  }
+  if (t === 'K') {
+    const p = S.pos.prev;
+    if (!p || tile(d, p.x, p.y) !== 'K') say('Darkness closes in. You cannot see your hand, or tell which way you face.', 'muted');
+  }
+  return false;
 }
 
 /* ---------- the fallen ----------
@@ -892,7 +1018,17 @@ function search() {
     any = true;
     if (R(100) < chance) { revealSecret(d, x, y, f); nfound++; }
   }
-  say(nfound ? `${rogue ? rogue.name : 'Someone'} finds a hidden door in the stonework!` : 'You run your hands along the wet stone and find nothing.', nfound ? 'good' : '');
+  const spotted = [], where = ['underfoot', 'ahead', 'to the right', 'behind', 'to the left'];
+  for (let i = 0; i < 5; i++) {
+    const g = i ? (S.pos.f + i - 1) % 4 : -1, tx = g < 0 ? x : x + DX[g], ty = g < 0 ? y : y + DY[g];
+    if (g >= 0 && !canPass(d, x, y, g)) continue;
+    const t = tile(d, tx, ty);
+    if (TRAPS[t] && !trapKnown(d, tx, ty) && R(100) < chance) { knowTrap(d, tx, ty); spotted.push(`${TRAPS[t]} ${where[i]}`); }
+  }
+  const who = rogue ? rogue.name : 'Someone';
+  if (spotted.length) say(`${who} spots ${spotted.join(' and ')}.`, 'good');
+  if (nfound) say(`${who} finds a hidden door in the stonework!`, 'good');
+  if (!nfound && !spotted.length) say('You run your hands along the wet stone and find nothing.');
   void any; save(); render();
 }
 
@@ -1194,6 +1330,12 @@ function crisp(cv, w, h) {
 function drawView(cv) {
   const W = 640, H = 480, g = crisp(cv, W, H), cx = W / 2, cy = H / 2, F = W / 2;
   const {depth: D, x: px, y: py, f} = S.pos;
+  if (inDark()) {
+    g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#3a4234'; g.font = "italic 22px 'Alegreya Sans', sans-serif"; g.textAlign = 'center'; g.fillText('Darkness', cx, cy);
+    if (ui.combat) drawFoes(g, W, H);
+    return;
+  }
   const fx = DX[f], fy = DY[f], rx = DX[(f + 1) % 4], ry = DY[(f + 1) % 4];
   const P = (x, z, y) => [cx + x / z * F, cy + y / z * F];
   // ceiling and floor
@@ -1278,6 +1420,8 @@ function drawView(cv) {
     if (t === '>') { const p = [P(-.32, z1, .5), P(.32, z1, .5), P(.32, z0, .5), P(-.32, z0, .5)]; g.beginPath(); p.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.closePath(); g.fillStyle = '#000'; g.fill(); g.strokeStyle = '#4a3a26'; g.lineWidth = 2; g.stroke(); }
     if (t === 'F') { const [ax, ay] = P(0, d + .5, .5), [bx] = P(.3, d + .5, .5); const ry2 = (P(0, z0, .5)[1] - P(0, z1, .5)[1]) / 2; g.beginPath(); g.ellipse(ax, ay, bx - ax, Math.max(2, ry2), 0, 0, 7); g.fillStyle = '#1f5a52'; g.fill(); g.strokeStyle = '#6cc5b3'; g.lineWidth = 1.5; g.stroke(); }
     if (t === '<') { const z = d + .5, [l] = P(-.18, z, 0), [r] = P(.18, z, 0), [, top] = P(0, z, -.5), [, bot] = P(0, z, .5); g.strokeStyle = '#5b4a30'; g.lineWidth = Math.max(1.5, (bot - top) / 40); g.beginPath(); g.moveTo(l, top); g.lineTo(l, bot); g.moveTo(r, top); g.lineTo(r, bot); for (let k = 1; k < 8; k++) { const yy = top + (bot - top) * k / 8; g.moveTo(l, yy); g.lineTo(r, yy); } g.stroke(); }
+    if (t === 'P') { const p = [P(-.3, z1, .5), P(.3, z1, .5), P(.36, z0, .5), P(-.36, z0, .5)]; g.beginPath(); p.forEach((q, i) => i ? g.lineTo(...q) : g.moveTo(...q)); g.closePath(); g.fillStyle = '#000'; g.fill(); g.strokeStyle = '#8a3b2a'; g.lineWidth = 2; g.stroke(); }
+    if (t === 'T' || t === 'X') { const [ax, ay] = P(0, d + .5, .5), [bx] = P(.3, d + .5, .5); const ry2 = (P(0, z0, .5)[1] - P(0, z1, .5)[1]) / 2; g.beginPath(); g.ellipse(ax, ay, bx - ax, Math.max(2, ry2), 0, 0, 7); g.strokeStyle = t === 'T' ? '#a58ad6' : '#d9a24a'; g.lineWidth = 2; g.setLineDash(t === 'X' ? [6, 5] : []); g.stroke(); g.setLineDash([]); }
     if (t === 'N') { const [ax, ay] = P(0, d + .5, .5), [bx] = P(.14, d + .5, .5), [, tp] = P(0, d + .5, .2); g.fillStyle = '#5c6150'; g.fillRect(ax - (bx - ax), tp, (bx - ax) * 2, ay - tp); }
   };
   for (let d = MAXD; d >= 0; d--) {
@@ -1286,7 +1430,7 @@ function drawView(cv) {
       const [ax, ay] = at(lx, d), k = sideKind(D, ax, ay, f);
       if (k) face([P(lx - .5, d + 1, -.5), P(lx + .5, d + 1, -.5), P(lx + .5, d + 1, .5), P(lx - .5, d + 1, .5)], d + 1, {k, ax, ay, dir: f}, false);
     }
-    if (d >= 1 && vis.has('0,' + d)) { const [ax, ay] = at(0, d); floorMark(d, tile(D, ax, ay)); }
+    if (d >= 1 && vis.has('0,' + d)) { const [ax, ay] = at(0, d); floorMark(d, shownTile(D, ax, ay)); }
     const z0 = Math.max(.5, d), z1 = d + 1;
     for (const lx of row) {
       const [ax, ay] = at(lx, d);
@@ -1317,7 +1461,7 @@ function drawMap(cv) {
   for (const k in seen) {
     const [x, y] = k.split(',').map(Number);
     g.fillStyle = '#2b3626'; g.fillRect(x * s, y * s, s, s);
-    const t = tile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b'}[t];
+    const t = shownTile(D, x, y), mark = {'<': '#c7d38f', '>': '#e2b45a', 'F': '#6cc5b3', 'N': '#9ba18b', 'P': '#b0503c', 'T': '#a58ad6', 'X': '#d9a24a'}[t];
     if (mark) { g.fillStyle = mark; g.fillRect(x * s + s * .3, y * s + s * .3, s * .4, s * .4); }
   }
   // walls as thin lines on the sides of the squares walked; doors as a gap with a brown leaf
@@ -1334,6 +1478,7 @@ function drawMap(cv) {
       g.strokeStyle = '#b07a3e'; g.beginPath(); g.moveTo(...lerp(.3)); g.lineTo(...lerp(.7)); g.stroke();
     }
   }
+  if (inDark()) return; // in the dark the party does not know where it stands
   const cxp = px * s + s / 2, cyp = py * s + s / 2;
   g.fillStyle = '#ffffff'; g.beginPath();
   g.moveTo(cxp + DX[f] * s * .4, cyp + DY[f] * s * .4);
@@ -1419,7 +1564,7 @@ function dungeonHTML() {
   const actingId = C && choosers()[C.cur] ? choosers()[C.cur].id : null;
   return `<div class="grid"><div class="col">
       <div class="view"><canvas id="view" width="640" height="480" aria-label="View down the corridor"></canvas>
-        <div class="bar"><span>Facing ${DIRN[S.pos.f]}</span><span>${S.pos.x}, ${S.pos.y}</span></div></div>
+        <div class="bar">${inDark() ? '<span>Facing ?</span><span>?, ?</span>' : `<span>Facing ${DIRN[S.pos.f]}</span><span>${S.pos.x}, ${S.pos.y}</span>`}</div></div>
       ${controls}
       ${ui.map ? `<div class="mapwrap"><canvas id="map" width="320" height="320" aria-label="Map of the squares you have walked"></canvas></div>` : ''}
     </div><div class="col">${partyPanel(actingId)}${logPanel()}</div></div>`;
